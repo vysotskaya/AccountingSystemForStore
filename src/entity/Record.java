@@ -24,10 +24,19 @@ public class Record implements Serializable {
     @Column(name = "retention_limit")
     private String retention_limit;
 
+    @Column(length = 10000000)
     private StoreArea storeArea;
+
+    @Column(length = 10000000)
     private Product product;
+
+    @Column(length = 10000000)
     private Receiver receiver;
+
+    @Column(length = 10000000)
     private Sender sender;
+
+    @Column(length = 10000000)
     private Employee employee;
 
     public Record() {
