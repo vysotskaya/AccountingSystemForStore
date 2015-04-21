@@ -15,16 +15,20 @@ import static junit.framework.Assert.*;
 public class RegimeDAOTest {
     private CustomsRegimeType regime;
 
-    @Before
-    public void setRegime() {
-        regime  = new CustomsRegimeType("свободное пользование");
-        DAOFactory.getFactory().getRegimeDAO().create(regime);
-    }
+//    @Before
+//    public void setRegime() {
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("свободное обращение"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("экспорт"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("переработка на таможенной территории"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("переработка вне таможенной территории"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("временный ввоз"));
+//    }
 
-    @After
-    public void clearRegime() {
-        DAOFactory.getFactory().getRegimeDAO().deleteById(1);
-    }
+//
+//    @After
+//    public void clearRegime() {
+//        DAOFactory.getFactory().getRegimeDAO().deleteById(1);
+//    }
 
     @Ignore
     @Test
@@ -33,12 +37,12 @@ public class RegimeDAOTest {
         assertTrue(regime.equals(DAOFactory.getFactory().getRegimeDAO().getById(1)));
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void updateRegimeTest() {
         regime.setRegime_name("временный ввоз");
-        DAOFactory.getFactory().getRegimeDAO().update(regime);
         regime.setRegime_id(1);
+        DAOFactory.getFactory().getRegimeDAO().update(regime);
         assertTrue(regime.equals(DAOFactory.getFactory().getRegimeDAO().getById(1)));
     }
 
@@ -50,10 +54,13 @@ public class RegimeDAOTest {
         assertFalse(regime.equals(DAOFactory.getFactory().getRegimeDAO().getById(1)));
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void readRegimeTest() {
         List regimes = DAOFactory.getFactory().getRegimeDAO().read();
-        assertTrue(regimes.size() == 1);
+        for (Object o : regimes) {
+            System.out.println(o.toString());
+        }
+        assertTrue(regimes.size() == 5);
     }
 }

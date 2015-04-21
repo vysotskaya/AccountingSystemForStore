@@ -11,6 +11,9 @@ public class DAOFactory {
     private static ProductDAO productDAO = null;
     private static ReceiverDAO receiverDAO = null;
     private static SenderDAO senderDAO = null;
+    private static StoreAreaDAO storeAreaDAO = null;
+    private static EmployeeDAO employeeDAO = null;
+    public static RecordDAO recordDAO = null;
 
     public static DAOFactory getFactory(){
         if (daoFactory == null){
@@ -52,6 +55,27 @@ public class DAOFactory {
             senderDAO = new SenderDAO();
         }
         return senderDAO;
+    }
+
+    public StoreAreaDAO getStoreAreaDAO() {
+        if (storeAreaDAO == null) {
+            storeAreaDAO = new StoreAreaDAO();
+        }
+        return storeAreaDAO;
+    }
+
+    public EmployeeDAO getEmployeeDAO() {
+        if (employeeDAO == null) {
+            employeeDAO = new EmployeeDAO();
+        }
+        return employeeDAO;
+    }
+
+    public RecordDAO getRecordDAO() {
+        if (recordDAO == null) {
+            recordDAO = new RecordDAO();
+        }
+        return recordDAO;
     }
 
 }

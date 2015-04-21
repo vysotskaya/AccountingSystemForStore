@@ -37,8 +37,8 @@ public class SenderDAOTest {
     @Test
     public void updateSenderTest() {
         sender.setLegal_address("Россия");
-        DAOFactory.getFactory().getSenderDAO().update(sender);
         sender.setSender_id(1);
+        DAOFactory.getFactory().getSenderDAO().update(sender);
         assertTrue(sender.equals(DAOFactory.getFactory().getSenderDAO().getById(1)));
     }
 

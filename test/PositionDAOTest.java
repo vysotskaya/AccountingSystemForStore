@@ -37,8 +37,8 @@ public class PositionDAOTest {
     @Test
     public void updatePositionTest() {
         position.setPosition_name("директор");
-        DAOFactory.getFactory().getPositionDAO().update(position);
         position.setPosition_id(1);
+        DAOFactory.getFactory().getPositionDAO().update(position);
         assertTrue(position.equals(DAOFactory.getFactory().getPositionDAO().getById(1)));
     }
 

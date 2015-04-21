@@ -15,18 +15,18 @@ public class Product_DAOTest {
     private CustomsRegimeType regime;
     private Product product;
 
-    @Before
-    public void setProduct() {
-        regime  = new CustomsRegimeType("свободное пользование");
-        product = new Product(8, DAOFactory.getFactory().getRegimeDAO().getById(1),
-                "шт.", "18J99", "нет", "пиво");
-        DAOFactory.getFactory().getProductDAO().create(product);
-    }
+//    @Before
+//    public void setProduct() {
+//        DAOFactory.getFactory().getProductDAO().create(new Product(8, DAOFactory.getFactory().getRegimeDAO().getById(2),
+//                "шт.", "18J99", "нет", "пиво"));
+//        DAOFactory.getFactory().getProductDAO().create(new Product(2, DAOFactory.getFactory().getRegimeDAO().getById(4),
+//                "шт.", "18J99", "нет", "диван"));
+//    }
 
-    @After
-    public void clearProduct() {
-        DAOFactory.getFactory().getProductDAO().deleteById(1);
-    }
+//    @After
+//    public void clearProduct() {
+//        DAOFactory.getFactory().getProductDAO().deleteById(1);
+//    }
 
     @Ignore
     @Test
@@ -39,12 +39,12 @@ public class Product_DAOTest {
     @Test
     public void updateProductTest() {
         product.setAcount(9999);
-        DAOFactory.getFactory().getProductDAO().update(product);
         product.setProduct_id(1);
+        DAOFactory.getFactory().getProductDAO().update(product);
         assertTrue(product.equals(DAOFactory.getFactory().getProductDAO().getById(1)));
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void deleteProductByIdTest() {
         DAOFactory.getFactory().getProductDAO().deleteById(1);
@@ -56,6 +56,9 @@ public class Product_DAOTest {
     @Test
     public void readProductTest() {
         List products = DAOFactory.getFactory().getProductDAO().read();
-        assertTrue(products.size() == 1);
+        for (Object o : products) {
+            System.out.println(o.toString());
+        }
+        assertTrue(products.size() == 2);
     }
 }

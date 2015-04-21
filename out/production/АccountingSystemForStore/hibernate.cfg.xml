@@ -11,13 +11,16 @@
     <property name="hibernate.show_sql">true</property>
     <!-- enable Hibernate's automatic session context management -->
     <property name="hibernate.current_session_context_class">thread</property>
-	<property name="hibernate.hbm2ddl.auto">create</property>
+	<property name="hibernate.hbm2ddl.auto">update</property>
 	
 	<mapping class="entity.CustomsRegimeType"/>
     <mapping class="entity.Position"/>
 	<mapping class="entity.Receiver"/>
 	<mapping class="entity.Sender"/>
 	<mapping class="entity.Product"/>
+    <mapping class="entity.StoreArea"/>
+    <mapping class="entity.Employee"/>
+    <mapping class="entity.Record"/>
 
   </session-factory>
 </hibernate-configuration>
