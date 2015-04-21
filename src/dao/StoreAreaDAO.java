@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by User on 21.04.2015.
  */
-public class StoreAreaDAO implements BaseDAO <StoreArea> {
+public class StoreAreaDAO implements BaseDAO<StoreArea> {
 
     @Override
     public boolean create(StoreArea storeArea) {

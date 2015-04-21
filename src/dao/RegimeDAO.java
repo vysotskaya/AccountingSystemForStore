@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by User on 07.04.2015.
  */
-public class RegimeDAO implements BaseDAO <CustomsRegimeType> {
+public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
 
     @Override
     public boolean create(CustomsRegimeType regime) {

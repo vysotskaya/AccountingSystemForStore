@@ -1,0 +1,154 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel = 'stylesheet' href="style.css">
+
+<title>Система учёта</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="bootstrap-3.3.4-dist\js\bootstrap.min.js"></script>
+<link rel = 'stylesheet' href="bootstrap-3.3.4-dist\css\bootstrap.min.css">
+
+<style>
+  .navmenu {
+	width: 200px;
+	}
+
+  table thead tr th{
+	text-align : center;
+  }
+  
+  table tbody tr td{
+	text-align : center;
+  }
+  
+  body {
+  /* Margin bottom by footer height */
+    margin-bottom: 60px;
+  }
+  #footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+  }
+
+  .text-muted {
+    margin-top: 20px;
+	overflow: auto;
+  }
+  
+  .link {
+    color: #000000;
+  }
+  
+  table tr {
+    width: 100%;
+    display: table;
+  }
+  
+  table tbody {
+    height: 240px; 
+	overflow: auto;  
+	display: block; 
+	width:100%;
+  }
+
+  .menu {
+    margin-top:50px; 
+	border:1px solid; 
+	border-color: #A9A9A9; 
+	background-color: #F5F5F5;
+  }
+  
+</style>
+</head>
+<body>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+	<a href="" class="pull-right" style="margin-top:25px">| Редактировать профиль</a>
+	<a href="" class="pull-right" style="margin-top:25px">Войти&nbsp;</a>
+  </div>
+</div>
+<div class="jumbotron" style="margin-bottom: 0px;padding-bottom: 10px;">
+  <div class="container">
+    <div class="col-sm-8">
+      <h3>
+	    <a href="" class="link">Система учетов товаров</a>
+	  </h3>
+	  <h5>
+	    Склад временного хранения
+	  </h5>
+	</div>
+	<div class="col-sm-4" style="margin-top:10px;">
+	<br>
+	  <form class="form-inline text-right" role="form">
+	    <div class="form-group">
+		  <input type="text" class="form-control" placeholder="Search..." />
+		</div>
+		<div class="form-group">
+		  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+		</div>
+	  </form>
+	</div>
+  </div>
+</div>
+<div class="container">
+  <div class="col-sm-3 text-center">
+    <nav class="navmenu navmenu-default menu" role="navigation">
+      <ul class="nav navmenu-nav">
+        <li class="active"><a href="#" class="link">Отправители товаров</a></li>
+        <li><a href="#" class="link">Получатели товаров</a></li>
+		<li><a href="#" class="link">Полная информация о товарах</a></li>
+		<li><a href="#" class="link">Запрещённые товары на складе</a></li>
+		<li><a href="#" class="link">Сформировать отчёт за период</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+  <div class="col-sm-9 text-center">
+    <table class="table table-hover" style="margin-top: 50px;">
+	  <thead style="display: block; width:100%;">
+	    <tr>
+		  <th style="width: 20%;">
+		    Имя отправителя
+		  </th>
+		  <th style="width: 40%;">
+		    Юридический адрес
+		  </th>
+		  <th style="width: 20%;">
+		    Телефон
+		  </th>
+		  <th style="width: 20%;">
+		    Почта
+		  </th>
+		  </tr>
+	  </thead>
+	  <tbody>
+	    <tr>
+		  <td style="width: 20%;">
+		    1111
+		  </td>
+		  <td style="width: 40%;">
+		    2222
+		  </td>
+		  <td style="width: 20%;">
+		    3333
+		  </td>
+		  <td style="width: 20%;">
+		    44444
+		  </td>
+		</tr>
+	  </tbody>
+	</table>
+  </div>
+</div>
+<div id="footer" style="background: #D3D3D3;">
+      <div class="container text-center" style="">
+        <p class="text-muted">Accounting system &copy; 2015</p>
+      </div>
+    </div>
+</body>
+</html>

@@ -35,13 +35,13 @@ public class Product_DAOTest {
         assertTrue(product.equals(DAOFactory.getFactory().getProductDAO().getById(1)));
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void updateProductTest() {
-        product.setAcount(9999);
-        product.setProduct_id(1);
+        product = DAOFactory.getFactory().getProductDAO().getById(4);
+        product.setProduct_marking("19B001");
         DAOFactory.getFactory().getProductDAO().update(product);
-        assertTrue(product.equals(DAOFactory.getFactory().getProductDAO().getById(1)));
+        assertTrue(product.equals(DAOFactory.getFactory().getProductDAO().getById(4)));
     }
 
     @Ignore

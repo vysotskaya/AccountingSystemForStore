@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Product;
 import entity.Record;
 import hibernateutil.HibernateUtil;
 import org.hibernate.HibernateException;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by User on 21.04.2015.
  */
-public class RecordDAO implements BaseDAO <Record> {
+public class RecordDAO implements BaseDAO<Record> {
 
     @Override
     public boolean create(Record record) {
@@ -102,6 +103,27 @@ public class RecordDAO implements BaseDAO <Record> {
             transaction = session.beginTransaction();
             Record record = (Record)session.getNamedQuery("getRecordById")
                     .setParameter("record_id", id).uniqueResult();
+            transaction.commit();
+            return record;
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return new Record();
+    }
+
+    public Record getByProductId (Product product) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = HibernateUtil.openSession();
+            transaction = session.beginTransaction();
+            Record record = (Record)session.getNamedQuery("getRecordByProductId")
+                    .setParameter("product", product).uniqueResult();
             transaction.commit();
             return record;
         } catch (Exception e) {

@@ -1,7 +1,14 @@
 package entity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by User on 21.04.2015.
@@ -13,7 +20,9 @@ import javax.persistence.*;
         @NamedQuery(name = "deleteRecordById", query = "delete from entity.Record r " +
                 "where r.record_id = :record_id"),
         @NamedQuery(name = "getRecordById", query = "from entity.Record r " +
-                "where r.record_id = :record_id")})
+                "where r.record_id = :record_id"),
+        @NamedQuery(name = "getRecordByProductId", query = "from entity.Record r " +
+                "where r.product = :product")})
 
 public class Record implements Serializable {
     @Id
@@ -82,6 +91,7 @@ public class Record implements Serializable {
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     public Product getProduct() {
         return product;

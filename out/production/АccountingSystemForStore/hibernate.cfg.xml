@@ -12,6 +12,8 @@
     <!-- enable Hibernate's automatic session context management -->
     <property name="hibernate.current_session_context_class">thread</property>
 	<property name="hibernate.hbm2ddl.auto">update</property>
+
+    <!--<property name="hibernate.connection.datasource">java:comp/env/jdbc/store</property>-->
 	
 	<mapping class="entity.CustomsRegimeType"/>
     <mapping class="entity.Position"/>

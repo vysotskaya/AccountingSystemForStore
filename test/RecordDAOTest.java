@@ -1,4 +1,5 @@
 import dao.DAOFactory;
+import entity.Product;
 import entity.Record;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -18,29 +19,33 @@ public class RecordDAOTest {
 //    @Before
 //    public void setRecord() {
 //        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getById(1),
-//                DAOFactory.getFactory().getProductDAO().getById(1), DAOFactory.getFactory().getReceiverDAO().getById(1),
+//                DAOFactory.getFactory().getProductDAO().getById(3), DAOFactory.getFactory().getReceiverDAO().getById(1),
 //                "15.06.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(1),
 //                DAOFactory.getFactory().getSenderDAO().getById(1)));
 //        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getById(2),
-//                DAOFactory.getFactory().getProductDAO().getById(2), DAOFactory.getFactory().getReceiverDAO().getById(1),
+//                DAOFactory.getFactory().getProductDAO().getById(4), DAOFactory.getFactory().getReceiverDAO().getById(1),
 //                "01.05.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(3),
-//                DAOFactory.getFactory().getSenderDAO().getById(1)));
-//        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getById(1),
-//                DAOFactory.getFactory().getProductDAO().getById(1), DAOFactory.getFactory().getReceiverDAO().getById(1),
-//                "qwertyu", DAOFactory.getFactory().getStoreAreaDAO().getById(1),
 //                DAOFactory.getFactory().getSenderDAO().getById(1)));
 //
 //    }
 
-    //@Ignore
+    @Ignore
     @Test
     public void getRecordByIdTest() {
         record = new Record(DAOFactory.getFactory().getEmployeeDAO().getById(1),
                 DAOFactory.getFactory().getProductDAO().getById(1), DAOFactory.getFactory().getReceiverDAO().getById(1),
-                "30.06.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(1),
+                "15.06.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(1),
                 DAOFactory.getFactory().getSenderDAO().getById(1));
         record.setRecord_id(1);
         assertTrue(record.equals(DAOFactory.getFactory().getRecordDAO().getById(1)));
+    }
+
+    //@Ignore
+    @Test
+    public void getRecordByProductIdTest() {
+        record = DAOFactory.getFactory().getRecordDAO().getById(12);
+        Product product = DAOFactory.getFactory().getProductDAO().getById(3);
+        assertTrue(record.equals(DAOFactory.getFactory().getRecordDAO().getByProductId(product)));
     }
 
     @Ignore

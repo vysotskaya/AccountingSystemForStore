@@ -1,7 +1,7 @@
 package entity;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by User on 21.04.2015.
