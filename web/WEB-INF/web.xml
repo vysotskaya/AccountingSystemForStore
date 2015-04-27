@@ -5,11 +5,11 @@
          version="3.1">
 
     <servlet>
-        <servlet-name>MainServlet</servlet-name>
-        <servlet-class>servlets.MainServlet</servlet-class>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>servlets.Controller</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>MainServlet</servlet-name>
+        <servlet-name>Controller</servlet-name>
         <url-pattern>/accountingsystem</url-pattern>
     </servlet-mapping>
 
