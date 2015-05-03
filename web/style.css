@@ -60,3 +60,12 @@ table tbody {
 table th, td {
     width: 17%;
 }
+
+#myModal {
+    display: block;
+    opacity: 1;
+}
+
+#blackoutdiv {
+    display: block;
+}

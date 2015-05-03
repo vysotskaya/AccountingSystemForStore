@@ -22,19 +22,31 @@
   </style>
 </head>
 <body>
-  <%--<jsp:useBean id="list" class="java.util.List<entity.Record>" scope="request"/>--%>
   <c:set var="list" value="${list}"/>
+  <c:set var="login" value="${login}" scope="session" />
+  <c:set var="isAuthorized" value="${isAuthorized}" scope="session" />
+
   <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-      <a href="" class="pull-right" style="margin-top:25px">| Редактировать профиль</a>
-      <a href="/accountingsystem?command=authorizedafterlogin" class="pull-right" style="margin-top:25px">Войти&nbsp;</a>
+      <c:if test="${not empty login}">
+        <a href="editprofile.jsp" class="pull-right" style="margin-top:25px">| Редактировать профиль</a>
+      </c:if>
+      <a href="/accountingsystem?command=signin" class="pull-right" style="margin-top:25px">
+        <c:if test="${empty login}"><c:out value="Войти" /></c:if>
+        <c:if test="${not empty login}">
+          <c:out value="${login}" />
+          <c:out value=" | Выход" />
+        </c:if>
+        &nbsp;
+      </a>
     </div>
+
   </div>
   <div class="jumbotron" style="margin-bottom: 0px;padding-bottom: 10px;">
     <div class="container">
       <div class="col-sm-8">
         <h3>
-          <a href="" class="link">Система учетов товаров</a>
+          <a href="/accountingsystem?command=showallrecords" class="link">Система учетов товаров</a>
         </h3>
         <h5>
           Склад временного хранения
@@ -152,7 +164,8 @@
         </style>
       </c:if>
 
-      <a href="" id="addbutton" class="btn btn-sm btn-primary">Добавить</a>
+      <a href="#" id="addbutton" class="btn btn-sm btn-primary">Добавить</a>
+
     </div>
   </div>
   <div id="footer" style="background: #D3D3D3;">

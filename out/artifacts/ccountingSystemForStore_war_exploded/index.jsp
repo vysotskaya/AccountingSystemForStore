@@ -23,7 +23,7 @@
   <div class="container" style="margin-top : 10%;">
     <div class="jumbotron text-center alert-info">
       <div class="container col-md-4 col-md-offset-4 main text-center">
-        <h3>Вход в систему учёта товаров</h3>
+        <h3>Вход в систему учёта товаров123456</h3>
         <br/>
         <form action="/accountingsystem" method="post">
           <input type="text" placeholder="Login" name="loginInput" style="width: 105%;" class="form-control"/><br/>

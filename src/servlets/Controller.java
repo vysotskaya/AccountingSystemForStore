@@ -1,7 +1,10 @@
 package servlets;
 
+import command.Command;
+import command.manage.CommandFactory;
 import dao.DAOFactory;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,34 +47,12 @@ public class Controller extends HttpServlet {
 
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String command = (String) req.getParameter("command");
-        String loginInput = (String) req.getParameter("loginInput");
-        if (command.equals("showallreceivers")) {
-            List receivers = DAOFactory.getFactory().getReceiverDAO().read();
-            req.setAttribute("list", receivers);
-            req.getRequestDispatcher("/receiverspage.jsp").forward(req, resp);
-        }
-        if (command.equals("showallsenders")) {
-            List senders = DAOFactory.getFactory().getSenderDAO().read();
-            req.setAttribute("list", senders);
-            req.getRequestDispatcher("/senderspage.jsp").forward(req, resp);
-        }
-        if (command.equals("authorizedafterlogin")) {
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
-        }
-        if (command.equals("login")) {
-            List records = DAOFactory.getFactory().getRecordDAO().read();
-            req.setAttribute("isAuthorized", false);
-            req.setAttribute("list", records);
-            req.getRequestDispatcher("/storepage.jsp").forward(req, resp);
-        } else if (loginInput.equals("true")) {
-            List records = DAOFactory.getFactory().getRecordDAO().read();
-            req.setAttribute("isAuthorized", true);
-            req.setAttribute("list", records);
-            req.getRequestDispatcher("/storepage.jsp").forward(req, resp);
-        } else {
-            req.setAttribute("isWrong", true);
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
-        }
+
+        String page = null;
+        Command command = CommandFactory.getCommand(req, resp);
+        page = command.execute(req, resp);
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+        dispatcher.forward(req, resp);
+
     }
 }
