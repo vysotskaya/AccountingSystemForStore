@@ -26,6 +26,7 @@ public class EmployeeDAOTest {
 //                "qwerty", DAOFactory.getFactory().getPositionDAO().getById(1)));
 //
 //    }
+//
 
     @Ignore
     @Test
@@ -54,6 +55,15 @@ public class EmployeeDAOTest {
         assertFalse(employee.equals(DAOFactory.getFactory().getEmployeeDAO().getById(3)));
     }
 
+    @Ignore
+    @Test
+    public void getEmployeeByLoginTest() {
+        employee = new Employee("ivanov@gmail.com", "Иванов И.И.", "Ivanov",
+                "123456", DAOFactory.getFactory().getPositionDAO().getById(1));
+        employee.setEmployee_id(1);
+        assertTrue(employee.equals(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin("Ivanov")));
+    }
+
     //@Ignore
     @Test
     public void readEmployeeTest() {
@@ -61,6 +71,6 @@ public class EmployeeDAOTest {
         for (Object o : employees) {
             System.out.println(o.toString());
         }
-        assertTrue(employees.size() == 2);
+        assertTrue(true);
     }
 }

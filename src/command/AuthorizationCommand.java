@@ -2,6 +2,7 @@ package command;
 
 import configuration.PageManager;
 import dao.DAOFactory;
+import entity.Employee;
 import service.AuthorizationService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,18 @@ public class AuthorizationCommand implements Command {
         String login = (String) request.getParameter("loginInput");
         String password = (String) request.getParameter("passwordInput");
 
-        if (AuthorizationService.checkAuthorize(login, password)) {
+        Employee employee = AuthorizationService.checkAuthorize(login, password);
+
+        if ( employee != null) {
             HttpSession session = request.getSession();
             session.setAttribute("login", login);
             session.setAttribute("isAuthorized", true);
-            return PageManager.SHOW_ALL_RECORDS_COMMAND;
+            session.setAttribute("role", employee.getPosition().getPosition_id());
+            if (employee.getPosition().getPosition_id() != 2) {
+                return PageManager.SHOW_ALL_RECORDS_COMMAND;
+            } else {
+                return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
+            }
         } else {
             request.setAttribute("isWrong", true);
             return PageManager.LOGIN_PAGE;

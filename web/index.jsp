@@ -26,8 +26,10 @@
         <h3>Вход в систему учёта товаров</h3>
         <br/>
         <form action="/accountingsystem" method="post">
-          <input type="text" placeholder="Login" name="loginInput" style="width: 105%;" class="form-control"/><br/>
-          <input type="password" placeholder="Password" name="passwordInput" style="width: 105%;" class="form-control"/><br/><br/>
+          <input type="text" placeholder="Login" required="true"
+                 name="loginInput" style="width: 105%;" class="form-control"/><br/>
+          <input type="password" placeholder="Password" required="true"
+                 name="passwordInput" style="width: 105%;" class="form-control"/><br/><br/>
           <div class="form-inline text-center form-group" role="form" style="margin-left : 20px;">
             <button class="btn btn-sm btn-primary" style="width: 48%;" type="submit"
                     data-toggle="modal" data-target=".bs-example-modal-sm"
@@ -59,6 +61,7 @@
                   <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                   <br/>
                   <b>Некорректные данные!</b>
+
                   <br/>
                   <br/>
                 </div>

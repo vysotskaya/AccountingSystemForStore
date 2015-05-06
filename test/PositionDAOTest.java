@@ -15,16 +15,12 @@ import static junit.framework.Assert.*;
 public class PositionDAOTest {
     private Position position;
 
-    @Before
-    public void setPosition() {
-        position = new Position("инженер");
-        DAOFactory.getFactory().getPositionDAO().create(position);
-    }
+//    @Before
+//    public void setPosition() {
+//        position = new Position("инженер");
+//        DAOFactory.getFactory().getPositionDAO().create(position);
+//    }
 
-    @After
-    public void clearPosition() {
-        DAOFactory.getFactory().getPositionDAO().deleteById(1);
-    }
 
     @Ignore
     @Test
@@ -42,7 +38,7 @@ public class PositionDAOTest {
         assertTrue(position.equals(DAOFactory.getFactory().getPositionDAO().getById(1)));
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void deletePositionByIdTest() {
         DAOFactory.getFactory().getPositionDAO().deleteById(1);
@@ -54,6 +50,9 @@ public class PositionDAOTest {
     @Test
     public void readPositionTest() {
         List positions = DAOFactory.getFactory().getPositionDAO().read();
-        assertTrue(positions.size() == 1);
+        for (Object o : positions) {
+            System.out.println(o.toString());
+        }
+        assertTrue(positions.size() == 3);
     }
 }

@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:requestEncoding value="utf-8" />
 <%--
   Created by IntelliJ IDEA.
   User: User
@@ -20,31 +22,37 @@
 </head>
 <body>
 
+  <c:set var="list" value="${list}"></c:set>
+
   <div class="container">
       <div class="container col-md-4 col-md-offset-4 main">
-          <form>
+          <form action="/accountingsystem" method="get">
             <!-- Modal for edit profile -->
             <div class="modal text-left alert-info" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
               <div class="modal-dialog" style="width: 30%;">
                 <div class="modal-content" >
                   <div class="modal-header">
-                    <a href="/accountingsystem?command=showallrecords" id="closebutton" style="margin-top: -10px;" class="btn close">×</a>
+                    <a href="/accountingsystem?command=showallemployees" id="closebutton" style="margin-top: -10px;" class="btn close">×</a>
                     <h4 class="modal-title" id="myModalLabel">Редактировать профиль</h4>
                   </div>
                   <div class="modal-body">
                     <form class="text-left">
-                      Фамилия* <input type="text"  name="surnameInput" class="form-control"/><br/>
-                      Имя* <input type="text" name="nameInput" class="form-control"/><br/>
-                      Отчество* <input type="text" name="lastNameInput" class="form-control"/><br/>
+                      <input type="hidden" name="employee_id" value="${employee.employee_id}">
+                      Фамилия И. О.* <input type="text" pattern="^[А-Я]{1}[а-я]{2,}\s[А-Я]{1}.[А-Я]{1}."
+                                            title="например, Иванов И.И." name="surnameInput" class="form-control"
+                                            required="true" value="${employee.employee_name}"/><br/>
                       Должность* <br/>
-                      <select class="form-control">
-                        <option>Инженер</option>
-                        <option>Администратор</option>
-                      </select>
+                      <select class="form-control" name="positionSelect">
+                        <c:forEach var="position" items="${list}">
+                          <c:if test="${position.position_id != 2}">
+                            <option value="${position.position_id}"><c:out value="${position.position_name}"/></option>
+                          </c:if>
+                        </c:forEach>
+                      </select><br/>
+                      Почта* <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                    name="email" class="form-control" value="${employee.email}" required="true"/><br/>
+                      <button type="submit" name="command" value="saveprofile" class="btn btn-primary text-center">Сохранить изменения</button>
                     </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Сохранить изменения</button>
                   </div>
                 </div>
               </div>

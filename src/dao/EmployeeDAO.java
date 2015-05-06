@@ -114,4 +114,25 @@ public class EmployeeDAO implements BaseDAO <Employee> {
         }
         return new Employee();
     }
+
+    public Employee getEmployeeByLogin(String employee_login) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = HibernateUtil.openSession();
+            transaction = session.beginTransaction();
+            Employee employee = (Employee)session.getNamedQuery("getEmployeeByLogin")
+                    .setParameter("employee_login", employee_login).uniqueResult();
+            transaction.commit();
+            return employee;
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 }

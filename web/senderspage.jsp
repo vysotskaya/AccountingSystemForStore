@@ -28,9 +28,6 @@
 
   <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-      <c:if test="${not empty login}">
-        <a href="editprofile.jsp" class="pull-right" style="margin-top:25px">| Редактировать профиль</a>
-      </c:if>
       <a href="/accountingsystem?command=signin" class="pull-right" style="margin-top:25px">
         <c:if test="${empty login}"><c:out value="Войти" /></c:if>
         <c:if test="${not empty login}">

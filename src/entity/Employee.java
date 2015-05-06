@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "deleteEmployeeById", query = "delete from entity.Employee e " +
                 "where e.employee_id = :employee_id"),
+        @NamedQuery(name = "getEmployeeByLogin", query = "from entity.Employee e " +
+                "where e.login = :employee_login"),
         @NamedQuery(name = "getEmployeeById", query = "from entity.Employee e " +
                 "where e.employee_id = :employee_id")})
 
