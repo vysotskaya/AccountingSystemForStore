@@ -17,4 +17,5 @@ public class PageManager {
     public static final String EDIT_PROFILE_PAGE = "/editprofile.jsp";
     public static final String ADD_EMPLOYEE_COMMAND = "/accountingsystem?command=addemployee";
     public static final String ADD_EMPLOYEE_PAGE = "/addemployee.jsp";
+    public static final String ADD_PRODUCT_PAGE = "/addproduct.jsp";
 }

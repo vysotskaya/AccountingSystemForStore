@@ -15,22 +15,26 @@ import static junit.framework.Assert.*;
 public class SenderDAOTest {
     private Sender sender;
 
-    @Before
-    public void setSender() {
-        sender = new Sender("ytrewq@mail.ru", "Литва", "+375298150057", "OAO Металл");
-        DAOFactory.getFactory().getSenderDAO().create(sender);
-    }
+//    @Before
+//    public void setSender() {
+//        sender = new Sender("ytrewq@mail.ru", "Литва", "+375298150057", "OAO Металл");
+//        DAOFactory.getFactory().getSenderDAO().create(sender);
+//    }
 
-    @After
-    public void clearSender() {
-        DAOFactory.getFactory().getSenderDAO().deleteById(1);
-    }
 
-//    @Ignore
+    @Ignore
     @Test
     public void getSenderByIdTest() {
         sender.setSender_id(1);
         assertTrue(sender.equals(DAOFactory.getFactory().getSenderDAO().getById(1)));
+    }
+
+    @Ignore
+    @Test
+    public void getSenderByNameAndAddressTest() {
+        Sender sender1 = DAOFactory.getFactory().getSenderDAO().getById(1);
+        assertTrue(sender1.equals(DAOFactory.getFactory().getSenderDAO()
+                .getSenderByLegalAddress(sender1.getLegal_address())));
     }
 
     @Ignore
@@ -50,10 +54,13 @@ public class SenderDAOTest {
         assertFalse(sender.equals(DAOFactory.getFactory().getSenderDAO().getById(1)));
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void readSenderTest() {
         List senders = DAOFactory.getFactory().getSenderDAO().read();
+        for (Object o : senders) {
+            System.out.println(o.toString());
+        }
         assertTrue(senders.size() == 1);
     }
 }

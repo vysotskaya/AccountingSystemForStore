@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "deleteReceiverById", query = "delete from entity.Receiver r " +
                 "where r.receiver_id = :receiver_id"),
+        @NamedQuery(name = "getReceiverByLegalAddress", query = "from entity.Receiver r " +
+                "where r.legal_address = :legal_address"),
         @NamedQuery(name = "getReceiverById", query = "from entity.Receiver r " +
                 "where r.receiver_id = :receiver_id")})
 

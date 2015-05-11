@@ -143,8 +143,14 @@
                 </c:if>
 
                 <td>
-                  <a href="" id="editbutton" class="btn btn-sm btn-warning">><span class="glyphicon glyphicon-pencil"></span></a>
-                  <a href="" id="deletebutton" class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
+
+                  <a href="#" id="editbutton" class="btn btn-sm btn-warning">>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                  </a>
+                  <a href="/accountingsystem?command=deleterecord&record_id=${record.record_id}"
+                     onclick="return confirm('Вы действительно желаете удалить эту запись?')"
+                     class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
+
                 </td>
               </tr>
 
@@ -161,7 +167,7 @@
         </style>
       </c:if>
 
-      <a href="#" id="addbutton" class="btn btn-sm btn-primary">Добавить</a>
+      <a href="/accountingsystem?command=addproduct" id="addbutton" class="btn btn-sm btn-primary">Добавить</a>
 
     </div>
   </div>

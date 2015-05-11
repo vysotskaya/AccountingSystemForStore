@@ -114,4 +114,21 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
         }
         return new CustomsRegimeType();
     }
+
+    public CustomsRegimeType getRegimeByName (String name) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            CustomsRegimeType regime = (CustomsRegimeType)session.getNamedQuery("getRegimeByName")
+                    .setParameter("regime_name", name).uniqueResult();
+            return regime;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 }

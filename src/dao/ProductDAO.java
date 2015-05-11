@@ -114,4 +114,22 @@ public class ProductDAO implements BaseDAO <Product> {
         }
         return new Product();
     }
+
+    public Product getProductByMarking (String marking) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            Product product = (Product)session.getNamedQuery("getProductByMarking")
+                    .setParameter("product_marking", marking).uniqueResult();
+            return product;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
 }

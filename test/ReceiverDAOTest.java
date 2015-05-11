@@ -15,22 +15,27 @@ import static junit.framework.Assert.*;
 public class ReceiverDAOTest {
     private Receiver receiver;
 
-    @Before
-    public void setReceiver() {
-        receiver = new Receiver("qwerty@mail.ru", "Беларусь", "+375298150057", "OAO Металл");
-        DAOFactory.getFactory().getReceiverDAO().create(receiver);
-    }
+//    @Before
+//    public void setReceiver() {
+//        receiver = new Receiver("qwerty@mail.ru", "Беларусь", "+375298150057", "OAO Металл");
+//        DAOFactory.getFactory().getReceiverDAO().create(receiver);
+//    }
+//
 
-    @After
-    public void clearReceiver() {
-        DAOFactory.getFactory().getReceiverDAO().deleteById(1);
-    }
 
     @Ignore
     @Test
     public void getReceiverByIdTest() {
         receiver.setReceiver_id(1);
         assertTrue(receiver.equals(DAOFactory.getFactory().getReceiverDAO().getById(1)));
+    }
+
+    //@Ignore
+    @Test
+    public void getSenderByNameAndAddressTest() {
+        Receiver receiver1 = DAOFactory.getFactory().getReceiverDAO().getById(1);
+        assertTrue(receiver1.equals(DAOFactory.getFactory().getReceiverDAO()
+                .getReceiverByLegalAddress(receiver1.getLegal_address())));
     }
 
     @Ignore
@@ -50,7 +55,7 @@ public class ReceiverDAOTest {
         assertFalse(receiver.equals(DAOFactory.getFactory().getReceiverDAO().getById(1)));
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void readReceiverTest() {
         List receivers = DAOFactory.getFactory().getReceiverDAO().read();

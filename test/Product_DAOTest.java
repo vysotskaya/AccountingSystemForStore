@@ -37,6 +37,14 @@ public class Product_DAOTest {
 
     //@Ignore
     @Test
+    public void getProductByMarkingTest() {
+        Product product1 = DAOFactory.getFactory().getProductDAO().getById(3);
+        assertTrue(product1.equals(DAOFactory.getFactory().getProductDAO()
+                .getProductByMarking(product1.getProduct_marking())));
+    }
+
+    @Ignore
+    @Test
     public void updateProductTest() {
         product = DAOFactory.getFactory().getProductDAO().getById(4);
         product.setProduct_marking("19B001");

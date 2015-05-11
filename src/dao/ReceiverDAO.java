@@ -114,4 +114,21 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
         }
         return new Receiver();
     }
+
+    public Receiver getReceiverByLegalAddress (String address) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            Receiver receiver = (Receiver)session.getNamedQuery("getReceiverByLegalAddress")
+                    .setParameter("legal_address", address).uniqueResult();
+            return receiver;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 }

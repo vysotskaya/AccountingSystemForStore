@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "deleteRegimeById", query = "delete from entity.CustomsRegimeType c " +
                 "where c.regime_id = :regime_id"),
+        @NamedQuery(name = "getRegimeByName", query = "from entity.CustomsRegimeType c " +
+                "where c.regime_name = :regime_name"),
         @NamedQuery(name = "getRegimeById", query = "from entity.CustomsRegimeType c " +
                 "where c.regime_id = :regime_id")})
 

@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "deleteProductById", query = "delete from entity.Product p " +
                 "where p.product_id = :product_id"),
+        @NamedQuery(name = "getProductByMarking", query = "from entity.Product p " +
+                "where p.product_marking = :product_marking"),
         @NamedQuery(name = "getProductById", query = "from entity.Product p " +
                 "where p.product_id = :product_id")})
 

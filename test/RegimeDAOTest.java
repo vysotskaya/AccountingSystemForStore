@@ -37,6 +37,14 @@ public class RegimeDAOTest {
         assertTrue(regime.equals(DAOFactory.getFactory().getRegimeDAO().getById(1)));
     }
 
+    //@Ignore
+    @Test
+    public void getRegimeByNameTest() {
+        CustomsRegimeType regimeType = DAOFactory.getFactory().getRegimeDAO().getById(3);
+        assertTrue(regimeType.equals(DAOFactory.getFactory().getRegimeDAO()
+                .getRegimeByName(regimeType.getRegime_name())));
+    }
+
     @Ignore
     @Test
     public void updateRegimeTest() {

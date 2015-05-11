@@ -24,6 +24,9 @@ public class CommandManager {
         commandMap.put("saveemployee", new SaveEmployeeCommand());
         commandMap.put("addemployee", new AddEmployeeCommand());
         commandMap.put("deleteemployee", new DeleteEmployeeCommand());
+        commandMap.put("saveproduct", new SaveProductCommand());
+        commandMap.put("addproduct", new AddProductCommand());
+        commandMap.put("deleterecord", new DeleteRecordCommand());
     }
 
     public static Command getCurrentCommand(String commandKey) {

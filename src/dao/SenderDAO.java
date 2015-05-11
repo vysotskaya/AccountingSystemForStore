@@ -114,4 +114,21 @@ public class SenderDAO implements BaseDAO <Sender>{
         }
         return new Sender();
     }
+
+    public Sender getSenderByLegalAddress (String address) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            Sender sender = (Sender)session.getNamedQuery("getSenderByLegalAddress")
+                    .setParameter("legal_address", address).uniqueResult();
+            return sender;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 }
