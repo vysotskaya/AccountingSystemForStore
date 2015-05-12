@@ -1,10 +1,15 @@
 import dao.DAOFactory;
 import entity.Product;
 import entity.Record;
+import hibernateutil.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
@@ -40,7 +45,7 @@ public class RecordDAOTest {
         assertTrue(record.equals(DAOFactory.getFactory().getRecordDAO().getById(1)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void getRecordByProductIdTest() {
         record = DAOFactory.getFactory().getRecordDAO().getById(12);
@@ -68,7 +73,7 @@ public class RecordDAOTest {
         assertFalse(record.equals(DAOFactory.getFactory().getRecordDAO().getById(3)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void readRecordTest() {
         List records = DAOFactory.getFactory().getRecordDAO().read();
@@ -76,5 +81,16 @@ public class RecordDAOTest {
             System.out.println(o.toString());
         }
         assertTrue(records.size() == 2);
+    }
+
+    @Ignore
+    @Test
+    public void getRecordsForPeriodTest() {
+        String periodBegin = "16.05.2015";
+        String periodEnd = "16.08.2015";
+
+        List recordList = DAOFactory.getFactory().getRecordDAO().getRecordsForPeriod(periodBegin, periodEnd);
+
+        assertTrue(recordList.size() == 2);
     }
 }

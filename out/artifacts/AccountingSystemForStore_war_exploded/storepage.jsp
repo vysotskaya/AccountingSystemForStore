@@ -70,7 +70,7 @@
           <li><a href="/accountingsystem?command=showallreceivers" class="link">Получатели товаров</a></li>
           <li><a href="#" class="link">Полная информация о товарах</a></li>
           <li><a href="#" class="link">Запрещённые товары на складе</a></li>
-          <li><a href="#" class="link">Сформировать отчёт за период</a></li>
+          <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
         </ul>
         </li>
         </ul>
@@ -147,7 +147,7 @@
                   <a href="#" id="editbutton" class="btn btn-sm btn-warning">>
                     <span class="glyphicon glyphicon-pencil"></span>
                   </a>
-                  <a href="/accountingsystem?command=deleterecord&record_id=${record.record_id}"
+                  <a href="/accountingsystem?command=deleterecord&record_id=${record.record_id}" id="deletebutton"
                      onclick="return confirm('Вы действительно желаете удалить эту запись?')"
                      class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
 

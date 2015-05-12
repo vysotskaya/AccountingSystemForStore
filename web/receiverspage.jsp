@@ -69,7 +69,7 @@
           <li><a href="/accountingsystem?command=showallreceivers" class="link">Получатели товаров</a></li>
           <li><a href="#" class="link">Полная информация о товарах</a></li>
           <li><a href="#" class="link">Запрещённые товары на складе</a></li>
-          <li><a href="#" class="link">Сформировать отчёт за период</a></li>
+          <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
         </ul>
         </li>
         </ul>

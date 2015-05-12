@@ -21,6 +21,8 @@ import java.io.Serializable;
                 "where r.record_id = :record_id"),
         @NamedQuery(name = "getRecordById", query = "from entity.Record r " +
                 "where r.record_id = :record_id"),
+        @NamedQuery(name = "getRecordsForPeriod", query = "from entity.Record r " +
+                "where r.retention_limit > :retention_limit"),
         @NamedQuery(name = "getRecordByProductId", query = "from entity.Record r " +
                 "where r.product = :product")})
 

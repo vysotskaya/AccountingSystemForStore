@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -135,5 +136,34 @@ public class RecordDAO implements BaseDAO<Record> {
             }
         }
         return new Record();
+    }
+
+    public List getRecordsForPeriod(String periodBegin, String periodEnd) {
+        String[] periodBeginStr = periodBegin.split("\\.");
+        String[] periodEndStr = periodEnd.split("\\.");
+        Date dateBegin = new Date(Integer.parseInt(periodBeginStr[2]), Integer.parseInt(periodBeginStr[1]),
+                Integer.parseInt(periodBeginStr[0]));
+        Date dateEnd = new Date(Integer.parseInt(periodEndStr[2]), Integer.parseInt(periodEndStr[1]),
+                Integer.parseInt(periodEndStr[0]));
+
+        List records = DAOFactory.getFactory().getRecordDAO().read();
+        List<Record> recordList = new ArrayList();
+
+        Record record = null;
+        for (Object o : records) {
+            record = (Record) o;
+            String[] limit = record.getRetention_limit().split("\\.");
+            Date date = new Date(Integer.parseInt(limit[2]), Integer.parseInt(limit[1]),
+                    Integer.parseInt(limit[0]));
+            if (date.compareTo(dateBegin) >= 0 && date.compareTo(dateEnd) <= 0) {
+                recordList.add(record);
+            }
+        }
+
+        if (!recordList.isEmpty()) {
+            return recordList;
+        }
+
+        return null;
     }
 }

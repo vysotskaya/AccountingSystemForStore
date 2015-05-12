@@ -35,7 +35,7 @@ public class Product_DAOTest {
         assertTrue(product.equals(DAOFactory.getFactory().getProductDAO().getById(1)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void getProductByMarkingTest() {
         Product product1 = DAOFactory.getFactory().getProductDAO().getById(3);
@@ -67,6 +67,6 @@ public class Product_DAOTest {
         for (Object o : products) {
             System.out.println(o.toString());
         }
-        assertTrue(products.size() == 2);
+        assertTrue(products.size() == 3);
     }
 }
