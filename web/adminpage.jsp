@@ -56,7 +56,7 @@
           <input type="text" id="textToFind" class="form-control" placeholder="Search..." />
         </div>
         <div class="form-group">
-          <a href="#" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></a>
+          <a title="Осуществить поиск" href="#" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></a>
         </div>
       </form>
     </div>
@@ -108,10 +108,10 @@
                   <c:out value="${employee.email}"/>
                 </td>
                 <td style="width: 25%;">
-                    <a href="/accountingsystem?command=editprofile&emloyee_id=${employee.employee_id}" id="editbutton" class="btn btn-sm btn-warning">>
+                    <a title="Редактировать данные сотрудника" href="/accountingsystem?command=editprofile&emloyee_id=${employee.employee_id}" id="editbutton" class="btn btn-sm btn-warning">>
                       <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    <a href="/accountingsystem?command=deleteemployee&employee_id=${employee.employee_id}"
+                    <a title="Удалить данные о сотруднике" href="/accountingsystem?command=deleteemployee&employee_id=${employee.employee_id}"
                        onclick="return confirm('Вы действительно желаете удалить пользователя?')"
                        class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
 

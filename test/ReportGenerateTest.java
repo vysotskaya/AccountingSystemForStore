@@ -6,6 +6,7 @@ import org.docx4j.wml.*;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigInteger;
@@ -21,6 +22,7 @@ public class ReportGenerateTest {
     private ObjectFactory factory = null;
     private WordprocessingMLPackage wordMLPackage = null;
 
+    //@Ignore
     @Test
     public void reportGenerateTest() {
         try {
@@ -101,4 +103,5 @@ public class ReportGenerateTest {
                 wordMLPackage.getMainDocumentPart().createParagraphOfText(content));
         tableRow.getContent().add(tableCell);
     }
+
 }

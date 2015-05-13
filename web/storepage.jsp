@@ -41,7 +41,7 @@
   </div>
   <div class="jumbotron" style="margin-bottom: 0px;padding-bottom: 10px;">
     <div class="container">
-      <div class="col-sm-8">
+      <div class="col-sm-7">
         <h3>
           <a href="/accountingsystem?command=showallrecords" class="link">Система учетов товаров</a>
         </h3>
@@ -49,14 +49,21 @@
           Склад временного хранения
         </h5>
       </div>
-      <div class="col-sm-4" style="margin-top:10px;">
+      <div class="col-sm-5" style="margin-top:10px;">
         <br>
         <form class="form-inline text-right" role="form">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Search..." />
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+            <select class="form-control" name="searchOption">
+              <option value="byMarking">по маркировке</option>
+              <option value="byName">по наименованию</option>
+              <option value="byEmployee">по ответственному</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button title="Осуществить поиск" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
           </div>
         </form>
       </div>
@@ -68,9 +75,15 @@
         <ul class="nav navmenu-nav">
           <li class="active"><a href="/accountingsystem?command=showallsenders" class="link">Отправители товаров</a></li>
           <li><a href="/accountingsystem?command=showallreceivers" class="link">Получатели товаров</a></li>
-          <li><a href="#" class="link">Полная информация о товарах</a></li>
-          <li><a href="#" class="link">Запрещённые товары на складе</a></li>
-          <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
+          <li><a href="/accountingsystem?command=showallproducts" class="link">Полная информация о товарах</a></li>
+          <li><a href="/accountingsystem?command=showforbiddenproducts" class="link">Запрещённые товары на складе</a></li>
+          <li><a href="/accountingsystem?command=showstoringfeatures" class="link">Особенности хранения товаров</a></li>
+          <li><a href="/accountingsystem?command=showproductstodetention" class="link">Товары к задержанию</a></li>
+
+          <c:if test="${not empty login}">
+            <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
+          </c:if>
+
         </ul>
         </li>
         </ul>
@@ -144,10 +157,11 @@
 
                 <td>
 
-                  <a href="#" id="editbutton" class="btn btn-sm btn-warning">>
+                  <a title="Редактировать запись" href="/accountingsystem?command=editproduct&record_id=${record.record_id}" id="editbutton"
+                     class="btn btn-sm btn-warning">>
                     <span class="glyphicon glyphicon-pencil"></span>
                   </a>
-                  <a href="/accountingsystem?command=deleterecord&record_id=${record.record_id}" id="deletebutton"
+                  <a title="Удалить запись" href="/accountingsystem?command=deleterecord&record_id=${record.record_id}" id="deletebutton"
                      onclick="return confirm('Вы действительно желаете удалить эту запись?')"
                      class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
 

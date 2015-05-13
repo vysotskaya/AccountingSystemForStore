@@ -14,6 +14,8 @@ import java.io.Serializable;
                 "where p.product_id = :product_id"),
         @NamedQuery(name = "getProductByMarking", query = "from entity.Product p " +
                 "where p.product_marking = :product_marking"),
+        @NamedQuery(name = "getProductsByRegime", query = "from entity.Product p " +
+                "where p.customsRegimeType = :regime"),
         @NamedQuery(name = "getProductById", query = "from entity.Product p " +
                 "where p.product_id = :product_id")})
 

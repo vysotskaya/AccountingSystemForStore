@@ -1,5 +1,6 @@
 package dao;
 
+import entity.CustomsRegimeType;
 import entity.Product;
 import hibernateutil.HibernateUtil;
 import org.hibernate.HibernateException;
@@ -122,6 +123,23 @@ public class ProductDAO implements BaseDAO <Product> {
             Product product = (Product)session.getNamedQuery("getProductByMarking")
                     .setParameter("product_marking", marking).uniqueResult();
             return product;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Product> getProductsByRegime (CustomsRegimeType regimeType) {
+        Session session = null;
+        List<Product> products = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            products = session.getNamedQuery("getProductsByRegime").setParameter("regime", regimeType).list();
+            return products;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

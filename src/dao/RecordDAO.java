@@ -166,4 +166,25 @@ public class RecordDAO implements BaseDAO<Record> {
 
         return null;
     }
+
+    public List<Record> getRecordsByProductRegime (String regime) {
+        Session session = null;
+        List<Record> records = new ArrayList();
+        List<Product> products = DAOFactory.getFactory().getProductDAO()
+                .getProductsByRegime(DAOFactory.getFactory().getRegimeDAO().getRegimeByName(regime));
+        try {
+            session = HibernateUtil.openSession();
+            for (Product product : products) {
+                records.add(getByProductId(product));
+            }
+            return records;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 }

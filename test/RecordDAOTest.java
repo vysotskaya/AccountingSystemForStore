@@ -80,7 +80,7 @@ public class RecordDAOTest {
         for (Object o : records) {
             System.out.println(o.toString());
         }
-        assertTrue(records.size() == 2);
+        assertTrue(records.size() == 3);
     }
 
     @Ignore
@@ -92,5 +92,16 @@ public class RecordDAOTest {
         List recordList = DAOFactory.getFactory().getRecordDAO().getRecordsForPeriod(periodBegin, periodEnd);
 
         assertTrue(recordList.size() == 2);
+    }
+
+    @Ignore
+    @Test
+    public void getRecordsByProductRegimeTest() {
+        List<Record> records = DAOFactory.getFactory().getRecordDAO()
+                .getRecordsByProductRegime("экспорт");
+        for (Record r : records) {
+            System.out.println(r.toString());
+        }
+        assertTrue(records.size() == 1);
     }
 }

@@ -55,7 +55,7 @@
             <input type="text" class="form-control" placeholder="Search..." />
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+            <button title="Осуществить поиск" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
           </div>
         </form>
       </div>
@@ -67,9 +67,15 @@
         <ul class="nav navmenu-nav">
           <li class="active"><a href="/accountingsystem?command=showallsenders" class="link">Отправители товаров</a></li>
           <li><a href="/accountingsystem?command=showallreceivers" class="link">Получатели товаров</a></li>
-          <li><a href="#" class="link">Полная информация о товарах</a></li>
-          <li><a href="#" class="link">Запрещённые товары на складе</a></li>
-          <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
+          <li><a href="/accountingsystem?command=showallproducts" class="link">Полная информация о товарах</a></li>
+          <li><a href="/accountingsystem?command=showforbiddenproducts" class="link">Запрещённые товары на складе</a></li>
+          <li><a href="/accountingsystem?command=showstoringfeatures" class="link">Особенности хранения товаров</a></li>
+          <li><a href="/accountingsystem?command=showproductstodetention" class="link">Товары к задержанию</a></li>
+
+          <c:if test="${not empty login}">
+            <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
+          </c:if>
+
         </ul>
         </li>
         </ul>

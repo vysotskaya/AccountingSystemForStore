@@ -22,6 +22,16 @@ public class RegimeDAOTest {
 //        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("переработка на таможенной территории"));
 //        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("переработка вне таможенной территории"));
 //        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("временный ввоз"));
+//
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("временный вывоз"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("таможенный склад"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("реимпорт"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("реэкспорт"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("уничтожение"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("отказ в пользу государства"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("свободная таможенная зона"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("беспошлинная торговля"));
+//        DAOFactory.getFactory().getRegimeDAO().create(new CustomsRegimeType("свободный склад"));
 //    }
 
 //
@@ -37,7 +47,7 @@ public class RegimeDAOTest {
         assertTrue(regime.equals(DAOFactory.getFactory().getRegimeDAO().getById(1)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void getRegimeByNameTest() {
         CustomsRegimeType regimeType = DAOFactory.getFactory().getRegimeDAO().getById(3);
@@ -69,6 +79,6 @@ public class RegimeDAOTest {
         for (Object o : regimes) {
             System.out.println(o.toString());
         }
-        assertTrue(regimes.size() == 5);
+        assertTrue(regimes.size() == 14);
     }
 }
