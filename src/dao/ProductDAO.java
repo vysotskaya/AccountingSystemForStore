@@ -150,4 +150,72 @@ public class ProductDAO implements BaseDAO <Product> {
         return null;
     }
 
+    public List<Product> findProductByMarking (String marking) {
+        Session session = null;
+        List<Product> products = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            products = session.getNamedQuery("findProductByMarking").setParameter("product_marking", marking).list();
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Product> findProductByName (String name) {
+        Session session = null;
+        List<Product> products = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            products = session.getNamedQuery("findProductByName").setParameter("product_name", name).list();
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Product> findProductByAcount (int acount) {
+        Session session = null;
+        List<Product> products = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            products = session.getNamedQuery("findProductByAcount").setParameter("acount", acount).list();
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Product> findProductByUnit (String unit) {
+        Session session = null;
+        List<Product> products = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            products = session.getNamedQuery("findProductByUnit").setParameter("measuring_unit", unit).list();
+            return products;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
 }

@@ -19,6 +19,8 @@
     <jsp:include page="bootstrap-3.3.4-dist\css\bootstrap.min.css"></jsp:include>
     <jsp:include page="style.css"></jsp:include>
   </style>
+  <script src="${pageContext.request.contextPath}/js/jquery-latest.js"></script>
+  <script src="${pageContext.request.contextPath}/js/jquery.tablesorter.js"></script>
 </head>
 <body>
 
@@ -83,7 +85,7 @@
     </nav>
   </div>
   <div class="col-sm-9 text-center">
-    <table class="table table-hover" style="margin-top: 50px;">
+    <table id="myTable" class="tablesorter table table-hover" style="margin-top: 50px;">
       <thead style="display: block; width:100%;">
       <tr>
         <th style="width: 25%;">
@@ -141,5 +143,12 @@
     <p class="text-muted">Accounting system &copy; 2015</p>
   </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $("#myTable").tablesorter();
+  });
+</script>
+
 </body>
 </html>

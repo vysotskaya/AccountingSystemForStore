@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CommandFactory {
     public static Command getCommand(HttpServletRequest request, HttpServletResponse response) {
         String action = (String) request.getParameter("command");
+
         Command command = CommandManager.getCurrentCommand(action);
 
         if (action == null || action.isEmpty()) {

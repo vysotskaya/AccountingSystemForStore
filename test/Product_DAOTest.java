@@ -60,7 +60,51 @@ public class Product_DAOTest {
         assertFalse(product.equals(DAOFactory.getFactory().getProductDAO().getById(1)));
     }
 
-//    @Ignore
+    @Ignore
+    @Test
+    public void findProductByMarkingTest() {
+        String findStr = "9";
+        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByMarking(findStr);
+        for (Product p : products) {
+            System.out.println(p.toString());
+        }
+        assertTrue(products.size() == 3);
+    }
+
+    //@Ignore
+    @Test
+    public void findProductByNameTest() {
+        String findStr = "во";
+        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByName(findStr);
+        for (Product p : products) {
+            System.out.println(p.toString());
+        }
+        assertTrue(products.size() == 2);
+    }
+
+    //@Ignore
+    @Test
+    public void findProductByAcountTest() {
+        int find = 8;
+        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByAcount(find);
+        for (Product p : products) {
+            System.out.println(p.toString());
+        }
+        assertTrue(products.size() == 2);
+    }
+
+    //@Ignore
+    @Test
+    public void findProductByUnitTest() {
+        String findStr = "шт";
+        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByUnit(findStr);
+        for (Product p : products) {
+            System.out.println(p.toString());
+        }
+        assertTrue(products.size() == 5);
+    }
+
+    @Ignore
     @Test
     public void readProductTest() {
         List products = DAOFactory.getFactory().getProductDAO().read();

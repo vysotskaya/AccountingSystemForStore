@@ -135,4 +135,25 @@ public class EmployeeDAO implements BaseDAO <Employee> {
         }
         return null;
     }
+
+    public List<Employee> findEmployeeByName(String employee_name) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = HibernateUtil.openSession();
+            transaction = session.beginTransaction();
+            List<Employee> employees = session.getNamedQuery("findEmployeeByName")
+                    .setParameter("employee_name", employee_name).list();
+            transaction.commit();
+            return employees;
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
 }

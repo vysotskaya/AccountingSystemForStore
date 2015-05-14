@@ -23,8 +23,12 @@ import java.io.Serializable;
                 "where r.record_id = :record_id"),
         @NamedQuery(name = "getRecordsForPeriod", query = "from entity.Record r " +
                 "where r.retention_limit > :retention_limit"),
+        @NamedQuery(name = "findRecordByLimit", query = "from entity.Record r " +
+                "where r.retention_limit like concat('%', :retention_limit, '%')"),
         @NamedQuery(name = "getRecordByProductId", query = "from entity.Record r " +
-                "where r.product = :product")})
+                "where r.product = :product"),
+        @NamedQuery(name = "getRecordsByEmployee", query = "from entity.Record r " +
+                "where r.employee = :employee")})
 
 public class Record implements Serializable {
     @Id

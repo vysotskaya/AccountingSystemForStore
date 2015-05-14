@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Employee;
 import entity.Product;
 import entity.Record;
 import hibernateutil.HibernateUtil;
@@ -185,6 +186,62 @@ public class RecordDAO implements BaseDAO<Record> {
                 session.close();
             }
         }
+        return null;
+    }
+
+    public List<Record> getRecordsByEmployee (Employee employee) {
+        Session session = null;
+        List<Record> records = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            records = session.getNamedQuery("getRecordsByEmployee").setParameter("employee", employee).list();
+            return records;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Record> findRecordByLimit (String limit) {
+        Session session = null;
+        List<Record> records = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            records = session.getNamedQuery("findRecordByLimit").setParameter("retention_limit", limit).list();
+            return records;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Record> findRecordsByEmployee(String findStr) {
+        List<Employee> employees = DAOFactory.getFactory().getEmployeeDAO().findEmployeeByName(findStr);
+        List<Record> records = null;
+        List<Record> resultList = new ArrayList();
+        if (!employees.isEmpty()) {
+            for (Employee employee : employees) {
+                records = getRecordsByEmployee(employee);
+                if(!records.isEmpty()) {
+                    for (Record record1 : records) {
+                        resultList.add(record1);
+                    }
+                }
+            }
+        }
+
+        if (!resultList.isEmpty()) {
+            return resultList;
+        }
+
         return null;
     }
 }

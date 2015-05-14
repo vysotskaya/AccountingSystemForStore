@@ -1,4 +1,5 @@
 import dao.DAOFactory;
+import entity.Employee;
 import entity.Product;
 import entity.Record;
 import hibernateutil.HibernateUtil;
@@ -92,6 +93,25 @@ public class RecordDAOTest {
         List recordList = DAOFactory.getFactory().getRecordDAO().getRecordsForPeriod(periodBegin, periodEnd);
 
         assertTrue(recordList.size() == 2);
+    }
+
+    @Ignore
+    @Test
+    public void findRecordByLimitTest() {
+        String findStr = "05";
+        List<Record> records = DAOFactory.getFactory().getRecordDAO().findRecordByLimit(findStr);
+        for (Record r : records) {
+            System.out.println(r.toString());
+        }
+        assertTrue(records.size() == 2);
+    }
+
+    //@Ignore
+    @Test
+    public void findRecordByEmployeeTest() {
+        String findStr = "Ом";
+        List<Record> records = DAOFactory.getFactory().getRecordDAO().findRecordsByEmployee(findStr);
+        assertTrue(records.size() == 1);
     }
 
     @Ignore

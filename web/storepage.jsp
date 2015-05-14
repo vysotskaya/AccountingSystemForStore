@@ -20,6 +20,8 @@
     <jsp:include page="bootstrap-3.3.4-dist\css\bootstrap.min.css"></jsp:include>
     <jsp:include page="style.css"></jsp:include>
   </style>
+  <script src="${pageContext.request.contextPath}/js/jquery-latest.js"></script>
+  <script src="${pageContext.request.contextPath}/js/jquery.tablesorter.js"></script>
 </head>
 <body>
   <c:set var="list" value="${list}"/>
@@ -51,19 +53,19 @@
       </div>
       <div class="col-sm-5" style="margin-top:10px;">
         <br>
-        <form class="form-inline text-right" role="form">
+        <form class="form-inline text-right" method="get" action="/accountingsystem" role="form">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search..." />
+            <input type="text" class="form-control" name="searchOption" placeholder="Search..." />
           </div>
+          <%--<div class="form-group">--%>
+            <%--<select class="form-control" name="searchOption">--%>
+              <%--<option value="byMarking">по маркировке</option>--%>
+              <%--<option value="byName">по наименованию</option>--%>
+              <%--<option value="byEmployee">по ответственному</option>--%>
+            <%--</select>--%>
+          <%--</div>--%>
           <div class="form-group">
-            <select class="form-control" name="searchOption">
-              <option value="byMarking">по маркировке</option>
-              <option value="byName">по наименованию</option>
-              <option value="byEmployee">по ответственному</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <button title="Осуществить поиск" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+            <button title="Осуществить поиск" name="command" value="search" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
           </div>
         </form>
       </div>
@@ -90,7 +92,7 @@
       </nav>
     </div>
     <div class="col-sm-9 text-center" style="position: relative;">
-      <table class="table table-hover" style="margin-top: 50px;">
+      <table id="myTable" class="tablesorter table table-hover" style="margin-top: 50px;">
         <thead style="display: block; width:100%;">
         <tr>
           <th>
@@ -171,6 +173,7 @@
             </c:forEach>
           </c:if>
         </tbody>
+
       </table>
 
       <c:if test="${not isAuthorized}">
@@ -190,6 +193,12 @@
       <p class="text-muted">Accounting system &copy; 2015</p>
     </div>
   </div>
+
+  <script>
+    $(document).ready(function(){
+      $("#myTable").tablesorter();
+    });
+  </script>
 
 </body>
 </html>

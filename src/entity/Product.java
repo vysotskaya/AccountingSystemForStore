@@ -17,7 +17,15 @@ import java.io.Serializable;
         @NamedQuery(name = "getProductsByRegime", query = "from entity.Product p " +
                 "where p.customsRegimeType = :regime"),
         @NamedQuery(name = "getProductById", query = "from entity.Product p " +
-                "where p.product_id = :product_id")})
+                "where p.product_id = :product_id"),
+        @NamedQuery(name = "findProductByName", query = "from entity.Product p " +
+                "where p.product_name like concat('%', :product_name, '%')"),
+        @NamedQuery(name = "findProductByAcount", query = "from entity.Product p " +
+                "where p.acount like concat('%', :acount, '%')"),
+        @NamedQuery(name = "findProductByUnit", query = "from entity.Product p " +
+                "where p.measuring_unit like concat('%', :measuring_unit, '%')"),
+        @NamedQuery(name = "findProductByMarking", query = "from entity.Product p " +
+                "where p.product_marking like concat('%', :product_marking, '%')")})
 
 public class Product implements Serializable {
     @Id
