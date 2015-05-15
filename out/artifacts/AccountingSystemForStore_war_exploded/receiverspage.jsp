@@ -75,7 +75,7 @@
           <li><a href="/accountingsystem?command=showproductstodetention" class="link">Товары к задержанию</a></li>
 
           <c:if test="${not empty login}">
-            <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
+            <li><a href="/accountingsystem?command=enterperiod" class="link">Сформировать отчёт за период</a></li>
           </c:if>
 
         </ul>

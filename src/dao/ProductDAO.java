@@ -39,11 +39,11 @@ public class ProductDAO implements BaseDAO <Product> {
     @Override
     public List read() {
         Session session = null;
-        List products = new ArrayList<Product>();
+        List<Product> products = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             products = session.createCriteria(Product.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -63,7 +63,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session.update(product);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -83,7 +83,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session.getNamedQuery("deleteProductById").setParameter("product_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -97,23 +97,19 @@ public class ProductDAO implements BaseDAO <Product> {
     @Override
     public Product getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Product product = (Product)session.getNamedQuery("getProductById")
                     .setParameter("product_id", id).uniqueResult();
-            transaction.commit();
             return product;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Product();
+        return null;
     }
 
     public Product getProductByMarking (String marking) {
@@ -123,7 +119,7 @@ public class ProductDAO implements BaseDAO <Product> {
             Product product = (Product)session.getNamedQuery("getProductByMarking")
                     .setParameter("product_marking", marking).uniqueResult();
             return product;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -140,7 +136,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session = HibernateUtil.openSession();
             products = session.getNamedQuery("getProductsByRegime").setParameter("regime", regimeType).list();
             return products;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -157,7 +153,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session = HibernateUtil.openSession();
             products = session.getNamedQuery("findProductByMarking").setParameter("product_marking", marking).list();
             return products;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -174,7 +170,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session = HibernateUtil.openSession();
             products = session.getNamedQuery("findProductByName").setParameter("product_name", name).list();
             return products;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -191,7 +187,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session = HibernateUtil.openSession();
             products = session.getNamedQuery("findProductByAcount").setParameter("acount", acount).list();
             return products;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -208,7 +204,7 @@ public class ProductDAO implements BaseDAO <Product> {
             session = HibernateUtil.openSession();
             products = session.getNamedQuery("findProductByUnit").setParameter("measuring_unit", unit).list();
             return products;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -217,5 +213,4 @@ public class ProductDAO implements BaseDAO <Product> {
         }
         return null;
     }
-
 }

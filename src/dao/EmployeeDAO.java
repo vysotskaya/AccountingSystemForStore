@@ -38,11 +38,11 @@ public class EmployeeDAO implements BaseDAO <Employee> {
     @Override
     public List read() {
         Session session = null;
-        List employees = new ArrayList<Employee>();
+        List<Employee> employees = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             employees = session.createCriteria(Employee.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -62,7 +62,7 @@ public class EmployeeDAO implements BaseDAO <Employee> {
             session.update(employee);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -82,7 +82,7 @@ public class EmployeeDAO implements BaseDAO <Employee> {
             session.getNamedQuery("deleteEmployeeById").setParameter("employee_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -96,38 +96,30 @@ public class EmployeeDAO implements BaseDAO <Employee> {
     @Override
     public Employee getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Employee employee = (Employee)session.getNamedQuery("getEmployeeById")
                     .setParameter("employee_id", id).uniqueResult();
-            transaction.commit();
             return employee;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Employee();
+        return null;
     }
 
     public Employee getEmployeeByLogin(String employee_login) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Employee employee = (Employee)session.getNamedQuery("getEmployeeByLogin")
                     .setParameter("employee_login", employee_login).uniqueResult();
-            transaction.commit();
             return employee;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -138,17 +130,13 @@ public class EmployeeDAO implements BaseDAO <Employee> {
 
     public List<Employee> findEmployeeByName(String employee_name) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             List<Employee> employees = session.getNamedQuery("findEmployeeByName")
                     .setParameter("employee_name", employee_name).list();
-            transaction.commit();
             return employees;
         } catch (Exception e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

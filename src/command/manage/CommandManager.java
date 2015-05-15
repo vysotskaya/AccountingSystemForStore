@@ -35,6 +35,7 @@ public class CommandManager {
         commandMap.put("deleterecord", new DeleteRecordCommand());
         commandMap.put("generatereport", new GenerateReportCommand());
         commandMap.put("search", new SearchCommand());
+        commandMap.put("enterperiod", new EnterPeriodCommand());
     }
 
     public static Command getCurrentCommand(String commandKey) {

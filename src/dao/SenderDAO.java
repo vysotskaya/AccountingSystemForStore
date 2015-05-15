@@ -38,11 +38,11 @@ public class SenderDAO implements BaseDAO <Sender>{
     @Override
     public List read() {
         Session session = null;
-        List senders = new ArrayList<Sender>();
+        List<Sender> senders = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             senders = session.createCriteria(Sender.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -62,7 +62,7 @@ public class SenderDAO implements BaseDAO <Sender>{
             session.update(sender);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -82,7 +82,7 @@ public class SenderDAO implements BaseDAO <Sender>{
             session.getNamedQuery("deleteSenderById").setParameter("sender_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -96,23 +96,19 @@ public class SenderDAO implements BaseDAO <Sender>{
     @Override
     public Sender getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Sender sender = (Sender)session.getNamedQuery("getSenderById")
                     .setParameter("sender_id", id).uniqueResult();
-            transaction.commit();
             return sender;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Sender();
+        return null;
     }
 
     public Sender getSenderByLegalAddress (String address) {
@@ -122,7 +118,7 @@ public class SenderDAO implements BaseDAO <Sender>{
             Sender sender = (Sender)session.getNamedQuery("getSenderByLegalAddress")
                     .setParameter("legal_address", address).uniqueResult();
             return sender;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {

@@ -38,11 +38,11 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
     @Override
     public List read() {
         Session session = null;
-        List receivers = new ArrayList<Receiver>();
+        List<Receiver> receivers = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             receivers = session.createCriteria(Receiver.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -62,7 +62,7 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             session.update(receiver);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -82,7 +82,7 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             session.getNamedQuery("deleteReceiverById").setParameter("receiver_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -96,23 +96,19 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
     @Override
     public Receiver getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Receiver receiver = (Receiver)session.getNamedQuery("getReceiverById")
                     .setParameter("receiver_id", id).uniqueResult();
-            transaction.commit();
             return receiver;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Receiver();
+        return null;
     }
 
     public Receiver getReceiverByLegalAddress (String address) {
@@ -122,7 +118,7 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             Receiver receiver = (Receiver)session.getNamedQuery("getReceiverByLegalAddress")
                     .setParameter("legal_address", address).uniqueResult();
             return receiver;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {

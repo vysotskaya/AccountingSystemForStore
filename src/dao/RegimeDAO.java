@@ -38,11 +38,11 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
     @Override
     public List read() {
         Session session = null;
-        List regimes = new ArrayList<CustomsRegimeType>();
+        List<CustomsRegimeType> regimes = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             regimes = session.createCriteria(CustomsRegimeType.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -62,7 +62,7 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             session.update(regime);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -82,7 +82,7 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             session.getNamedQuery("deleteRegimeById").setParameter("regime_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -96,23 +96,19 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
     @Override
     public CustomsRegimeType getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             CustomsRegimeType regime = (CustomsRegimeType)session.getNamedQuery("getRegimeById")
                     .setParameter("regime_id", id).uniqueResult();
-            transaction.commit();
             return regime;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new CustomsRegimeType();
+        return null;
     }
 
     public CustomsRegimeType getRegimeByName (String name) {
@@ -122,7 +118,7 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             CustomsRegimeType regime = (CustomsRegimeType)session.getNamedQuery("getRegimeByName")
                     .setParameter("regime_name", name).uniqueResult();
             return regime;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {

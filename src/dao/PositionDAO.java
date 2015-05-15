@@ -38,7 +38,7 @@ public class PositionDAO implements BaseDAO <Position> {
     @Override
     public List read() {
         Session session = null;
-        List positions = new ArrayList<Position>();
+        List<Position> positions = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             positions = session.createCriteria(Position.class).list();
@@ -62,7 +62,7 @@ public class PositionDAO implements BaseDAO <Position> {
             session.update(position);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -82,7 +82,7 @@ public class PositionDAO implements BaseDAO <Position> {
             session.getNamedQuery("deletePositionById").setParameter("position_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -96,22 +96,18 @@ public class PositionDAO implements BaseDAO <Position> {
     @Override
     public Position getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Position position = (Position)session.getNamedQuery("getPositionById")
                     .setParameter("position_id", id).uniqueResult();
-            transaction.commit();
             return position;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Position();
+        return null;
     }
 }

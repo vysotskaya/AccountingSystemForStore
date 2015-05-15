@@ -2,7 +2,10 @@ package servlets;
 
 import command.Command;
 import command.manage.CommandFactory;
+import configuration.PageManager;
 import dao.DAOFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +19,7 @@ import java.util.List;
  * Created by User on 21.04.2015.
  */
 public class Controller extends HttpServlet {
+
     public Controller() {
         super();
     }
@@ -23,6 +27,11 @@ public class Controller extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+        String prefix = getServletContext().getRealPath("/");
+        String filename = getInitParameter("log4j.xml");
+        if (filename != null) {
+            PropertyConfigurator.configure(prefix + filename);
+        }
     }
 
     @Override
@@ -50,8 +59,16 @@ public class Controller extends HttpServlet {
 
         String page = null;
         Command command = CommandFactory.getCommand(req, resp);
-        page = command.execute(req, resp);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+
+        try {
+            page = command.execute(req, resp);
+        } catch (NullPointerException ex) {
+            Logger logger = Logger.getLogger(Controller.class);
+            logger.error("unknown command : ", ex);
+            page = PageManager.LOGIN_PAGE;
+        }
+
+        RequestDispatcher dispatcher  = getServletContext().getRequestDispatcher(page);
         dispatcher.forward(req, resp);
 
     }

@@ -23,4 +23,5 @@ public class PageManager {
     public static final String FORBIDDEN_PRODUCT_PAGE = "/forbiddenproductspage.jsp";
     public static final String STORING_FEATURES_PAGE = "/storingfeaturespage.jsp";
     public static final String PRODUCT_TO_DETENTION_PAGE = "/productstodetentionpage.jsp";
+    public static final String PERIOD_PAGE = "/periodpage.jsp";
 }

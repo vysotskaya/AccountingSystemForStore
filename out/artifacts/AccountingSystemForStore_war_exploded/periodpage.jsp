@@ -22,6 +22,22 @@
 </head>
 <body>
 
+<c:set var="role" value="${role}" scope="session" />
+<c:choose>
+  <c:when test="${empty role}">
+    <div align="center" style="margin-top: 100px;">
+      <h3><a href="index.jsp">Сделать всё по-человечески</a></h3>
+    </div>
+    <jsp:forward page="index.jsp" />
+  </c:when>
+  <c:when test="${role == 2}">
+    <div align="center" style="margin-top: 100px;">
+      <h3><a style="text-align: center;" href="/accountingsystem?command=showallemployees">Сделать всё по-человечески</a></h3>
+    </div>
+    <jsp:forward page="index.jsp" />
+  </c:when>
+</c:choose>
+
 <c:set var="regimeList" value="${regimeList}"></c:set>
 <c:set var="areaList" value="${areaList}"></c:set>
 

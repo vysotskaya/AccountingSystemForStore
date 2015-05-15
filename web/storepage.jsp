@@ -83,7 +83,7 @@
           <li><a href="/accountingsystem?command=showproductstodetention" class="link">Товары к задержанию</a></li>
 
           <c:if test="${not empty login}">
-            <li><a href="periodpage.jsp" class="link">Сформировать отчёт за период</a></li>
+            <li><a href="/accountingsystem?command=enterperiod" class="link">Сформировать отчёт за период</a></li>
           </c:if>
 
         </ul>
@@ -176,6 +176,40 @@
 
       </table>
 
+      <c:choose>
+        <c:when test="${not isProhibited}">
+          <style>
+            #modalblock {
+              display: none;
+              opacity: 0;
+            }
+          </style>
+        </c:when>
+        <c:otherwise>
+          <style>
+            #modalblock {
+              display: block;
+              opacity: 1;
+            }
+          </style>
+        </c:otherwise>
+      </c:choose>
+
+      <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
+           tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;"
+                    aria-hidden="true">×</button>&nbsp;
+            <br/>
+            <b>У Вас нет прав для редактирования этой записи!</b>
+
+            <br/>
+            <br/>
+          </div>
+        </div>
+      </div>
+
       <c:if test="${not isAuthorized}">
         <style>
           #addbutton{
@@ -198,6 +232,33 @@
     $(document).ready(function(){
       $("#myTable").tablesorter();
     });
+  </script>
+
+  <c:choose>
+    <c:when test="${not isProhibited}">
+      <style>
+        #blackoutdiv {
+          display: none;
+        }
+      </style>
+    </c:when>
+    <c:otherwise>
+      <style>
+        #blackoutdiv {
+          display: block;
+        }
+      </style>
+    </c:otherwise>
+  </c:choose>
+
+  <div class="modal-backdrop fade in" id="blackoutdiv"></div>
+
+  <script type="text/javascript">
+    document.getElementById('modalclose').onclick = function () {
+      document.getElementById('blackoutdiv').style.display = 'none';
+      document.getElementById('modalblock').style.display = 'none';
+      document.getElementById('modalblock').style.opacity = '0';
+    }
   </script>
 
 </body>

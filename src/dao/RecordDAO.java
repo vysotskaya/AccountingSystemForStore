@@ -41,11 +41,11 @@ public class RecordDAO implements BaseDAO<Record> {
     @Override
     public List read() {
         Session session = null;
-        List records = new ArrayList<Record>();
+        List<Record> records = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             records = session.createCriteria(Record.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -65,7 +65,7 @@ public class RecordDAO implements BaseDAO<Record> {
             session.update(record);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -85,7 +85,7 @@ public class RecordDAO implements BaseDAO<Record> {
             session.getNamedQuery("deleteRecordById").setParameter("record_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -99,44 +99,36 @@ public class RecordDAO implements BaseDAO<Record> {
     @Override
     public Record getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Record record = (Record)session.getNamedQuery("getRecordById")
                     .setParameter("record_id", id).uniqueResult();
-            transaction.commit();
             return record;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Record();
+        return null;
     }
 
     public Record getByProductId (Product product) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             Record record = (Record)session.getNamedQuery("getRecordByProductId")
                     .setParameter("product", product).uniqueResult();
-            transaction.commit();
             return record;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new Record();
+        return null;
     }
 
     public List getRecordsForPeriod(String periodBegin, String periodEnd) {
@@ -147,17 +139,17 @@ public class RecordDAO implements BaseDAO<Record> {
         Date dateEnd = new Date(Integer.parseInt(periodEndStr[2]), Integer.parseInt(periodEndStr[1]),
                 Integer.parseInt(periodEndStr[0]));
 
-        List records = DAOFactory.getFactory().getRecordDAO().read();
+        List<Record> records = DAOFactory.getFactory().getRecordDAO().read();
         List<Record> recordList = new ArrayList();
 
-        Record record = null;
-        for (Object o : records) {
-            record = (Record) o;
-            String[] limit = record.getRetention_limit().split("\\.");
-            Date date = new Date(Integer.parseInt(limit[2]), Integer.parseInt(limit[1]),
-                    Integer.parseInt(limit[0]));
-            if (date.compareTo(dateBegin) >= 0 && date.compareTo(dateEnd) <= 0) {
-                recordList.add(record);
+        if (!records.isEmpty()) {
+            for (Record r : records) {
+                String[] limit = r.getRetention_limit().split("\\.");
+                Date date = new Date(Integer.parseInt(limit[2]), Integer.parseInt(limit[1]),
+                        Integer.parseInt(limit[0]));
+                if (date.compareTo(dateBegin) >= 0 && date.compareTo(dateEnd) <= 0) {
+                    recordList.add(r);
+                }
             }
         }
 
@@ -175,11 +167,13 @@ public class RecordDAO implements BaseDAO<Record> {
                 .getProductsByRegime(DAOFactory.getFactory().getRegimeDAO().getRegimeByName(regime));
         try {
             session = HibernateUtil.openSession();
-            for (Product product : products) {
-                records.add(getByProductId(product));
+            if (!products.isEmpty()) {
+                for (Product product : products) {
+                    records.add(getByProductId(product));
+                }
             }
             return records;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -196,7 +190,7 @@ public class RecordDAO implements BaseDAO<Record> {
             session = HibernateUtil.openSession();
             records = session.getNamedQuery("getRecordsByEmployee").setParameter("employee", employee).list();
             return records;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -213,7 +207,7 @@ public class RecordDAO implements BaseDAO<Record> {
             session = HibernateUtil.openSession();
             records = session.getNamedQuery("findRecordByLimit").setParameter("retention_limit", limit).list();
             return records;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -225,7 +219,7 @@ public class RecordDAO implements BaseDAO<Record> {
 
     public List<Record> findRecordsByEmployee(String findStr) {
         List<Employee> employees = DAOFactory.getFactory().getEmployeeDAO().findEmployeeByName(findStr);
-        List<Record> records = null;
+        List<Record> records = new ArrayList();
         List<Record> resultList = new ArrayList();
         if (!employees.isEmpty()) {
             for (Employee employee : employees) {

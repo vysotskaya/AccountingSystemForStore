@@ -38,11 +38,11 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
     @Override
     public List read() {
         Session session = null;
-        List areas = new ArrayList<StoreArea>();
+        List<StoreArea> areas = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             areas = session.createCriteria(StoreArea.class).list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -62,7 +62,7 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
             session.update(storeArea);
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isOpen()) {
@@ -82,7 +82,7 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
             session.getNamedQuery("deleteStoreAreaById").setParameter("storearea_id", id).executeUpdate();
             transaction.commit();
             return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -96,22 +96,18 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
     @Override
     public StoreArea getById (int id) {
         Session session = null;
-        Transaction transaction = null;
         try {
             session = HibernateUtil.openSession();
-            transaction = session.beginTransaction();
             StoreArea storeArea = (StoreArea)session.getNamedQuery("getStoreAreaById")
                     .setParameter("storearea_id", id).uniqueResult();
-            transaction.commit();
             return storeArea;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return new StoreArea();
+        return null;
     }
 }
