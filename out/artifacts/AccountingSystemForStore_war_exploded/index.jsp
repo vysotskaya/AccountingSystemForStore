@@ -36,34 +36,43 @@
                     name="command" value="authorization">
               Авторизоваться
             </button>
-            <button class="btn btn-sm btn-primary" style="width: 50%;" type="submit" name="command" value="login">Войти без авторизации</button>
-            <c:if test="${not isWrong}">
-              <style>
-                #modalblock {
-                  display: none;
-                  opacity: 0;
-                }
-              </style>
-            </c:if>
-            <c:if test="${isWrong}">
-              <style>
-                #modalblock {
-                  display: block;
-                  opacity: 1;
-                }
-              </style>
-            </c:if>
+            <button class="btn btn-sm btn-primary" style="width: 50%;" type="submit" name="command"
+                    value="login">Войти без авторизации</button>
+
+            <c:choose>
+              <c:when test="${not isWrong}">
+                <style>
+                  #modalblock {
+                    display: none;
+                    opacity: 0;
+                  }
+                  #blackoutdiv {
+                    display: none;
+                  }
+                </style>
+              </c:when>
+              <c:otherwise>
+                <style>
+                  #modalblock {
+                    display: block;
+                    opacity: 1;
+                  }
+                  #blackoutdiv {
+                    display: block;
+                  }
+                </style>
+              </c:otherwise>
+            </c:choose>
 
             <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
                  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-sm">
                 <div class="modal-content">
-                  <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
+                  <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
+                          style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                   <br/>
                   <b>Некорректные данные!</b>
-
-                  <br/>
-                  <br/>
+                  <br/><br/>
                 </div>
               </div>
             </div>
@@ -74,21 +83,6 @@
       <div class="container"></div>
     </div>
   </div>
-
-  <c:if test="${not isWrong}">
-    <style>
-      #blackoutdiv {
-        display: none;
-      }
-    </style>
-  </c:if>
-  <c:if test="${isWrong}">
-    <style>
-      #blackoutdiv {
-         display: block;
-       }
-    </style>
-  </c:if>
 
   <div class="modal-backdrop fade in" id="blackoutdiv"></div>
 

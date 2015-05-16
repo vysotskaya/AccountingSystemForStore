@@ -45,7 +45,14 @@
                       <select class="form-control" name="positionSelect">
                         <c:forEach var="position" items="${list}">
                           <c:if test="${position.position_id != 2}">
-                            <option value="${position.position_id}"><c:out value="${position.position_name}"/></option>
+                            <c:choose>
+                              <c:when test="${position.position_id == employee.position.position_id}">
+                                <option value="${position.position_id}" selected><c:out value="${position.position_name}"/></option>
+                              </c:when>
+                              <c:otherwise>
+                                <option value="${position.position_id}"><c:out value="${position.position_name}"/></option>
+                              </c:otherwise>
+                            </c:choose>
                           </c:if>
                         </c:forEach>
                       </select><br/>

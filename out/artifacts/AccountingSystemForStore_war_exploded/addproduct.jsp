@@ -24,6 +24,7 @@
 
 <c:set var="regimeList" value="${regimeList}"></c:set>
 <c:set var="areaList" value="${areaList}"></c:set>
+<c:set var="record" value="${record}"></c:set>
 
 <div class="container">
   <div class="container col-md-4 col-md-offset-4 main">
@@ -41,25 +42,33 @@
                 <div class="form-inline text-center" role="form">
                   <div class="form-group text-left">
                     Маркировка* <br/> <input type="text"  name="markingInput" class="form-control"
-                                             required="true" placeholder="1A2DW55"/><br/><br/>
+                                             required="true" placeholder="1A2DW55"
+                                             value="${record.product.product_marking}"/><br/><br/>
                     Количесвто* <br/> <input type="text"  name="acountInput" class="form-control"
-                                             required="true" placeholder="0"/><br/><br/>
+                                             required="true" placeholder="0"
+                                             value="${record.product.acount}"/><br/><br/>
                     Имя отправителя* <br/> <input type="text"  name="senderNameInput" class="form-control"
-                                             required="true" placeholder="Имя отправителя"/><br/><br/>
+                                             required="true" placeholder="Имя отправителя"
+                                             value="${record.sender.sender_name}"/><br/><br/>
                     Юридический адрес о.* <br/> <input type="text"  name="senderAddressInput" class="form-control"
-                                             required="true" placeholder="Юридический адрес"/><br/><br/>
+                                             required="true" placeholder="Юридический адрес"
+                                             value="${record.sender.legal_address}"/><br/><br/>
                     Телефон отправителя* <br/> <input type="text"  name="senderPhoneInput" class="form-control"
-                                             required="true" placeholder="йцукенг"/><br/><br/>
+                                             required="true" placeholder="йцукенг"
+                                             value="${record.sender.phone}"/><br/><br/>
                     Почта отправителя* <br/> <input type="text"  name="senderEmailInput" class="form-control"
-                                             required="true" placeholder="Почта"/><br/><br/>
+                                             required="true" placeholder="Почта"
+                                             value="${record.sender.email}"/><br/><br/>
                     Срок хранения* <br/> <input type="date"  name="limitInput" class="form-control"
-                                             required="true" placeholder="01.01.2015"/><br/><br/>
+                                             required="true" placeholder="01.01.2015"
+                                             value="${record.retention_limit}"/><br/><br/>
                     Особенности хранения <br/> <textarea rows="4" cols="18"  name="featuresInput" class="form-control"
-                                             placeholder="Введите особенности хранения..."></textarea><br/>
+                                             placeholder="Введите особенности хранения..."><c:out value="${record.product.storing_features}" /></textarea><br/>
                   </div>
                   <div class="form-group text-left">
                     Наименование* <br/> <input type="text" name="nameInput" class="form-control"
-                                               required="true" placeholder="Наименование"/><br/><br/>
+                                               required="true" placeholder="Наименование"
+                                               value="${record.product.product_name}"/><br/><br/>
                     Единица измерения* <br/>
                     <select class="form-control" name="unitSelect">
                       <option>шт.</option>
@@ -67,30 +76,49 @@
                       <option>л.</option>
                     </select>	<br/><br/>
                     Имя получателя* <br/> <input type="text"  name="receiverNameInput" class="form-control"
-                                                 required="true" placeholder="Имя получателя"/><br/><br/>
+                                                 required="true" placeholder="Имя получателя"
+                                                 value="${record.receiver.receiver_name}"/><br/><br/>
                     Юридический адрес п.* <br/> <input type="text" name="receiverAddressInput" class="form-control"
-                                                 required="true" placeholder="Юридический адрес"/><br/><br/>
+                                                 required="true" placeholder="Юридический адрес"
+                                                 value="${record.receiver.legal_address}"/><br/><br/>
                     Телефон получателя* <br/> <input type="text"  name="receiverPhoneInput" class="form-control"
-                                                 required="true" placeholder="йцукенгш"/><br/><br/>
+                                                 required="true" placeholder="йцукенгш"
+                                                 value="${record.receiver.phone}"/><br/><br/>
                     Почта получателя* <br/> <input type="text"  name="receiverEmailInput" class="form-control"
-                                                 required="true" placeholder="Почта"/><br/><br/>
+                                                 required="true" placeholder="Почта"
+                                                 value="${record.receiver.email}"/><br/><br/>
                     Таможенный режим* <br/>
                     <select class="form-control" style="width: 200px;" name="regimeSelect">
                       <c:forEach var="regime" items="${regimeList}">
-                        <option value="${regime.regime_id}"><c:out value="${regime.regime_name}"/></option>
+                        <c:choose>
+                          <c:when test="${regime.regime_id == record.product.customsRegimeType.regime_id}">
+                            <option value="${regime.regime_id}" selected><c:out value="${regime.regime_name}"/></option>
+                          </c:when>
+                          <c:otherwise>
+                            <option value="${regime.regime_id}"><c:out value="${regime.regime_name}"/></option>
+                          </c:otherwise>
+                        </c:choose>
                       </c:forEach>
                     </select>	<br/><br/>
                     Складская зона* <br/>
                     <select class="form-control" name="areaSelect">
                       <c:forEach var="area" items="${areaList}">
-                        <option value="${area.storearea_id}"><c:out value="${area.storearea_name}"/></option>
+                        <c:choose>
+                          <c:when test="${area.storearea_id == record.storeArea.storearea_id}">
+                            <option value="${area.storearea_id}" selected><c:out value="${area.storearea_name}"/></option>
+                          </c:when>
+                          <c:otherwise>
+                            <option value="${area.storearea_id}"><c:out value="${area.storearea_name}"/></option>
+                          </c:otherwise>
+                        </c:choose>
                       </c:forEach>
                     </select> <br/><br/><br/><br/><br/>
                   </div>
                 </div>
 
                 <br/>
-                <button type="submit" style="margin-left: 280px;" name="command" value="saveproduct" class="btn btn-primary text-center">Сохранить запись</button>
+                <button type="submit" style="margin-left: 280px;" name="command" value="saveproduct"
+                        class="btn btn-primary text-center">Сохранить запись</button>
 
                 <c:if test="${not isWrong}">
                   <style>
@@ -115,7 +143,7 @@
                     <div class="modal-content alert-danger" style="background: #e4b9b9;">
                       <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                       <br/>
-                      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qwertyui!</b>
+                      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Недопустимые данные!</b>
                       <br/>
                       <br/>
                     </div>

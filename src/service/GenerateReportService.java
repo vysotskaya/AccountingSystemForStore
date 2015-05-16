@@ -19,7 +19,8 @@ public class GenerateReportService {
     private static ObjectFactory factory = null;
     private static WordprocessingMLPackage wordMLPackage = null;
 
-    public static void generateReport(String periodBegin, String periodEnd, List records) {
+    public static void generateReport(String periodBegin, String periodEnd, List records)
+            throws Docx4JException, InvalidFormatException {
         try {
             wordMLPackage = WordprocessingMLPackage.createPackage();
             factory = Context.getWmlObjectFactory();
@@ -34,10 +35,10 @@ public class GenerateReportService {
             try {
                 wordMLPackage.save(new java.io.File("d:\\reports" + "\\" + periodBegin + "_" + periodEnd + ".docx"));
             } catch (Docx4JException e) {
-                e.printStackTrace();
+                throw new Docx4JException(e.getMessage());
             }
         } catch (InvalidFormatException e) {
-            e.printStackTrace();
+           throw new InvalidFormatException(e.getMessage());
         }
     }
 

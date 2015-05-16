@@ -68,7 +68,7 @@
                   </div>
                   <div class="form-group text-left">
                     Наименование* <br/> <input type="text" name="nameInput" class="form-control"
-                                               required="true" placeholder="Наименование" readonly
+                                               required="true" placeholder="Наименование"
                                                value="${record.product.product_name}"/><br/><br/>
                     Единица измерения* <br/>
                     <select class="form-control" name="unitSelect">

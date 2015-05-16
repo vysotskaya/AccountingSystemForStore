@@ -23,66 +23,86 @@
 <body>
 
 <c:set var="list" value="${list}"></c:set>
+<c:set var="employee" value="${employee}"></c:set>
 
 <div class="container">
   <div class="container col-md-4 col-md-offset-4 main">
     <form action="/accountingsystem" method="get">
       <!-- Modal for edit profile -->
-      <div class="modal text-left alert-info" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+      <div class="modal text-left alert-info" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal"
+           aria-hidden="true">
         <div class="modal-dialog" style="width: 30%;">
           <div class="modal-content" >
             <div class="modal-header">
-              <a href="/accountingsystem?command=showallemployees" id="closebutton" style="margin-top: -10px;" class="btn close">×</a>
+              <a href="/accountingsystem?command=showallemployees" id="closebutton" style="margin-top: -10px;"
+                 class="btn close">×</a>
               <h4 class="modal-title" id="myModalLabel">Добавить пользователя</h4>
             </div>
             <div class="modal-body">
               <form class="text-left">
-                <%--<input type="hidden" name="employee_id" value="${employee.employee_id}">--%>
                 Фамилия И. О.* <input type="text" pattern="^[А-Я]{1}[а-я]{2,}\s[А-Я]{1}.[А-Я]{1}."
                                       title="например, Иванов И.И." name="surnameInput" class="form-control"
-                                      required="true" placeholder="Иванов И.И."/><br/>
+                                      required="true" placeholder="Иванов И.И." value="${employee.employee_name}"/><br/>
                 Должность* <br/>
                 <select class="form-control" name="positionSelect">
                   <c:forEach var="position" items="${list}">
                     <c:if test="${position.position_id != 2}">
-                      <option value="${position.position_id}"><c:out value="${position.position_name}"/></option>
+                      <c:choose>
+                        <c:when test="${position.position_id == employee.position.position_id}">
+                          <option value="${position.position_id}" selected><c:out value="${position.position_name}"/></option>
+                        </c:when>
+                        <c:otherwise>
+                          <option value="${position.position_id}"><c:out value="${position.position_name}"/></option>
+                        </c:otherwise>
+                      </c:choose>
                     </c:if>
                   </c:forEach>
                 </select><br/>
                 Почта* <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                              name="emailInput" class="form-control" required="true" placeholder="Почта"/><br/>
+                              name="emailInput" class="form-control" required="true" placeholder="Почта"
+                              value="${employee.email}"/><br/>
                 Логин* <input type="text" pattern="^[A-Za-z0-9._]{3,}"
-                              name="loginInput" class="form-control" required="true" placeholder="login"/><br/>
+                              name="loginInput" class="form-control" required="true" placeholder="login"
+                              value="${employee.login}"/><br/>
                 Пароль* <input type="password" pattern="^[A-Za-z0-9._]{3,}"
-                              name="passwordInput" class="form-control" required="true" placeholder="password"/><br/>
+                              name="passwordInput" class="form-control" required="true" placeholder="password"
+                              value="${employee.password}"/><br/>
                 <button type="submit" name="command" value="saveemployee" class="btn btn-primary text-center">Сохранить запись</button>
 
-                  <c:if test="${not isWrong}">
+                <c:choose>
+                  <c:when test="${not isWrong}">
                     <style>
                       #modalblock {
                         display: none;
                         opacity: 0;
                       }
+                      #blackoutdiv {
+                        display: none;
+                      }
                     </style>
-                  </c:if>
-                  <c:if test="${isWrong}">
+                  </c:when>
+                  <c:otherwise>
                     <style>
                       #modalblock {
                         display: block;
                         opacity: 1;
                       }
+                      #blackoutdiv {
+                        display: block;
+                      }
                     </style>
-                  </c:if>
+                  </c:otherwise>
+                </c:choose>
 
                   <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
                        tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
                       <div class="modal-content alert-danger" style="background: #e4b9b9;">
-                        <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
+                        <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
+                                style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                         <br/>
                         <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Такой логин уже существует!</b>
-                        <br/>
-                        <br/>
+                        <br/><br/>
                       </div>
                     </div>
                   </div>
@@ -98,21 +118,6 @@
   <div class="container"></div>
 </div>
 <div class="modal-backdrop fade in" id="blackoutdiv"></div>
-
-<c:if test="${not isWrong}">
-  <style>
-    #blackoutdiv {
-      display: none;
-    }
-  </style>
-</c:if>
-<c:if test="${isWrong}">
-  <style>
-    #blackoutdiv {
-      display: block;
-    }
-  </style>
-</c:if>
 
 <div class="modal-backdrop fade in " id="blackoutdiv"></div>
 
