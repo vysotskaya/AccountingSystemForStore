@@ -3,11 +3,11 @@ package command;
 import configuration.PageManager;
 import dao.DAOFactory;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 
 /**
@@ -16,6 +16,7 @@ import java.util.List;
 public class DeleteEmployeeCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        Logger logger = Logger.getLogger(DeleteEmployeeCommand.class);
         HttpSession session = request.getSession();
         Integer role = (Integer)session.getAttribute("role");
         if (role == null) {
@@ -25,11 +26,11 @@ public class DeleteEmployeeCommand implements Command {
                 try {
                     int id = Integer.parseInt((String) request.getParameter("employee_id"));
                     DAOFactory.getFactory().getEmployeeDAO().deleteById(id);
+                } catch (HibernateException e) {
+                    logger.error("hibernate error" ,e);
                 } catch (NullPointerException ex) {
-                    Logger logger = Logger.getLogger(DeleteEmployeeCommand.class);
                     logger.error("remove nonexistent employee : ", ex);
                 } catch (NumberFormatException ex) {
-                    Logger logger = Logger.getLogger(DeleteEmployeeCommand.class);
                     logger.error("incorrect format of employee_id : ", ex);
                 }
                 return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;

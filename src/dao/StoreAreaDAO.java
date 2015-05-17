@@ -15,7 +15,7 @@ import java.util.List;
 public class StoreAreaDAO implements BaseDAO<StoreArea> {
 
     @Override
-    public boolean create(StoreArea storeArea) {
+    public boolean create(StoreArea storeArea) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,25 +25,24 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException{
         Session session = null;
         List<StoreArea> areas = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             areas = session.createCriteria(StoreArea.class).list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -53,7 +52,7 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
     }
 
     @Override
-    public boolean update(StoreArea storeArea) {
+    public boolean update(StoreArea storeArea) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -63,17 +62,16 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -83,18 +81,17 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public StoreArea getById (int id) {
+    public StoreArea getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -102,12 +99,11 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
                     .setParameter("storearea_id", id).uniqueResult();
             return storeArea;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

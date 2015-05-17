@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductDAO implements BaseDAO <Product> {
 
     @Override
-    public boolean create(Product product) {
+    public boolean create(Product product) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -26,25 +26,24 @@ public class ProductDAO implements BaseDAO <Product> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             products = session.createCriteria(Product.class).list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -54,7 +53,7 @@ public class ProductDAO implements BaseDAO <Product> {
     }
 
     @Override
-    public boolean update(Product product) {
+    public boolean update(Product product) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -64,17 +63,16 @@ public class ProductDAO implements BaseDAO <Product> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -84,18 +82,17 @@ public class ProductDAO implements BaseDAO <Product> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public Product getById (int id) {
+    public Product getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -103,16 +100,15 @@ public class ProductDAO implements BaseDAO <Product> {
                     .setParameter("product_id", id).uniqueResult();
             return product;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public Product getProductByMarking (String marking) {
+    public Product getProductByMarking (String marking) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -120,16 +116,15 @@ public class ProductDAO implements BaseDAO <Product> {
                     .setParameter("product_marking", marking).uniqueResult();
             return product;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public List<Product> getProductsByRegime (CustomsRegimeType regimeType) {
+    public List<Product> getProductsByRegime (CustomsRegimeType regimeType) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
@@ -137,16 +132,15 @@ public class ProductDAO implements BaseDAO <Product> {
             products = session.getNamedQuery("getProductsByRegime").setParameter("regime", regimeType).list();
             return products;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public List<Product> findProductByMarking (String marking) {
+    public List<Product> findProductByMarking (String marking) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
@@ -154,16 +148,15 @@ public class ProductDAO implements BaseDAO <Product> {
             products = session.getNamedQuery("findProductByMarking").setParameter("product_marking", marking).list();
             return products;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public List<Product> findProductByName (String name) {
+    public List<Product> findProductByName (String name) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
@@ -171,16 +164,15 @@ public class ProductDAO implements BaseDAO <Product> {
             products = session.getNamedQuery("findProductByName").setParameter("product_name", name).list();
             return products;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public List<Product> findProductByAcount (int acount) {
+    public List<Product> findProductByAcount (int acount) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
@@ -188,16 +180,15 @@ public class ProductDAO implements BaseDAO <Product> {
             products = session.getNamedQuery("findProductByAcount").setParameter("acount", acount).list();
             return products;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public List<Product> findProductByUnit (String unit) {
+    public List<Product> findProductByUnit (String unit) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
@@ -205,12 +196,11 @@ public class ProductDAO implements BaseDAO <Product> {
             products = session.getNamedQuery("findProductByUnit").setParameter("measuring_unit", unit).list();
             return products;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

@@ -1,7 +1,9 @@
 package command;
 
 import configuration.PageManager;
-import dao.DAOFactory;
+import entity.Record;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import service.DetentionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +20,15 @@ public class DetentionCommand implements Command {
         HttpSession session = request.getSession();
         Integer role = (Integer)session.getAttribute("role");
         if (role == null || role !=2) {
-            List records = DetentionService.getProductsToDetention();
-            request.setAttribute("list", records);
-            return PageManager.PRODUCT_TO_DETENTION_PAGE;
+            try {
+                List<Record> records = DetentionService.getProductsToDetention();
+                request.setAttribute("list", records);
+                return PageManager.PRODUCT_TO_DETENTION_PAGE;
+            } catch (HibernateException e) {
+                Logger logger = Logger.getLogger(DetentionCommand.class);
+                logger.error("hibernate error" ,e);
+            }
+            return PageManager.SHOW_ALL_RECORDS_COMMAND;
         } else {
             return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
         }

@@ -15,7 +15,7 @@ import java.util.List;
 public class SenderDAO implements BaseDAO <Sender>{
 
     @Override
-    public boolean create(Sender sender) {
+    public boolean create(Sender sender) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,25 +25,24 @@ public class SenderDAO implements BaseDAO <Sender>{
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException{
         Session session = null;
         List<Sender> senders = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             senders = session.createCriteria(Sender.class).list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -53,7 +52,7 @@ public class SenderDAO implements BaseDAO <Sender>{
     }
 
     @Override
-    public boolean update(Sender sender) {
+    public boolean update(Sender sender) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -63,17 +62,16 @@ public class SenderDAO implements BaseDAO <Sender>{
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -83,18 +81,17 @@ public class SenderDAO implements BaseDAO <Sender>{
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public Sender getById (int id) {
+    public Sender getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -102,16 +99,15 @@ public class SenderDAO implements BaseDAO <Sender>{
                     .setParameter("sender_id", id).uniqueResult();
             return sender;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public Sender getSenderByLegalAddress (String address) {
+    public Sender getSenderByLegalAddress (String address) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -119,12 +115,11 @@ public class SenderDAO implements BaseDAO <Sender>{
                     .setParameter("legal_address", address).uniqueResult();
             return sender;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

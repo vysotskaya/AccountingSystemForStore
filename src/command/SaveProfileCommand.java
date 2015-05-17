@@ -4,11 +4,12 @@ import configuration.PageManager;
 import dao.DAOFactory;
 import entity.Employee;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import service.CheckService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 04.05.2015.
@@ -16,7 +17,7 @@ import java.util.List;
 public class SaveProfileCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Logger logger = null;
+        Logger logger = Logger.getLogger(SaveProfileCommand.class);
         HttpSession session = request.getSession();
         Integer role = (Integer)session.getAttribute("role");
         if (role == null) {
@@ -29,7 +30,7 @@ public class SaveProfileCommand implements Command {
                     String email = (String) request.getParameter("email");
                     int position_id = Integer.parseInt((String) request.getParameter("positionSelect"));
 
-                    if (name == null || email == null) {
+                    if (CheckService.isNullParam(name, email)) {
                         throw new NullPointerException();
                     }
 
@@ -40,11 +41,11 @@ public class SaveProfileCommand implements Command {
 
                     DAOFactory.getFactory().getEmployeeDAO().update(employee);
 
+                } catch (HibernateException e) {
+                    logger.error("hibernate error", e);
                 } catch (NullPointerException ex) {
-                    logger = Logger.getLogger(SaveEmployeeCommand.class);
                     logger.error("incorrect data in saving employee", ex);
                 } catch (NumberFormatException ex) {
-                    logger = Logger.getLogger(SaveEmployeeCommand.class);
                     logger.error("incorrect format of position_id or employee_id", ex);
                 }
                 return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;

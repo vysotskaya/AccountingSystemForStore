@@ -6,12 +6,15 @@ import entity.Product;
 import entity.Receiver;
 import entity.Record;
 import entity.Sender;
+import exception.IncorrectDataInputException;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import service.CheckService;
+import service.CreationListsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 11.05.2015.
@@ -19,9 +22,10 @@ import java.util.List;
 public class SaveProductCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Logger logger = null;
+        Logger logger = Logger.getLogger(SaveProductCommand.class);;
         HttpSession session = request.getSession();
         Integer role = (Integer)session.getAttribute("role");
+        Record record = null;
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
@@ -48,43 +52,74 @@ public class SaveProductCommand implements Command {
                     String receiver_phone = (String) request.getParameter("receiverPhoneInput");
                     String receiver_email = (String) request.getParameter("receiverEmailInput");
 
-                    if (marking == null || product_name == null || measuring_unit == null || limit == null
-                            || features == null || sender_name == null || sender_address  == null
-                            || sender_phone  == null || sender_email  == null || receiver_name  == null
-                            || receiver_email  == null || receiver_address  == null || receiver_phone  == null) {
+                    if (CheckService.isNullParam(marking, product_name, measuring_unit, limit, features,
+                            sender_name, sender_address, sender_phone, sender_email, receiver_name,
+                            receiver_email, receiver_address, receiver_phone)) {
                         throw new NullPointerException();
+                    }
+
+                    if (features.equals("")) {
+                        features = "отсутствуют";
                     }
 
                     Product product = new Product(acount, DAOFactory.getFactory().getRegimeDAO().getById(regime_id),
                             measuring_unit, marking, features, product_name);
+
                     Receiver receiver = new Receiver(receiver_email, receiver_address, receiver_phone, receiver_name);
                     Sender sender = new Sender(sender_email, sender_address, sender_phone, sender_name);
-                    Record record = new Record(
+                    record = new Record(
                             DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(employee_login),
                             product, receiver, limit, DAOFactory.getFactory().getStoreAreaDAO().getById(area_id), sender);
 
-                    if (DAOFactory.getFactory().getProductDAO().getProductByMarking(marking) == null) {
-                        DAOFactory.getFactory().getProductDAO().create(product);
-                        DAOFactory.getFactory().getSenderDAO().create(sender);
-                        DAOFactory.getFactory().getReceiverDAO().create(receiver);
-                        DAOFactory.getFactory().getRecordDAO().create(record);
-                    } else {
-                        List regimes = DAOFactory.getFactory().getRegimeDAO().read();
-                        request.setAttribute("regimeList", regimes);
-
-                        List areas = DAOFactory.getFactory().getStoreAreaDAO().read();
-                        request.setAttribute("areaList", areas);
-
-                        request.setAttribute("isWrong", true);
-                        request.setAttribute("record", record);
-                        return PageManager.ADD_PRODUCT_PAGE;
+                    if (!CheckService.checkRetentionLimitDate(limit)){
+                        throw new IncorrectDataInputException("Неверный срок хранения!");
                     }
+
+                    if (DAOFactory.getFactory().getProductDAO().getProductByMarking(marking) != null) {
+                        throw new IncorrectDataInputException("Товар с такой маркировкой уже существует!");
+                    }
+
+                    Sender senderByLegalAddress = DAOFactory.getFactory().getSenderDAO()
+                            .getSenderByLegalAddress(sender_address);
+
+                    if (!CheckService.checkEqualsWithoutId(sender, senderByLegalAddress)) {
+                        if (senderByLegalAddress != null) {
+                            record.setSender(senderByLegalAddress);
+                            throw new IncorrectDataInputException("Отправитель с таким юридическим адресом уже существует! " +
+                                    "Вы можете выбрать его, сохранив запись повторно.");
+                        } else {
+                            DAOFactory.getFactory().getSenderDAO().create(sender);
+                        }
+                    }
+
+                    Receiver receiverByLegalAddress = DAOFactory.getFactory().getReceiverDAO()
+                            .getReceiverByLegalAddress(receiver_address);
+
+                    if (!CheckService.checkEqualsWithoutId(receiver, receiverByLegalAddress)) {
+                        if (receiverByLegalAddress != null) {
+                            record.setReceiver(receiverByLegalAddress);
+                            throw new IncorrectDataInputException("Получатель с таким юридическим адресом уже существует! " +
+                                    "Вы можете выбрать его, сохранив запись повторно.");
+                        } else {
+                            DAOFactory.getFactory().getReceiverDAO().create(receiver);
+                        }
+                    }
+
+                    DAOFactory.getFactory().getProductDAO().create(product);
+                    DAOFactory.getFactory().getRecordDAO().create(record);
+
+                } catch (HibernateException e) {
+                    logger.error("hibernate error", e);
                 } catch (NullPointerException ex) {
-                    logger = Logger.getLogger(SaveProductCommand.class);
                     logger.error("incorrect data in saving product", ex);
                 } catch (NumberFormatException ex) {
-                    logger = Logger.getLogger(SaveProductCommand.class);
                     logger.error("incorrect format of area_id, regime_id or acount", ex);
+                } catch (IncorrectDataInputException e) {
+                    CreationListsService.createRegimesAndAreasLists(request);
+                    request.setAttribute("errorMessage", e.getMessage());
+                    request.setAttribute("isWrong", true);
+                    request.setAttribute("record", record);
+                    return PageManager.ADD_PRODUCT_PAGE;
                 }
                 return PageManager.SHOW_ALL_RECORDS_COMMAND;
             } else {

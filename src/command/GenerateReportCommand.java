@@ -2,9 +2,11 @@ package command;
 
 import configuration.PageManager;
 import dao.DAOFactory;
+import entity.Record;
 import org.apache.log4j.Logger;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.exceptions.InvalidFormatException;
+import org.hibernate.HibernateException;
+import service.CheckService;
 import service.GenerateReportService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,20 +27,24 @@ public class GenerateReportCommand implements Command {
             return PageManager.LOGIN_PAGE;
         } else {
             if (role != 2) {
-                String periodBegin = (String) request.getParameter("periodBeginInput");
-                String periodEnd = (String) request.getParameter("periodEndInput");
+                try {
+                    String periodBegin = (String) request.getParameter("periodBeginInput");
+                    String periodEnd = (String) request.getParameter("periodEndInput");
 
-                if (periodBegin == null || periodEnd == null) {
-                    return PageManager.LOGIN_PAGE;
-                }
-
-                List records = DAOFactory.getFactory().getRecordDAO().getRecordsForPeriod(periodBegin, periodEnd);
-                if (records != null) {
-                    try {
-                        GenerateReportService.generateReport(periodBegin, periodEnd, records);
-                    } catch (Docx4JException e) {
-                        logger.error("error in generating report : ", e);
+                    if (CheckService.isNullParam(periodBegin, periodEnd)) {
+                        return PageManager.LOGIN_PAGE;
                     }
+
+                    List<Record> records = DAOFactory.getFactory().getRecordDAO().getRecordsForPeriod(periodBegin, periodEnd);
+                    if (records != null) {
+                        try {
+                            GenerateReportService.generateReport(periodBegin, periodEnd, records);
+                        } catch (Docx4JException e) {
+                            logger.error("error in generating report : ", e);
+                        }
+                    }
+                } catch (HibernateException e) {
+                    logger.error("hibernate error", e);
                 }
                 return PageManager.SHOW_ALL_RECORDS_COMMAND;
 

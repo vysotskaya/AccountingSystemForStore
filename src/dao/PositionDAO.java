@@ -15,7 +15,7 @@ import java.util.List;
 public class PositionDAO implements BaseDAO <Position> {
 
     @Override
-    public boolean create(Position position) {
+    public boolean create(Position position) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,25 +25,24 @@ public class PositionDAO implements BaseDAO <Position> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException{
         Session session = null;
         List<Position> positions = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             positions = session.createCriteria(Position.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (HibernateException e) {
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -53,7 +52,7 @@ public class PositionDAO implements BaseDAO <Position> {
     }
 
     @Override
-    public boolean update(Position position) {
+    public boolean update(Position position) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -63,17 +62,16 @@ public class PositionDAO implements BaseDAO <Position> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -83,18 +81,17 @@ public class PositionDAO implements BaseDAO <Position> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public Position getById (int id) {
+    public Position getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -102,12 +99,11 @@ public class PositionDAO implements BaseDAO <Position> {
                     .setParameter("position_id", id).uniqueResult();
             return position;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

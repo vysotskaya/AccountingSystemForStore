@@ -4,11 +4,12 @@ import configuration.PageManager;
 import dao.DAOFactory;
 import entity.Employee;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import service.CreationListsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 04.05.2015.
@@ -16,6 +17,7 @@ import java.util.List;
 public class EditProfileCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        Logger logger = Logger.getLogger(EditProfileCommand.class);
         HttpSession session = request.getSession();
         Integer role = (Integer) session.getAttribute("role");
         if (role == null) {
@@ -26,16 +28,15 @@ public class EditProfileCommand implements Command {
                     int id = Integer.parseInt((String)request.getParameter("emloyee_id"));
                     Employee employee = DAOFactory.getFactory().getEmployeeDAO().getById(id);
                     if (employee != null) {
-                        List positions = DAOFactory.getFactory().getPositionDAO().read();
+                        CreationListsService.createPositionList(request);
                         request.setAttribute("employee", employee);
-                        request.setAttribute("list", positions);
                         return PageManager.EDIT_PROFILE_PAGE;
                     }
+                } catch (HibernateException e) {
+                    logger.error("hibernate error : ", e);
                 } catch (NullPointerException ex) {
-                    Logger logger = Logger.getLogger(EditProfileCommand.class);
                     logger.error("edit nonexistent employee : ", ex);
                 } catch (NumberFormatException ex) {
-                    Logger logger = Logger.getLogger(EditProfileCommand.class);
                     logger.error("incorrect format of employee_id : ", ex);
                 }
                 return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;

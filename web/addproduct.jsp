@@ -43,24 +43,32 @@
                 <div class="form-inline text-center" role="form">
                   <div class="form-group text-left">
                     Маркировка* <br/> <input type="text"  name="markingInput" class="form-control"
-                                             required="true" placeholder="1A2DW55"
+                                             pattern="^[A-Za-z0-9]{3,30}"
+                                             required="true" placeholder="Маркировка"
                                              value="${record.product.product_marking}"/><br/><br/>
                     Количесвто* <br/> <input type="text"  name="acountInput" class="form-control"
+                                             pattern="^[0-9]{1,5}"
                                              required="true" placeholder="0"
                                              value="${record.product.acount}"/><br/><br/>
                     Имя отправителя* <br/> <input type="text"  name="senderNameInput" class="form-control"
                                              required="true" placeholder="Имя отправителя"
+                                             maxlength="100"
                                              value="${record.sender.sender_name}"/><br/><br/>
                     Юридический адрес о.* <br/> <input type="text"  name="senderAddressInput" class="form-control"
                                              required="true" placeholder="Юридический адрес"
+                                             maxlength="100"
                                              value="${record.sender.legal_address}"/><br/><br/>
                     Телефон отправителя* <br/> <input type="text"  name="senderPhoneInput" class="form-control"
-                                             required="true" placeholder="йцукенг"
+                                             pattern="^[0-9]{7,15}"
+                                             required="true" placeholder="8859667"
                                              value="${record.sender.phone}"/><br/><br/>
                     Почта отправителя* <br/> <input type="text"  name="senderEmailInput" class="form-control"
-                                             required="true" placeholder="Почта"
+                                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                             maxlength="100"
+                                             required="true" placeholder="Почта отправителя"
                                              value="${record.sender.email}"/><br/><br/>
                     Срок хранения* <br/> <input type="date"  name="limitInput" class="form-control"
+                    pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
                                              required="true" placeholder="01.01.2015"
                                              value="${record.retention_limit}"/><br/><br/>
                     Особенности хранения <br/> <textarea rows="4" cols="18"  name="featuresInput" class="form-control"
@@ -70,6 +78,7 @@
                   <div class="form-group text-left">
                     Наименование* <br/> <input type="text" name="nameInput" class="form-control"
                                                required="true" placeholder="Наименование"
+                                               pattern="^[А-Яа-яA-Za-z0-9]{3,30}"
                                                value="${record.product.product_name}"/><br/><br/>
                     Единица измерения* <br/>
                     <select class="form-control" name="unitSelect">
@@ -79,15 +88,19 @@
                     </select>	<br/><br/>
                     Имя получателя* <br/> <input type="text"  name="receiverNameInput" class="form-control"
                                                  required="true" placeholder="Имя получателя"
+                                                 maxlength="100"
                                                  value="${record.receiver.receiver_name}"/><br/><br/>
                     Юридический адрес п.* <br/> <input type="text" name="receiverAddressInput" class="form-control"
                                                  required="true" placeholder="Юридический адрес"
+                                                 maxlength="100"
                                                  value="${record.receiver.legal_address}"/><br/><br/>
                     Телефон получателя* <br/> <input type="text"  name="receiverPhoneInput" class="form-control"
-                                                 required="true" placeholder="йцукенгш"
+                                                 pattern="^[0-9]{7,15}"
+                                                 required="true" placeholder="8859667"
                                                  value="${record.receiver.phone}"/><br/><br/>
                     Почта получателя* <br/> <input type="text"  name="receiverEmailInput" class="form-control"
-                                                 required="true" placeholder="Почта"
+                                                 required="true" placeholder="Почта получателя"
+                                                 maxlength="100"
                                                  value="${record.receiver.email}"/><br/><br/>
                     Таможенный режим* <br/>
                     <select class="form-control" style="width: 200px;" name="regimeSelect">
@@ -154,7 +167,7 @@
                       <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
                               style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                       <br/>
-                      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Недопустимые данные!</b>
+                      <b>${errorMessage}</b>
                       <br/>
                       <br/>
                     </div>

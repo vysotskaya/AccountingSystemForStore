@@ -26,12 +26,12 @@
         <h3>Вход в систему учёта товаров</h3>
         <br/>
         <form action="/accountingsystem" method="post">
-          <input type="text" placeholder="Login" required="true"
+          <input type="text" placeholder="Login" id="log"
                  name="loginInput" style="width: 105%;" class="form-control"/><br/>
-          <input type="password" placeholder="Password" required="true"
+          <input type="password" placeholder="Password" id="pass"
                  name="passwordInput" style="width: 105%;" class="form-control"/><br/><br/>
           <div class="form-inline text-center form-group" role="form" style="margin-left : 20px;">
-            <button class="btn btn-sm btn-primary" style="width: 48%;" type="submit"
+            <button class="btn btn-sm btn-primary" style="width: 48%;" type="submit" id="authorizeButton"
                     data-toggle="modal" data-target=".bs-example-modal-sm"
                     name="command" value="authorization">
               Авторизоваться

@@ -15,7 +15,7 @@ import java.util.List;
 public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
 
     @Override
-    public boolean create(CustomsRegimeType regime) {
+    public boolean create(CustomsRegimeType regime) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,25 +25,24 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException{
         Session session = null;
         List<CustomsRegimeType> regimes = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             regimes = session.createCriteria(CustomsRegimeType.class).list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -53,7 +52,7 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
     }
 
     @Override
-    public boolean update(CustomsRegimeType regime) {
+    public boolean update(CustomsRegimeType regime) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -63,17 +62,16 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -83,18 +81,17 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public CustomsRegimeType getById (int id) {
+    public CustomsRegimeType getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -102,16 +99,15 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
                     .setParameter("regime_id", id).uniqueResult();
             return regime;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public CustomsRegimeType getRegimeByName (String name) {
+    public CustomsRegimeType getRegimeByName (String name) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -119,12 +115,11 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
                     .setParameter("regime_name", name).uniqueResult();
             return regime;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

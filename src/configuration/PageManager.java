@@ -1,8 +1,5 @@
 package configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by User on 03.05.2015.
  */

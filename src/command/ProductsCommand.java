@@ -2,6 +2,9 @@ package command;
 
 import configuration.PageManager;
 import dao.DAOFactory;
+import entity.Record;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +20,15 @@ public class ProductsCommand implements Command {
         HttpSession session = request.getSession();
         Integer role = (Integer) session.getAttribute("role");
         if (role == null || role != 2) {
-            List records = DAOFactory.getFactory().getRecordDAO().read();
-            request.setAttribute("list", records);
-            return PageManager.PRODUCT_PAGE;
+            try {
+                List<Record> records = DAOFactory.getFactory().getRecordDAO().read();
+                request.setAttribute("list", records);
+                return PageManager.PRODUCT_PAGE;
+            } catch (HibernateException e) {
+                Logger logger = Logger.getLogger(ProductsCommand.class);
+                logger.error("hibernate error" ,e);
+            }
+            return PageManager.SHOW_ALL_RECORDS_COMMAND;
         } else {
             return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
         }

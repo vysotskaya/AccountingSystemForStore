@@ -15,7 +15,7 @@ import java.util.List;
 public class ReceiverDAO implements BaseDAO <Receiver> {
 
     @Override
-    public boolean create(Receiver receiver) {
+    public boolean create(Receiver receiver) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,25 +25,24 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException{
         Session session = null;
         List<Receiver> receivers = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             receivers = session.createCriteria(Receiver.class).list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -53,7 +52,7 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
     }
 
     @Override
-    public boolean update(Receiver receiver) {
+    public boolean update(Receiver receiver) throws HibernateException {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -63,17 +62,16 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -83,18 +81,17 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public Receiver getById (int id) {
+    public Receiver getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -102,16 +99,15 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
                     .setParameter("receiver_id", id).uniqueResult();
             return receiver;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public Receiver getReceiverByLegalAddress (String address) {
+    public Receiver getReceiverByLegalAddress (String address) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -119,12 +115,11 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
                     .setParameter("legal_address", address).uniqueResult();
             return receiver;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

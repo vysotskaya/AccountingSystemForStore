@@ -1,13 +1,13 @@
 package command;
 
 import configuration.PageManager;
-import dao.DAOFactory;
-import entity.Employee;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import service.CreationListsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 05.05.2015.
@@ -21,9 +21,15 @@ public class AddEmployeeCommand implements Command {
             return PageManager.LOGIN_PAGE;
         } else {
             if ( role == 2) {
-                List positions = DAOFactory.getFactory().getPositionDAO().read();
-                request.setAttribute("list", positions);
-                return PageManager.ADD_EMPLOYEE_PAGE;
+                try {
+                    CreationListsService.createPositionList(request);
+                    return PageManager.ADD_EMPLOYEE_PAGE;
+                } catch (HibernateException e) {
+                    Logger logger = Logger.getLogger(AddEmployeeCommand.class);
+                    logger.error("hibernate error" ,e);
+                }
+                return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
+
             } else {
                 return PageManager.SHOW_ALL_RECORDS_COMMAND;
             }

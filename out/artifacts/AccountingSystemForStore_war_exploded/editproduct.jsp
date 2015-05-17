@@ -13,7 +13,7 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel = 'stylesheet' href="style.css">
-<title>Добавить товар</title>
+<title>Редактировать товар</title>
 <style>
   <jsp:include page="bootstrap-3.3.4-dist\js\bootstrap.min.js"></jsp:include>
   <jsp:include page="bootstrap-3.3.4-dist\css\bootstrap.min.css"></jsp:include>
@@ -33,7 +33,8 @@
         <div class="modal-dialog" style="width: 35%;">
           <div class="modal-content" >
             <div class="modal-header text-center">
-              <a href="/accountingsystem?command=showallrecords" id="closebutton" style="margin-top: -10px;" class="btn close">×</a>
+              <a href="/accountingsystem?command=showallrecords" id="closebutton"
+                 style="margin-top: -10px;" class="btn close">×</a>
               <h4 class="modal-title" id="myModalLabel">Редактировать товар</h4>
             </div>
             <div class="modal-body" style="height: 380px; overflow-y: scroll;">
@@ -42,33 +43,43 @@
                 <div class="form-inline text-center" role="form">
                   <div class="form-group text-left">
                     Маркировка* <br/> <input type="text"  name="markingInput" class="form-control"
-                                             required="true" placeholder="1A2DW55" readonly
+                                             pattern="^[A-Za-z0-9]{3,30}"
+                                             required="true" placeholder="Маркировка" readonly
                                              value="${record.product.product_marking}"/><br/><br/>
                     Количесвто* <br/> <input type="text"  name="acountInput" class="form-control"
+                                             pattern="^[0-9]{1,5}"
                                              required="true" placeholder="0"
                                              value="${record.product.acount}"/><br/><br/>
                     <input type="hidden" name="sender_id" value="${record.sender.sender_id}"/>
                     Имя отправителя* <br/> <input type="text"  name="senderNameInput" class="form-control"
                                                   required="true" placeholder="Имя отправителя"
+                                                  maxlength="100"
                                                   value="${record.sender.sender_name}"/><br/><br/>
                     Юридический адрес о.* <br/> <input type="text"  name="senderAddressInput" class="form-control"
                                                        required="true" placeholder="Юридический адрес"
+                                                       maxlength="100"
                                                        value="${record.sender.legal_address}"/><br/><br/>
                     Телефон отправителя* <br/> <input type="text"  name="senderPhoneInput" class="form-control"
-                                                      required="true" placeholder="йцукенг"
+                                                      pattern="^[0-9]{7,15}"
+                                                      required="true" placeholder="8859667"
                                                       value="${record.sender.phone}"/><br/><br/>
                     Почта отправителя* <br/> <input type="text"  name="senderEmailInput" class="form-control"
-                                                    required="true" placeholder="Почта"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                                    maxlength="100"
+                                                    required="true" placeholder="Почта отправителя"
                                                     value="${record.sender.email}"/><br/><br/>
                     Срок хранения* <br/> <input type="date"  name="limitInput" class="form-control"
+                                                pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
                                                 required="true" placeholder="01.01.2015"
                                                 value="${record.retention_limit}"/><br/><br/>
                     Особенности хранения <br/> <textarea rows="4" cols="18"  name="featuresInput" class="form-control"
-                                                         placeholder="Введите особенности хранения..."><c:out value="${record.product.storing_features}" /></textarea><br/>
+                                                         placeholder="Введите особенности хранения..."><c:out
+                          value="${record.product.storing_features}" /></textarea><br/>
                   </div>
                   <div class="form-group text-left">
                     Наименование* <br/> <input type="text" name="nameInput" class="form-control"
                                                required="true" placeholder="Наименование"
+                                               pattern="^[А-Яа-яA-Za-z0-9]{3,30}"
                                                value="${record.product.product_name}"/><br/><br/>
                     Единица измерения* <br/>
                     <select class="form-control" name="unitSelect">
@@ -79,18 +90,22 @@
                     <input type="hidden" name="receiver_id" value="${record.receiver.receiver_id}"/>
                     Имя получателя* <br/> <input type="text"  name="receiverNameInput" class="form-control"
                                                  required="true" placeholder="Имя получателя"
+                                                 maxlength="100"
                                                  value="${record.receiver.receiver_name}"/><br/><br/>
                     Юридический адрес п.* <br/> <input type="text" name="receiverAddressInput" class="form-control"
                                                        required="true" placeholder="Юридический адрес"
+                                                       maxlength="100"
                                                        value="${record.receiver.legal_address}"/><br/><br/>
                     Телефон получателя* <br/> <input type="text"  name="receiverPhoneInput" class="form-control"
-                                                     required="true" placeholder="йцукенгш"
+                                                     pattern="^[0-9]{7,15}"
+                                                     required="true" placeholder="8859667"
                                                      value="${record.receiver.phone}"/><br/><br/>
                     Почта получателя* <br/> <input type="text"  name="receiverEmailInput" class="form-control"
-                                                   required="true" placeholder="Почта"
+                                                   required="true" placeholder="Почта получателя"
+                                                   maxlength="100"
                                                    value="${record.receiver.email}"/><br/><br/>
                     Таможенный режим* <br/>
-                    <select  class="form-control" style="width: 200px;" name="regimeSelect">
+                    <select class="form-control" style="width: 200px;" name="regimeSelect">
                       <c:forEach var="regime" items="${regimeList}">
                         <c:choose>
                           <c:when test="${regime.regime_id == record.product.customsRegimeType.regime_id}">
@@ -113,7 +128,6 @@
                             <option value="${area.storearea_id}"><c:out value="${area.storearea_name}"/></option>
                           </c:otherwise>
                         </c:choose>
-
                       </c:forEach>
                     </select> <br/><br/><br/><br/><br/>
                   </div>
@@ -123,30 +137,39 @@
                 <button type="submit" style="margin-left: 240px;" name="command" value="saveproductafteredit"
                         class="btn btn-primary text-center">Сохранить изменения</button>
 
-                <c:if test="${not isWrong}">
-                  <style>
-                    #modalblock {
-                      display: none;
-                      opacity: 0;
-                    }
-                  </style>
-                </c:if>
-                <c:if test="${isWrong}">
-                  <style>
-                    #modalblock {
-                      display: block;
-                      opacity: 1;
-                    }
-                  </style>
-                </c:if>
+                <c:choose>
+                  <c:when test="${not isWrong}">
+                    <style>
+                      #modalblock {
+                        display: none;
+                        opacity: 0;
+                      }
+                      #blackoutdiv {
+                        display: none;
+                      }
+                    </style>
+                  </c:when>
+                  <c:otherwise>
+                    <style>
+                      #modalblock {
+                        display: block;
+                        opacity: 1;
+                      }
+                      #blackoutdiv {
+                        display: block;
+                      }
+                    </style>
+                  </c:otherwise>
+                </c:choose>
 
                 <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
                      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-sm">
                     <div class="modal-content alert-danger" style="background: #e4b9b9;">
-                      <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
+                      <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
+                              style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                       <br/>
-                      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qwertyui!</b>
+                      <b>${errorMessage}</b>
                       <br/>
                       <br/>
                     </div>
@@ -165,21 +188,6 @@
   <div class="container"></div>
 </div>
 <div class="modal-backdrop fade in" id="blackoutdiv"></div>
-
-<c:if test="${not isWrong}">
-  <style>
-    #blackoutdiv {
-      display: none;
-    }
-  </style>
-</c:if>
-<c:if test="${isWrong}">
-  <style>
-    #blackoutdiv {
-      display: block;
-    }
-  </style>
-</c:if>
 
 <div class="modal-backdrop fade in " id="blackoutdiv"></div>
 

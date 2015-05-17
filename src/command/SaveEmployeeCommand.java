@@ -4,11 +4,13 @@ import configuration.PageManager;
 import dao.DAOFactory;
 import entity.Employee;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import service.CheckService;
+import service.CreationListsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 05.05.2015.
@@ -16,7 +18,7 @@ import java.util.List;
 public class SaveEmployeeCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Logger logger = null;
+        Logger logger = Logger.getLogger(SaveEmployeeCommand.class);
         HttpSession session = request.getSession();
         Integer role = (Integer)session.getAttribute("role");
         if (role == null) {
@@ -30,7 +32,7 @@ public class SaveEmployeeCommand implements Command {
                     String login = (String) request.getParameter("loginInput");
                     String password = (String) request.getParameter("passwordInput");
 
-                    if (name == null || email == null || password == null || login == null) {
+                    if (CheckService.isNullParam(name, email, password, login)) {
                         throw new NullPointerException();
                     }
 
@@ -40,18 +42,17 @@ public class SaveEmployeeCommand implements Command {
                     if (DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(login) == null) {
                         DAOFactory.getFactory().getEmployeeDAO().create(employee);
                     } else {
-                        List positions = DAOFactory.getFactory().getPositionDAO().read();
-                        request.setAttribute("list", positions);
+                        CreationListsService.createPositionList(request);
                         request.setAttribute("isWrong", true);
                         request.setAttribute("employee", employee);
                         return PageManager.ADD_EMPLOYEE_COMMAND;
                     }
                 } catch (NullPointerException ex) {
-                    logger = Logger.getLogger(SaveEmployeeCommand.class);
                     logger.error("incorrect data in saving employee", ex);
                 } catch (NumberFormatException ex) {
-                    logger = Logger.getLogger(SaveEmployeeCommand.class);
                     logger.error("incorrect format of position_id", ex);
+                } catch (HibernateException ex) {
+                    logger.error("hibernate error", ex);
                 }
                 return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
             } else {

@@ -6,12 +6,15 @@ import entity.Product;
 import entity.Receiver;
 import entity.Record;
 import entity.Sender;
+import exception.IncorrectDataInputException;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import service.CheckService;
+import service.CreationListsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 13.05.2015.
@@ -19,8 +22,9 @@ import java.util.List;
 public class SaveProductAfterEditCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Logger logger = null;
+        Logger logger = Logger.getLogger(SaveProductAfterEditCommand.class);
         HttpSession session = request.getSession();
+        Record record = null;
         Integer role = (Integer)session.getAttribute("role");
         if (role == null) {
             return PageManager.LOGIN_PAGE;
@@ -51,66 +55,90 @@ public class SaveProductAfterEditCommand implements Command {
                     String receiver_phone = (String) request.getParameter("receiverPhoneInput");
                     String receiver_email = (String) request.getParameter("receiverEmailInput");
 
-                    if (marking == null || product_name == null || measuring_unit == null || limit == null
-                            || features == null || sender_name == null || sender_address  == null
-                            || sender_phone  == null || sender_email  == null || receiver_name  == null
-                            || receiver_email  == null || receiver_address  == null || receiver_phone  == null) {
+                    if (CheckService.isNullParam(marking, product_name, measuring_unit, limit, features,
+                            sender_name, sender_address, sender_phone, sender_email, receiver_name,
+                            receiver_email, receiver_address, receiver_phone)) {
                         throw new NullPointerException();
                     }
 
-                    Record record = DAOFactory.getFactory().getRecordDAO()
-                            .getByProductId(DAOFactory.getFactory().getProductDAO().getProductByMarking(marking));
+                    if (features.equals("")) {
+                        features = "отсутствуют";
+                    }
 
                     Product product = DAOFactory.getFactory().getProductDAO().getProductByMarking(marking);
+
+                    record = DAOFactory.getFactory().getRecordDAO().getByProductId(product);
+
                     product.setProduct_name(product_name);
                     product.setAcount(acount);
                     product.setMeasuring_unit(measuring_unit);
                     product.setCustomsRegimeType(DAOFactory.getFactory().getRegimeDAO().getById(regime_id));
                     product.setStoring_features(features);
 
-                    Receiver receiver = DAOFactory.getFactory().getReceiverDAO().getById(receiver_id);
-                    receiver.setLegal_address(receiver_address);
-                    receiver.setEmail(receiver_email);
-                    receiver.setPhone(receiver_phone);
-                    receiver.setReceiver_name(receiver_name);
+                    if (!CheckService.checkRetentionLimitDate(limit)){
+                        throw new IncorrectDataInputException("Неверный срок хранения!");
+                    }
 
                     Sender sender = DAOFactory.getFactory().getSenderDAO().getById(sender_id);
-                    sender.setLegal_address(sender_address);
-                    sender.setEmail(sender_email);
-                    sender.setPhone(sender_phone);
-                    sender.setSender_name(sender_name);
+                    Sender senderByLegalAddress = DAOFactory.getFactory().getSenderDAO()
+                            .getSenderByLegalAddress(sender_address);
 
-                    if (true) {
-                        DAOFactory.getFactory().getProductDAO().update(product);
-                        DAOFactory.getFactory().getSenderDAO().update(sender);
-                        DAOFactory.getFactory().getReceiverDAO().update(receiver);
-
-                        record.setEmployee(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(employee_login));
-                        record.setProduct(product);
-                        record.setReceiver(receiver);
-                        record.setSender(sender);
-                        record.setRetention_limit(limit);
-                        record.setStoreArea(DAOFactory.getFactory().getStoreAreaDAO().getById(area_id));
-
-                        DAOFactory.getFactory().getRecordDAO().update(record);
-                        return PageManager.SHOW_ALL_RECORDS_COMMAND;
-                    } else {
-                        List regimes = DAOFactory.getFactory().getRegimeDAO().read();
-                        request.setAttribute("regimeList", regimes);
-
-                        List areas = DAOFactory.getFactory().getStoreAreaDAO().read();
-                        request.setAttribute("areaList", areas);
-
-                        request.setAttribute("isWrong", true);
-                        request.setAttribute("record", record);
-                        return PageManager.EDIT_PRODUCT_PAGE;
+                    if (!sender.equals(senderByLegalAddress)) {
+                        if (senderByLegalAddress != null) {
+                            record.setSender(senderByLegalAddress);
+                            throw new IncorrectDataInputException("Отправитель с таким юридическим адресом уже существует! " +
+                                    "Вы можете выбрать его, сохранив запись повторно.");
+                        } else {
+                            sender.setLegal_address(sender_address);
+                            sender.setEmail(sender_email);
+                            sender.setPhone(sender_phone);
+                            sender.setSender_name(sender_name);
+                            DAOFactory.getFactory().getSenderDAO().update(sender);
+                        }
                     }
+
+                    Receiver receiver = DAOFactory.getFactory().getReceiverDAO().getById(receiver_id);
+
+                    Receiver receiverByLegalAddress = DAOFactory.getFactory().getReceiverDAO()
+                            .getReceiverByLegalAddress(receiver_address);
+
+                    if (!receiver.equals(receiverByLegalAddress)) {
+                        if (receiverByLegalAddress != null) {
+                            record.setReceiver(receiverByLegalAddress);
+                            throw new IncorrectDataInputException("Получатель с таким юридическим адресом уже существует! " +
+                                    "Вы можете выбрать его, сохранив запись повторно.");
+                        } else {
+                            receiver.setLegal_address(receiver_address);
+                            receiver.setEmail(receiver_email);
+                            receiver.setPhone(receiver_phone);
+                            receiver.setReceiver_name(receiver_name);
+                            DAOFactory.getFactory().getReceiverDAO().update(receiver);
+                        }
+                    }
+
+                    DAOFactory.getFactory().getProductDAO().update(product);
+                    record.setEmployee(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(employee_login));
+                    record.setProduct(product);
+                    record.setReceiver(receiver);
+                    record.setSender(sender);
+                    record.setRetention_limit(limit);
+                    record.setStoreArea(DAOFactory.getFactory().getStoreAreaDAO().getById(area_id));
+
+                    DAOFactory.getFactory().getRecordDAO().update(record);
+                    return PageManager.SHOW_ALL_RECORDS_COMMAND;
+
+                } catch (HibernateException e) {
+                    logger.error("hibernate error", e);
                 } catch (NullPointerException ex) {
-                    logger = Logger.getLogger(SaveProductAfterEditCommand.class);
                     logger.error("incorrect data in saving product", ex);
                 } catch (NumberFormatException ex) {
-                    logger = Logger.getLogger(SaveProductAfterEditCommand.class);
                     logger.error("incorrect format of receiver_id, sender_id, regime_id, area_id or acount", ex);
+                } catch (IncorrectDataInputException e) {
+                    CreationListsService.createRegimesAndAreasLists(request);
+                    request.setAttribute("errorMessage", e.getMessage());
+                    request.setAttribute("isWrong", true);
+                    request.setAttribute("record", record);
+                    return PageManager.EDIT_PRODUCT_PAGE;
                 }
                 return PageManager.SHOW_ALL_RECORDS_COMMAND;
             } else {

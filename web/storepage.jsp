@@ -1,7 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="entity.Record" %>
-<%@ page import="java.util.List" %>
-<%@ page import="entity.Product" %>
 <%--
   Created by IntelliJ IDEA.
   User: User
@@ -31,11 +28,15 @@
   <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <a href="/accountingsystem?command=signin" class="pull-right" style="margin-top:25px">
-        <c:if test="${empty login}"><c:out value="Войти" /></c:if>
-        <c:if test="${not empty login}">
-          <c:out value="${login}" />
-          <c:out value=" | Выход" />
-        </c:if>
+        <c:choose>
+          <c:when test="${empty login}">
+            <c:out value="Войти" />
+          </c:when>
+          <c:otherwise>
+            <c:out value="${login}" />
+            <c:out value=" | Выход" />
+          </c:otherwise>
+        </c:choose>
         &nbsp;
       </a>
     </div>
@@ -65,7 +66,8 @@
             <%--</select>--%>
           <%--</div>--%>
           <div class="form-group">
-            <button title="Осуществить поиск" name="command" value="search" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+            <button title="Осуществить поиск" name="command" value="search" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-search"></span></button>
           </div>
         </form>
       </div>
@@ -86,8 +88,6 @@
             <li><a href="/accountingsystem?command=enterperiod" class="link">Сформировать отчёт за период</a></li>
           </c:if>
 
-        </ul>
-        </li>
         </ul>
       </nav>
     </div>
@@ -116,64 +116,66 @@
         </tr>
         </thead>
         <tbody>
-          <c:if test="${empty list}">
-            <tr>
-              <td>
-                <div class="alert alert-warning text-center" style="margin-top: 30px;">
-                  <h5>База данных товаров пуста.</h5>
-                </div>
-              </td>
-            </tr>
-          </c:if>
-          <c:if test="${not empty list}">
-            <c:forEach var="record" items="${list}">
-
+          <c:choose>
+            <c:when test="${empty list}">
               <tr>
                 <td>
-                  <c:out value="${record.product.product_marking}"/>
-                </td>
-                <td>
-                  <c:out value="${record.product.product_name}"/>
-                </td>
-                <td>
-                  <c:out value="${record.product.acount}"/>&nbsp;
-                  <c:out value="${record.product.measuring_unit}"/>
-                </td>
-                <td>
-                  <c:out value="${record.retention_limit}"/>
-                </td>
-                <td>
-                  <c:out value="${record.employee.employee_name}"/>
-                </td>
-
-                <c:if test="${not isAuthorized}">
-                  <style>
-                    #editbutton {
-                      display: none;
-                    }
-                    #deletebutton {
-                      display: none;
-                    }
-                  </style>
-                </c:if>
-
-                <td>
-
-                  <a title="Редактировать запись" href="/accountingsystem?command=editproduct&record_id=${record.record_id}" id="editbutton"
-                     class="btn btn-sm btn-warning">>
-                    <span class="glyphicon glyphicon-pencil"></span>
-                  </a>
-                  <a title="Удалить запись" href="/accountingsystem?command=deleterecord&record_id=${record.record_id}" id="deletebutton"
-                     onclick="return confirm('Вы действительно желаете удалить эту запись?')"
-                     class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
-
+                  <div class="alert alert-warning text-center" style="margin-top: 30px;">
+                    <h5>База данных товаров пуста.</h5>
+                  </div>
                 </td>
               </tr>
+            </c:when>
+            <c:otherwise>
+              <c:forEach var="record" items="${list}">
+                <tr>
+                  <td>
+                    <c:out value="${record.product.product_marking}"/>
+                  </td>
+                  <td>
+                    <c:out value="${record.product.product_name}"/>
+                  </td>
+                  <td>
+                    <c:out value="${record.product.acount}"/>&nbsp;
+                    <c:out value="${record.product.measuring_unit}"/>
+                  </td>
+                  <td>
+                    <c:out value="${record.retention_limit}"/>
+                  </td>
+                  <td>
+                    <c:out value="${record.employee.employee_name}"/>
+                  </td>
 
-            </c:forEach>
-          </c:if>
+                  <c:if test="${not isAuthorized}">
+                    <style>
+                      #editbutton {
+                        display: none;
+                      }
+                      #deletebutton {
+                        display: none;
+                      }
+                      #addbutton{
+                        display: none;
+                      }
+                    </style>
+                  </c:if>
+
+                  <td>
+                    <a title="Редактировать запись"
+                       href="/accountingsystem?command=editproduct&record_id=${record.record_id}" id="editbutton"
+                       class="btn btn-sm btn-warning">>
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <a title="Удалить запись"
+                       href="/accountingsystem?command=deleterecord&record_id=${record.record_id}" id="deletebutton"
+                       onclick="return confirm('Вы действительно желаете удалить эту запись?')"
+                       class="btn btn-sm btn-danger">><span class="glyphicon glyphicon-trash"></span></a>
+                  </td>
+                </tr>
+              </c:forEach>
+            </c:otherwise>
+          </c:choose>
         </tbody>
-
       </table>
 
       <c:choose>
@@ -183,6 +185,9 @@
               display: none;
               opacity: 0;
             }
+            #blackoutdiv {
+              display: none;
+            }
           </style>
         </c:when>
         <c:otherwise>
@@ -190,6 +195,9 @@
             #modalblock {
               display: block;
               opacity: 1;
+            }
+            #blackoutdiv {
+              display: block;
             }
           </style>
         </c:otherwise>
@@ -199,24 +207,14 @@
            tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
           <div class="modal-content">
-            <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"style="margin-right: 5px;"
-                    aria-hidden="true">×</button>&nbsp;
+            <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
+                    style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
             <br/>
             <b>У Вас нет прав для редактирования этой записи!</b>
-
-            <br/>
-            <br/>
+            <br/><br/>
           </div>
         </div>
       </div>
-
-      <c:if test="${not isAuthorized}">
-        <style>
-          #addbutton{
-            display: none;
-          }
-        </style>
-      </c:if>
 
       <a href="/accountingsystem?command=addproduct" id="addbutton" class="btn btn-sm btn-primary">Добавить</a>
 
@@ -227,31 +225,13 @@
       <p class="text-muted">Accounting system &copy; 2015</p>
     </div>
   </div>
+  <div class="modal-backdrop fade in" id="blackoutdiv"></div>
 
   <script>
     $(document).ready(function(){
       $("#myTable").tablesorter();
     });
   </script>
-
-  <c:choose>
-    <c:when test="${not isProhibited}">
-      <style>
-        #blackoutdiv {
-          display: none;
-        }
-      </style>
-    </c:when>
-    <c:otherwise>
-      <style>
-        #blackoutdiv {
-          display: block;
-        }
-      </style>
-    </c:otherwise>
-  </c:choose>
-
-  <div class="modal-backdrop fade in" id="blackoutdiv"></div>
 
   <script type="text/javascript">
     document.getElementById('modalclose').onclick = function () {

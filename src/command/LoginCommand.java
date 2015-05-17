@@ -1,12 +1,10 @@
 package command;
 
 import configuration.PageManager;
-import dao.DAOFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by User on 03.05.2015.

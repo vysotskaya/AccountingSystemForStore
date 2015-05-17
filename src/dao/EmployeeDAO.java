@@ -15,7 +15,7 @@ import java.util.List;
 public class EmployeeDAO implements BaseDAO <Employee> {
 
     @Override
-    public boolean create(Employee employee) {
+    public boolean create(Employee employee) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,25 +25,24 @@ public class EmployeeDAO implements BaseDAO <Employee> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public List read() {
+    public List read() throws HibernateException {
         Session session = null;
         List<Employee> employees = new ArrayList();
         try {
             session = HibernateUtil.openSession();
             employees = session.createCriteria(Employee.class).list();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -53,7 +52,7 @@ public class EmployeeDAO implements BaseDAO <Employee> {
     }
 
     @Override
-    public boolean update(Employee employee) {
+    public boolean update(Employee employee) throws HibernateException {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -63,17 +62,16 @@ public class EmployeeDAO implements BaseDAO <Employee> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return  false;
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws HibernateException{
         Session session = null;
         Transaction transaction = null;
         try {
@@ -83,18 +81,17 @@ public class EmployeeDAO implements BaseDAO <Employee> {
             transaction.commit();
             return true;
         } catch (HibernateException e) {
-            e.printStackTrace();
             transaction.rollback();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return false;
     }
 
     @Override
-    public Employee getById (int id) {
+    public Employee getById (int id) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -102,16 +99,15 @@ public class EmployeeDAO implements BaseDAO <Employee> {
                     .setParameter("employee_id", id).uniqueResult();
             return employee;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public Employee getEmployeeByLogin(String employee_login) {
+    public Employee getEmployeeByLogin(String employee_login) throws HibernateException {
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -119,29 +115,27 @@ public class EmployeeDAO implements BaseDAO <Employee> {
                     .setParameter("employee_login", employee_login).uniqueResult();
             return employee;
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 
-    public List<Employee> findEmployeeByName(String employee_name) {
+    public List<Employee> findEmployeeByName(String employee_name) throws HibernateException{
         Session session = null;
         try {
             session = HibernateUtil.openSession();
             List<Employee> employees = session.getNamedQuery("findEmployeeByName")
                     .setParameter("employee_name", employee_name).list();
             return employees;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (HibernateException e) {
+            throw e;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return null;
     }
 }

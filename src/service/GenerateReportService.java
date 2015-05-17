@@ -1,6 +1,5 @@
 package service;
 
-import dao.DAOFactory;
 import entity.Record;
 import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -35,10 +34,10 @@ public class GenerateReportService {
             try {
                 wordMLPackage.save(new java.io.File("d:\\reports" + "\\" + periodBegin + "_" + periodEnd + ".docx"));
             } catch (Docx4JException e) {
-                throw new Docx4JException(e.getMessage());
+                throw e;
             }
         } catch (InvalidFormatException e) {
-           throw new InvalidFormatException(e.getMessage());
+           throw e;
         }
     }
 

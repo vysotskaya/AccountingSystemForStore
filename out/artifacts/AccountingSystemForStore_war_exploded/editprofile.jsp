@@ -13,7 +13,7 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel = 'stylesheet' href="style.css">
-<title>Авторизация</title>
+<title>Редактировать профиль</title>
 <style>
   <jsp:include page="bootstrap-3.3.4-dist\js\bootstrap.min.js"></jsp:include>
   <jsp:include page="bootstrap-3.3.4-dist\css\bootstrap.min.css"></jsp:include>
@@ -28,11 +28,13 @@
       <div class="container col-md-4 col-md-offset-4 main">
           <form action="/accountingsystem" method="get">
             <!-- Modal for edit profile -->
-            <div class="modal text-left alert-info" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+            <div class="modal text-left alert-info" id="myModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModal" aria-hidden="true">
               <div class="modal-dialog" style="width: 30%;">
                 <div class="modal-content" >
                   <div class="modal-header">
-                    <a href="/accountingsystem?command=showallemployees" id="closebutton" style="margin-top: -10px;" class="btn close">×</a>
+                    <a href="/accountingsystem?command=showallemployees" id="closebutton" style="margin-top: -10px;"
+                       class="btn close">×</a>
                     <h4 class="modal-title" id="myModalLabel">Редактировать профиль</h4>
                   </div>
                   <div class="modal-body">
@@ -58,7 +60,8 @@
                       </select><br/>
                       Почта* <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                     name="email" class="form-control" value="${employee.email}" required="true"/><br/>
-                      <button type="submit" name="command" value="saveprofile" class="btn btn-primary text-center">Сохранить изменения</button>
+                      <button type="submit" name="command" value="saveprofile" class="btn btn-primary
+                        text-center">Сохранить изменения</button>
                     </form>
                   </div>
                 </div>

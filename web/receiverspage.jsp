@@ -1,6 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="entity.Record" %>
-<%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
   User: User
@@ -31,11 +29,15 @@
   <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <a href="/accountingsystem?command=signin" class="pull-right" style="margin-top:25px">
-        <c:if test="${empty login}"><c:out value="Войти" /></c:if>
-        <c:if test="${not empty login}">
-          <c:out value="${login}" />
-          <c:out value=" | Выход" />
-        </c:if>
+        <c:choose>
+          <c:when test="${empty login}">
+            <c:out value="Войти" />
+          </c:when>
+          <c:otherwise>
+            <c:out value="${login}" />
+            <c:out value=" | Выход" />
+          </c:otherwise>
+        </c:choose>
         &nbsp;
       </a>
     </div>
@@ -57,7 +59,8 @@
             <input type="text" class="form-control" placeholder="Search..." />
           </div>
           <div class="form-group">
-            <button title="Осуществить поиск" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+            <button title="Осуществить поиск" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-search"></span></button>
           </div>
         </form>
       </div>
@@ -78,8 +81,6 @@
             <li><a href="/accountingsystem?command=enterperiod" class="link">Сформировать отчёт за период</a></li>
           </c:if>
 
-        </ul>
-        </li>
         </ul>
       </nav>
     </div>
@@ -102,43 +103,41 @@
         </tr>
         </thead>
         <tbody>
-
-          <c:if test="${empty list}">
-            <tr>
-              <td>
-                <div class="alert alert-warning text-center" style="margin-top: 30px;">
-                  <h5>База данных получателей пуста.</h5>
-                </div>
-              </td>
-            </tr>
-          </c:if>
-          <c:if test="${not empty list}">
-            <c:forEach var="receiver" items="${list}">
-
+          <c:choose>
+            <c:when test="${empty list}">
               <tr>
-                <td style="width: 20%;">
-                  <c:out value="${receiver.receiver_name}"/>
-                </td>
-                <td style="width: 40%;">
-                  <c:out value="${receiver.legal_address}"/>
-                </td>
-                <td style="width: 20%;">
-                  <c:out value="${receiver.phone}"/>
-                </td>
-                <td style="width: 20%;">
-                  <c:out value="${receiver.email}"/>
+                <td>
+                  <div class="alert alert-warning text-center" style="margin-top: 30px;">
+                    <h5>База данных получателей пуста.</h5>
+                  </div>
                 </td>
               </tr>
-
-            </c:forEach>
-          </c:if>
-
+            </c:when>
+            <c:otherwise>
+              <c:forEach var="receiver" items="${list}">
+                <tr>
+                  <td style="width: 20%;">
+                    <c:out value="${receiver.receiver_name}"/>
+                  </td>
+                  <td style="width: 40%;">
+                    <c:out value="${receiver.legal_address}"/>
+                  </td>
+                  <td style="width: 20%;">
+                    <c:out value="${receiver.phone}"/>
+                  </td>
+                  <td style="width: 20%;">
+                    <c:out value="${receiver.email}"/>
+                  </td>
+                </tr>
+              </c:forEach>
+            </c:otherwise>
+          </c:choose>
         </tbody>
       </table>
     </div>
   </div>
   <div id="footer" style="background: #D3D3D3;">
-    <div class="container text-center" style="">
+    <div class="container text-center">
       <p class="text-muted">Accounting system &copy; 2015</p>
     </div>
   </div>

@@ -1,7 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="entity.Record" %>
-<%@ page import="java.util.List" %>
-<%@ page import="entity.Product" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: User
@@ -31,11 +29,15 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container" style="margin-right: 120px;">
     <a href="/accountingsystem?command=signin" class="pull-right" style="margin-top:25px">
-      <c:if test="${empty login}"><c:out value="Войти"/></c:if>
-      <c:if test="${not empty login}">
-        <c:out value="${login}" />
-        <c:out value=" | Выход" />
-      </c:if>
+      <c:choose>
+        <c:when test="${empty login}">
+          <c:out value="Войти"/>
+        </c:when>
+        <c:otherwise>
+          <c:out value="${login}" />
+          <c:out value=" | Выход" />
+        </c:otherwise>
+      </c:choose>
       &nbsp;
     </a>
   </div>
