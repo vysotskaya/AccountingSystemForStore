@@ -1,5 +1,6 @@
 package service;
 
+import configuration.Constants;
 import entity.Receiver;
 import entity.Sender;
 
@@ -33,6 +34,31 @@ public class CheckService {
         } else {
             return false;
         }
+    }
+
+    public static String checkPeriodForReport(String begin, String end) {
+        String[] beginStr = begin.split("\\.");
+        String[] endStr = end.split("\\.");
+        String[] constBeginStr = Constants.MIN_BEGIN_PERIOD_FOR_REPORT.split("\\.");
+        String[] constEndStr = Constants.MAX_END_PERIOD_FOR_REPORT.split("\\.");
+        Calendar beginDate = new GregorianCalendar(Integer.parseInt(beginStr[2]), Integer.parseInt(beginStr[1]) - 1,
+                Integer.parseInt(beginStr[0]));
+        Calendar endDate = new GregorianCalendar(Integer.parseInt(endStr[2]), Integer.parseInt(endStr[1]) - 1,
+                Integer.parseInt(endStr[0]));
+        Calendar constBeginDate = new GregorianCalendar(Integer.parseInt(constBeginStr[2]),
+                Integer.parseInt(constBeginStr[1]) - 1, Integer.parseInt(constBeginStr[0]));
+        Calendar constEndDate = new GregorianCalendar(Integer.parseInt(constEndStr[2]),
+                Integer.parseInt(constEndStr[1]) - 1, Integer.parseInt(constEndStr[0]));
+        if (beginDate.getTime().getTime() >= endDate.getTime().getTime()) {
+            return "Некорректный период!";
+        }
+        if (constBeginDate.getTime().getTime() > beginDate.getTime().getTime()) {
+            return "Минимальное начало периода - 01.01.2014!";
+        }
+        if (endDate.getTime().getTime() > constEndDate.getTime().getTime()) {
+            return "Максимальное окончание периода - 01.01.2099!";
+        }
+        return null;
     }
 
     public static boolean checkEqualsWithoutId(Object ob1, Object ob2) {

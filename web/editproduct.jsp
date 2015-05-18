@@ -24,6 +24,28 @@
 
 <c:set var="regimeList" value="${regimeList}"></c:set>
 <c:set var="areaList" value="${areaList}"></c:set>
+<c:set var="role" value="${role}" scope="session" />
+
+<c:choose>
+    <c:when test="${empty role}">
+        <div align="center" style="margin-top: 100px;">
+            <h3>No access</h3>
+            <script type="text/javascript">
+                setTimeout('location.replace("http://localhost:8080/index.jsp")', 1000);
+            </script>
+        </div>
+        <jsp:forward page="index.jsp" />
+    </c:when>
+    <c:when test="${role == 2}">
+        <div align="center" style="margin-top: 100px;">
+            <h3>No access</h3>
+            <script type="text/javascript">
+                setTimeout('location.replace("http://localhost:8080/accountingsystem?command=showallemployees")', 1000);
+            </script>
+        </div>
+        <jsp:forward page="index.jsp" />
+    </c:when>
+</c:choose>
 
 <div class="container">
   <div class="container col-md-4 col-md-offset-4 main">
@@ -46,31 +68,30 @@
                                              pattern="^[A-Za-z0-9]{3,30}"
                                              required="true" placeholder="Маркировка" readonly
                                              value="${record.product.product_marking}"/><br/><br/>
-                    Количесвто* <br/> <input type="text"  name="acountInput" class="form-control"
-                                             pattern="^[0-9]{1,5}"
+                    Количество* <br/> <input type="text"  name="acountInput" class="form-control"
+                                             pattern="^[0-9]{1,5}" title="Максимальное количество товара -  99999."
                                              required="true" placeholder="0"
                                              value="${record.product.acount}"/><br/><br/>
                     <input type="hidden" name="sender_id" value="${record.sender.sender_id}"/>
                     Имя отправителя* <br/> <input type="text"  name="senderNameInput" class="form-control"
                                                   required="true" placeholder="Имя отправителя"
-                                                  maxlength="100"
+                                                  maxlength="100" title="Максимальная длина - 100."
                                                   value="${record.sender.sender_name}"/><br/><br/>
                     Юридический адрес о.* <br/> <input type="text"  name="senderAddressInput" class="form-control"
                                                        required="true" placeholder="Юридический адрес"
-                                                       maxlength="100"
+                                                       maxlength="100" title="Максимальная длина - 100."
                                                        value="${record.sender.legal_address}"/><br/><br/>
                     Телефон отправителя* <br/> <input type="text"  name="senderPhoneInput" class="form-control"
-                                                      pattern="^[0-9]{7,15}"
+                                                      pattern="^[0-9]{7,15}" title="Допустимы только цифры. Минимальная длина - 7, максимальная - 15."
                                                       required="true" placeholder="8859667"
                                                       value="${record.sender.phone}"/><br/><br/>
-                    Почта отправителя* <br/> <input type="text"  name="senderEmailInput" class="form-control"
-                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                                                    maxlength="100"
+                    Почта отправителя* <br/> <input type="email"  name="senderEmailInput" class="form-control"
+                                                    maxlength="100" title="Почтовый адрес должен содержать @. Максимальная длина - 100."
                                                     required="true" placeholder="Почта отправителя"
                                                     value="${record.sender.email}"/><br/><br/>
                     Срок хранения* <br/> <input type="date"  name="limitInput" class="form-control"
                                                 pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
-                                                required="true" placeholder="01.01.2015"
+                                                required="true" placeholder="01.01.2015" title="Формат dd.mm.yyyy"
                                                 value="${record.retention_limit}"/><br/><br/>
                     Особенности хранения <br/> <textarea rows="4" cols="18"  name="featuresInput" class="form-control"
                                                          placeholder="Введите особенности хранения..."><c:out
@@ -79,7 +100,8 @@
                   <div class="form-group text-left">
                     Наименование* <br/> <input type="text" name="nameInput" class="form-control"
                                                required="true" placeholder="Наименование"
-                                               pattern="^[А-Яа-яA-Za-z0-9]{3,30}"
+                                               pattern="^[А-Яа-яA-Za-z0-9\s]{3,50}"
+                                               title="Допустимы цифры, буквы, пробелы. Минимальная длина - 3, максимальная - 50."
                                                value="${record.product.product_name}"/><br/><br/>
                     Единица измерения* <br/>
                     <select class="form-control" name="unitSelect">
@@ -90,19 +112,19 @@
                     <input type="hidden" name="receiver_id" value="${record.receiver.receiver_id}"/>
                     Имя получателя* <br/> <input type="text"  name="receiverNameInput" class="form-control"
                                                  required="true" placeholder="Имя получателя"
-                                                 maxlength="100"
+                                                 maxlength="100" title="Максимальная длина - 100."
                                                  value="${record.receiver.receiver_name}"/><br/><br/>
                     Юридический адрес п.* <br/> <input type="text" name="receiverAddressInput" class="form-control"
                                                        required="true" placeholder="Юридический адрес"
-                                                       maxlength="100"
+                                                       maxlength="100" title="Максимальная длина - 100."
                                                        value="${record.receiver.legal_address}"/><br/><br/>
                     Телефон получателя* <br/> <input type="text"  name="receiverPhoneInput" class="form-control"
-                                                     pattern="^[0-9]{7,15}"
-                                                     required="true" placeholder="8859667"
+                                                     pattern="^[0-9]{7,15}" required="true" placeholder="8859667"
+                                                     title="Допустимы только цифры. Минимальная длина - 7, максимальная - 15."
                                                      value="${record.receiver.phone}"/><br/><br/>
-                    Почта получателя* <br/> <input type="text"  name="receiverEmailInput" class="form-control"
+                    Почта получателя* <br/> <input type="email"  name="receiverEmailInput" class="form-control"
                                                    required="true" placeholder="Почта получателя"
-                                                   maxlength="100"
+                                                   maxlength="100" title="Почтовый адрес должен содержать @. Максимальная длина - 100."
                                                    value="${record.receiver.email}"/><br/><br/>
                     Таможенный режим* <br/>
                     <select class="form-control" style="width: 200px;" name="regimeSelect">
@@ -164,8 +186,8 @@
 
                 <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
                      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-sm">
-                    <div class="modal-content alert-danger" style="background: #e4b9b9;">
+                  <div class="modal-dialog modal-sm" style="height: 100px;">
+                    <div class="modal-content text-center alert-danger" style="background: #e4b9b9; padding: 5px;">
                       <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
                               style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                       <br/>

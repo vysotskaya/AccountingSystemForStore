@@ -95,6 +95,11 @@ public class SaveProductAfterEditCommand implements Command {
                             sender.setSender_name(sender_name);
                             DAOFactory.getFactory().getSenderDAO().update(sender);
                         }
+                    } else {
+                        sender.setEmail(sender_email);
+                        sender.setPhone(sender_phone);
+                        sender.setSender_name(sender_name);
+                        DAOFactory.getFactory().getSenderDAO().update(sender);
                     }
 
                     Receiver receiver = DAOFactory.getFactory().getReceiverDAO().getById(receiver_id);
@@ -114,6 +119,11 @@ public class SaveProductAfterEditCommand implements Command {
                             receiver.setReceiver_name(receiver_name);
                             DAOFactory.getFactory().getReceiverDAO().update(receiver);
                         }
+                    } else {
+                        receiver.setEmail(receiver_email);
+                        receiver.setPhone(receiver_phone);
+                        receiver.setReceiver_name(receiver_name);
+                        DAOFactory.getFactory().getReceiverDAO().update(receiver);
                     }
 
                     DAOFactory.getFactory().getProductDAO().update(product);

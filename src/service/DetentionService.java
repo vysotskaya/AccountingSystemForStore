@@ -12,16 +12,13 @@ import java.util.List;
  * Created by User on 13.05.2015.
  */
 public class DetentionService {
-    private static final String periodBegin = "01.01.1000";
+    private static final String PERIOD_BEGIN = "01.01.1000";
 
     public static List<Record> getProductsToDetention() throws HibernateException{
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         List<Record> recordList = DAOFactory.getFactory().getRecordDAO()
-                .getRecordsForPeriod(periodBegin, sdf.format(currentDate).toString());
-        if (!recordList.isEmpty()) {
-            return recordList;
-        }
-        return null;
+                .getRecordsForPeriod(PERIOD_BEGIN, sdf.format(currentDate).toString());
+        return recordList;
     }
 }

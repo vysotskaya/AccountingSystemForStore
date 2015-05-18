@@ -25,6 +25,19 @@
   <c:set var="list" value="${list}"/>
   <c:set var="login" value="${login}" scope="session" />
   <c:set var="isAuthorized" value="${isAuthorized}" scope="session" />
+  <c:set var="role" value="${role}" scope="session" />
+
+  <c:choose>
+    <c:when test="${role == 2}">
+      <div align="center" style="margin-top: 100px;">
+        <h3>No access</h3>
+        <script type="text/javascript">
+          setTimeout('location.replace("http://localhost:8080/accountingsystem?command=showallemployees")', 1000);
+        </script>
+      </div>
+      <jsp:forward page="index.jsp" />
+    </c:when>
+  </c:choose>
 
   <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">

@@ -127,7 +127,7 @@ public class RecordDAO implements BaseDAO<Record> {
         }
     }
 
-    public List getRecordsForPeriod(String periodBegin, String periodEnd) throws HibernateException{
+    public List  getRecordsForPeriod(String periodBegin, String periodEnd) throws HibernateException{
         String[] periodBeginStr = periodBegin.split("\\.");
         String[] periodEndStr = periodEnd.split("\\.");
         Date dateBegin = new Date(Integer.parseInt(periodBeginStr[2]), Integer.parseInt(periodBeginStr[1]),

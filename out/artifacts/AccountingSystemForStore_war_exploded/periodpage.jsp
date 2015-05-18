@@ -21,9 +21,9 @@
 </style>
 </head>
 <body>
-  <c:set var="role" value="${role}" scope="session" />
   <c:set var="regimeList" value="${regimeList}"></c:set>
   <c:set var="areaList" value="${areaList}"></c:set>
+  <c:set var="role" value="${role}" scope="session" />
 
   <c:choose>
     <c:when test="${empty role}">
@@ -63,11 +63,15 @@
                 <div class="form-inline text-center" role="form">
                   <div class="form-group text-left">
                     Начало периода <br/> <input type="text"  name="periodBeginInput" class="form-control"
-                                             required="true" placeholder="01.01.2014"/><br/>
+                                                pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
+                                                title="Формат dd.mm.yyyy" required="true"
+                                                value="${begin}" placeholder="01.01.2014"/><br/>
                   </div>
                   <div class="form-group text-left">
                     Конец периода <br/> <input type="text" name="periodEndInput" class="form-control"
-                                               required="true" placeholder="01.02.2015"/><br/>
+                                               pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
+                                               required="true" title="Формат dd.mm.yyyy"
+                                               value="${end}" placeholder="01.01.2015"/><br/>
                   </div>
                 </div>
 
@@ -100,14 +104,14 @@
                   </c:otherwise>
                 </c:choose>
 
-                <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
+                <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 7%;"
                      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-sm">
-                    <div class="modal-content alert-danger" style="background: #e4b9b9;">
+                  <div class="modal-dialog modal-sm" style="height: 100px;">
+                    <div class="modal-content text-center alert-danger" style="background: #e4b9b9; padding: 5px;">
                       <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
                               style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                       <br/>
-                      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qwertyui!</b>
+                      <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${errorMessage}</b>
                       <br/>
                       <br/>
                     </div>

@@ -12,14 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-
 /**
- * Created by User on 05.05.2015.
+ * Created by User on 18.05.2015.
  */
-public class DeleteEmployeeCommand implements Command {
+public class SelectEmployeeCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Logger logger = Logger.getLogger(DeleteEmployeeCommand.class);
+        Logger logger = Logger.getLogger(SelectEmployeeCommand.class);
         HttpSession session = request.getSession();
         Integer role = (Integer)session.getAttribute("role");
         if (role == null) {
@@ -27,17 +26,20 @@ public class DeleteEmployeeCommand implements Command {
         } else {
             if ( role == 2) {
                 try {
-                    int id = Integer.parseInt((String) request.getParameter("employee_id"));
+                    int id = Integer.parseInt((String) request.getParameter("deleteEmployee_id"));
+                    int newEmployee_id = Integer.parseInt((String) request.getParameter("employeeSelect"));
                     List<Record> recordList = DAOFactory.getFactory().getRecordDAO()
                             .findRecordsByEmployee(DAOFactory.getFactory().getEmployeeDAO().getById(id).getEmployee_name());
                     if (!recordList.isEmpty()) {
-                        List<Employee> employeeList = DAOFactory.getFactory().getEmployeeDAO().read();
-                        request.setAttribute("list", employeeList);
-                        request.setAttribute("employee_id", id);
-                        return PageManager.EMPLOYEE_SELECTION_PAGE;
-                    } else {
-                        DAOFactory.getFactory().getEmployeeDAO().deleteById(id);
+                        Employee employee = DAOFactory.getFactory().getEmployeeDAO().getById(newEmployee_id);
+                        if (employee != null) {
+                            for (Record record : recordList) {
+                                record.setEmployee(employee);
+                                DAOFactory.getFactory().getRecordDAO().update(record);
+                            }
+                        }
                     }
+                    DAOFactory.getFactory().getEmployeeDAO().deleteById(id);
                 } catch (HibernateException e) {
                     logger.error("hibernate error" ,e);
                 } catch (NullPointerException ex) {

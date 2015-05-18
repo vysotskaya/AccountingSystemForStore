@@ -24,6 +24,28 @@
 
 <c:set var="list" value="${list}"></c:set>
 <c:set var="employee" value="${employee}"></c:set>
+<c:set var="role" value="${role}" scope="session" />
+
+<c:choose>
+  <c:when test="${empty role}">
+    <div align="center" style="margin-top: 100px;">
+      <h3>No access</h3>
+      <script type="text/javascript">
+        setTimeout('location.replace("http://localhost:8080/index.jsp")', 1000);
+      </script>
+    </div>
+    <jsp:forward page="index.jsp" />
+  </c:when>
+  <c:when test="${role != 2}">
+    <div align="center" style="margin-top: 100px;">
+      <h3>No access</h3>
+      <script type="text/javascript">
+        setTimeout('location.replace("http://localhost:8080/accountingsystem?command=showallrecords")', 1000);
+      </script>
+    </div>
+    <jsp:forward page="index.jsp" />
+  </c:when>
+</c:choose>
 
 <div class="container">
   <div class="container col-md-4 col-md-offset-4 main">
@@ -41,8 +63,9 @@
             <div class="modal-body">
               <form class="text-left">
                 Фамилия И. О.* <input type="text" pattern="^[А-Я]{1}[а-я]{2,}\s[А-Я]{1}.[А-Я]{1}."
-                                      title="например, Иванов И.И." name="surnameInput" class="form-control"
-                                      required="true" placeholder="Иванов И.И." value="${employee.employee_name}"/><br/>
+                                      title="Формат Фамилия И.О." name="surnameInput" class="form-control"
+                                      maxlength="50" required="true" placeholder="Иванов И.И."
+                                      value="${employee.employee_name}"/><br/>
                 Должность* <br/>
                 <select class="form-control" name="positionSelect">
                   <c:forEach var="position" items="${list}">
@@ -58,15 +81,17 @@
                     </c:if>
                   </c:forEach>
                 </select><br/>
-                Почта* <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                              name="emailInput" class="form-control" required="true" placeholder="Почта"
+                Почта* <input type="email" name="emailInput" class="form-control" required="true" placeholder="Почта"
+                              title="Почтовый адрес должен содержать @. Максимальная длина - 100." maxlength="100"
                               value="${employee.email}"/><br/>
                 Логин* <input type="text" pattern="^[A-Za-z0-9._]{3,}"
-                              name="loginInput" class="form-control" required="true" placeholder="login"
+                              title="Минимальная длина - 3, максимальная - 30. Русские символы недопустимы."
+                              name="loginInput" class="form-control" required="true" placeholder="Login" maxlength="30"
                               value="${employee.login}"/><br/>
                 Пароль* <input type="password" pattern="^[A-Za-z0-9._]{3,}"
-                              name="passwordInput" class="form-control" required="true" placeholder="password"
-                              value="${employee.password}"/><br/>
+                               title="Минимальная длина - 3, максимальная - 30. Русские символы недопустимы."
+                               name="passwordInput" class="form-control" required="true" placeholder="Password"
+                               maxlength="30" value="${employee.password}"/><br/>
                 <button type="submit" name="command" value="saveemployee" class="btn btn-primary text-center">Сохранить запись</button>
 
                 <c:choose>
@@ -97,7 +122,7 @@
                   <div class="modal fade bs-example-modal-sm" id="modalblock" style="margin-top: 15%;"
                        tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
-                      <div class="modal-content alert-danger" style="background: #e4b9b9;">
+                      <div class="modal-content text-center alert-danger" style="background: #e4b9b9;">
                         <button type="button" class="close" onclick="" id="modalclose" data-dismiss="modal"
                                 style="margin-right: 5px;" aria-hidden="true">×</button>&nbsp;
                         <br/>

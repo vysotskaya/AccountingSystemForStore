@@ -23,6 +23,28 @@
 <body>
 
   <c:set var="list" value="${list}"></c:set>
+  <c:set var="role" value="${role}" scope="session" />
+
+  <c:choose>
+    <c:when test="${empty role}">
+      <div align="center" style="margin-top: 100px;">
+        <h3>No access</h3>
+        <script type="text/javascript">
+          setTimeout('location.replace("http://localhost:8080/index.jsp")', 1000);
+        </script>
+      </div>
+      <jsp:forward page="index.jsp" />
+    </c:when>
+    <c:when test="${role != 2}">
+      <div align="center" style="margin-top: 100px;">
+        <h3>No access</h3>
+        <script type="text/javascript">
+          setTimeout('location.replace("http://localhost:8080/accountingsystem?command=showallrecords")', 1000);
+        </script>
+      </div>
+      <jsp:forward page="index.jsp" />
+    </c:when>
+  </c:choose>
 
   <div class="container">
       <div class="container col-md-4 col-md-offset-4 main">
@@ -41,8 +63,8 @@
                     <form class="text-left">
                       <input type="hidden" name="employee_id" value="${employee.employee_id}">
                       Фамилия И. О.* <input type="text" pattern="^[А-Я]{1}[а-я]{2,}\s[А-Я]{1}.[А-Я]{1}."
-                                            title="например, Иванов И.И." name="surnameInput" class="form-control"
-                                            required="true" value="${employee.employee_name}"/><br/>
+                                            title="Формат Фамилия И.О." maxlength="50" name="surnameInput"
+                                            class="form-control" required="true" value="${employee.employee_name}"/><br/>
                       Должность* <br/>
                       <select class="form-control" name="positionSelect">
                         <c:forEach var="position" items="${list}">
@@ -58,8 +80,9 @@
                           </c:if>
                         </c:forEach>
                       </select><br/>
-                      Почта* <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                                    name="email" class="form-control" value="${employee.email}" required="true"/><br/>
+                      Почта* <input type="email" name="email" class="form-control" value="${employee.email}"
+                                    title="Почтовый адрес должен содержать @. Максимальная длина - 100." maxlength="100"
+                                    required="true"/><br/>
                       <button type="submit" name="command" value="saveprofile" class="btn btn-primary
                         text-center">Сохранить изменения</button>
                     </form>

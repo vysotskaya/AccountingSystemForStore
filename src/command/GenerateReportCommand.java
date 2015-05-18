@@ -35,6 +35,15 @@ public class GenerateReportCommand implements Command {
                         return PageManager.LOGIN_PAGE;
                     }
 
+                    String checkString = CheckService.checkPeriodForReport(periodBegin, periodEnd);
+                    if (checkString != null) {
+                        request.setAttribute("errorMessage", checkString);
+                        request.setAttribute("isWrong", true);
+                        request.setAttribute("begin", periodBegin);
+                        request.setAttribute("end", periodEnd);
+                        return PageManager.PERIOD_PAGE;
+                    }
+
                     List<Record> records = DAOFactory.getFactory().getRecordDAO().getRecordsForPeriod(periodBegin, periodEnd);
                     if (records != null) {
                         try {

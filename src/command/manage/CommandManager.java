@@ -36,6 +36,7 @@ public class CommandManager {
         commandMap.put("generatereport", new GenerateReportCommand());
         commandMap.put("search", new SearchCommand());
         commandMap.put("enterperiod", new EnterPeriodCommand());
+        commandMap.put("selectemployee", new SelectEmployeeCommand());
     }
 
     public static Command getCurrentCommand(String commandKey) {

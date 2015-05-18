@@ -67,9 +67,9 @@ public class SaveProductCommand implements Command {
 
                     Receiver receiver = new Receiver(receiver_email, receiver_address, receiver_phone, receiver_name);
                     Sender sender = new Sender(sender_email, sender_address, sender_phone, sender_name);
-                    record = new Record(
-                            DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(employee_login),
-                            product, receiver, limit, DAOFactory.getFactory().getStoreAreaDAO().getById(area_id), sender);
+//                    record = new Record(
+//                            DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(employee_login),
+//                            product, receiver, limit, DAOFactory.getFactory().getStoreAreaDAO().getById(area_id), sender);
 
                     if (!CheckService.checkRetentionLimitDate(limit)){
                         throw new IncorrectDataInputException("Неверный срок хранения!");
@@ -106,6 +106,12 @@ public class SaveProductCommand implements Command {
                     }
 
                     DAOFactory.getFactory().getProductDAO().create(product);
+                    record = new Record(
+                            DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin(employee_login),
+                            DAOFactory.getFactory().getProductDAO().getProductByMarking(marking),
+                            DAOFactory.getFactory().getReceiverDAO().getReceiverByLegalAddress(receiver_address), limit,
+                            DAOFactory.getFactory().getStoreAreaDAO().getById(area_id),
+                            DAOFactory.getFactory().getSenderDAO().getSenderByLegalAddress(sender_address));
                     DAOFactory.getFactory().getRecordDAO().create(record);
 
                 } catch (HibernateException e) {
