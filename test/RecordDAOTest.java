@@ -24,14 +24,18 @@ public class RecordDAOTest {
 
 //    @Before
 //    public void setRecord() {
-//        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getById(1),
-//                DAOFactory.getFactory().getProductDAO().getById(3), DAOFactory.getFactory().getReceiverDAO().getById(1),
+//        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin("kate"),
+//                DAOFactory.getFactory().getProductDAO().getById(15), DAOFactory.getFactory().getReceiverDAO().getById(11),
 //                "15.06.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(1),
-//                DAOFactory.getFactory().getSenderDAO().getById(1)));
-//        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getById(2),
-//                DAOFactory.getFactory().getProductDAO().getById(4), DAOFactory.getFactory().getReceiverDAO().getById(1),
-//                "01.05.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(3),
-//                DAOFactory.getFactory().getSenderDAO().getById(1)));
+//                DAOFactory.getFactory().getSenderDAO().getById(12)));
+//        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin("kate"),
+//                DAOFactory.getFactory().getProductDAO().getById(16), DAOFactory.getFactory().getReceiverDAO().getById(15),
+//                "28.05.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(3),
+//                DAOFactory.getFactory().getSenderDAO().getById(13)));
+//        DAOFactory.getFactory().getRecordDAO().create(new Record(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin("olya"),
+//                DAOFactory.getFactory().getProductDAO().getById(17), DAOFactory.getFactory().getReceiverDAO().getById(12),
+//                "16.07.2015", DAOFactory.getFactory().getStoreAreaDAO().getById(2),
+//                DAOFactory.getFactory().getSenderDAO().getById(11)));
 //
 //    }
 
@@ -77,11 +81,11 @@ public class RecordDAOTest {
     //@Ignore
     @Test
     public void readRecordTest() {
-        List records = DAOFactory.getFactory().getRecordDAO().read();
-        for (Object o : records) {
-            System.out.println(o.toString());
+        List<Record> records = DAOFactory.getFactory().getRecordDAO().read();
+        for (Record r : records) {
+            System.out.println(r.toString());
         }
-        assertTrue(records.size() == records.size());
+        assertTrue(records.size() == 4);
     }
 
     @Ignore

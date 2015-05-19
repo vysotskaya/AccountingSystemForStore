@@ -18,14 +18,18 @@ import java.io.Serializable;
                 "where p.customsRegimeType = :regime"),
         @NamedQuery(name = "getProductById", query = "from entity.Product p " +
                 "where p.product_id = :product_id"),
-        @NamedQuery(name = "findProductByName", query = "from entity.Product p " +
-                "where p.product_name like concat('%', :product_name, '%')"),
-        @NamedQuery(name = "findProductByAcount", query = "from entity.Product p " +
-                "where p.acount like concat('%', :acount, '%')"),
-        @NamedQuery(name = "findProductByUnit", query = "from entity.Product p " +
-                "where p.measuring_unit like concat('%', :measuring_unit, '%')"),
-        @NamedQuery(name = "findProductByMarking", query = "from entity.Product p " +
-                "where p.product_marking like concat('%', :product_marking, '%')")})
+        @NamedQuery(name = "findProductByNameAcountUnitMarking", query = "from entity.Product p " +
+                "where p.product_name like concat('%', :product_name, '%') " +
+                "or p.acount like concat('%', :acount, '%') " +
+                "or p.measuring_unit like concat('%', :measuring_unit, '%') " +
+                "or p.product_marking like concat('%', :product_marking, '%')"),
+        @NamedQuery(name = "findProductByNameMarkingFeatures", query = "from entity.Product p " +
+                "where p.product_name like concat('%', :product_name, '%') " +
+                "or p.storing_features like concat('%', :storing_features, '%') " +
+                "or p.product_marking like concat('%', :product_marking, '%')"),
+        @NamedQuery(name = "findProductByNameMarking", query = "from entity.Product p " +
+                "where p.product_name like concat('%', :product_name, '%') " +
+                "or p.product_marking like concat('%', :product_marking, '%')")})
 
 public class Product implements Serializable {
     @Id

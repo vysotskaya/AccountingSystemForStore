@@ -28,7 +28,13 @@ import java.io.Serializable;
         @NamedQuery(name = "getRecordByProductId", query = "from entity.Record r " +
                 "where r.product = :product"),
         @NamedQuery(name = "getRecordsByEmployee", query = "from entity.Record r " +
-                "where r.employee = :employee")})
+                "where r.employee = :employee"),
+        @NamedQuery(name = "getRecordsByStoreArea", query = "from entity.Record r " +
+                "where r.storeArea = :storeArea"),
+        @NamedQuery(name = "getRecordsByReceiver", query = "from entity.Record r " +
+                "where r.receiver = :receiver"),
+        @NamedQuery(name = "getRecordsBySender", query = "from entity.Record r " +
+                "where r.sender = :sender")})
 
 public class Record implements Serializable {
     @Id

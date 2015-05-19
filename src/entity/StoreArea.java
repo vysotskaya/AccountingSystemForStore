@@ -13,7 +13,9 @@ import java.io.Serializable;
         @NamedQuery(name = "deleteStoreAreaById", query = "delete from entity.StoreArea s " +
                 "where s.storearea_id = :storearea_id"),
         @NamedQuery(name = "getStoreAreaById", query = "from entity.StoreArea s " +
-                "where s.storearea_id = :storearea_id")})
+                "where s.storearea_id = :storearea_id"),
+        @NamedQuery(name = "findStoreAreaByName", query = "from entity.StoreArea s " +
+        "where s.storearea_name like concat('%', :storearea_name, '%')")})
 
 public class StoreArea implements Serializable {
     @Id

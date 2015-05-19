@@ -7,6 +7,8 @@ import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.*;
 
+import javax.swing.*;
+import java.io.File;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -32,7 +34,13 @@ public class GenerateReportService {
             wordMLPackage.getMainDocumentPart().addObject(table);
 
             try {
-                wordMLPackage.save(new java.io.File("d:\\reports" + "\\" + periodBegin + "_" + periodEnd + ".docx"));
+                JFrame jFrame = new JFrame();
+                JFileChooser fileopen = new JFileChooser();
+                int ret = fileopen.showSaveDialog(jFrame);
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileopen.getSelectedFile();
+                    wordMLPackage.save(new java.io.File(file.getAbsolutePath()));
+                }
             } catch (Docx4JException e) {
                 throw e;
             }

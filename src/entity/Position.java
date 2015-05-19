@@ -13,7 +13,9 @@ import java.io.Serializable;
         @NamedQuery(name = "deletePositionById", query = "delete from entity.Position p " +
                 "where p.position_id = :position_id"),
         @NamedQuery(name = "getPositionById", query = "from entity.Position p " +
-                "where p.position_id = :position_id")})
+                "where p.position_id = :position_id"),
+        @NamedQuery(name = "findPositionByName", query = "from entity.Position p " +
+                "where p.position_name like concat('%', :position_name, '%')")})
 
 public class Position implements Serializable {
     @Id

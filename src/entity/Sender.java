@@ -15,7 +15,14 @@ import java.io.Serializable;
         @NamedQuery(name = "getSenderByLegalAddress", query = "from entity.Sender s " +
                 "where s.legal_address = :legal_address"),
         @NamedQuery(name = "getSenderById", query = "from entity.Sender s " +
-                "where s.sender_id = :sender_id")})
+                "where s.sender_id = :sender_id"),
+        @NamedQuery(name = "findSenderByName", query = "from entity.Sender s " +
+                "where s.sender_name like concat('%', :sender_name, '%')"),
+        @NamedQuery(name = "findSenderByNameAddressPhoneEmail", query = "from entity.Sender s " +
+                "where s.sender_name like concat('%', :sender_name, '%') " +
+                "or s.legal_address like concat('%', :legal_address, '%') " +
+                "or s.phone like concat('%', :phone, '%') " +
+                "or s.email like concat('%', :email, '%')")})
 
 public class Sender implements Serializable{
     @Id

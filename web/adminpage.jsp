@@ -79,11 +79,11 @@
       <br>
       <form class="form-inline text-right" role="form">
         <div class="form-group">
-          <input type="text" id="textToFind" class="form-control" placeholder="Search..." />
+          <input type="text" id="textToFind" name="searchOption" class="form-control" placeholder="Search..." />
         </div>
         <div class="form-group">
-          <a title="Осуществить поиск" href="#" type="submit" class="btn btn-primary">
-            <span class="glyphicon glyphicon-search"></span></a>
+          <button title="Осуществить поиск" name="command" value="adminsearch" type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span></button>
         </div>
       </form>
     </div>

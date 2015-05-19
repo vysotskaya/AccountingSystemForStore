@@ -122,4 +122,41 @@ public class ReceiverDAO implements BaseDAO <Receiver> {
             }
         }
     }
+
+    public List<Receiver> findReceiverByNameAddressPhoneEmail (String findStr) throws HibernateException{
+        Session session = null;
+        List<Receiver> receivers = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            receivers = session.getNamedQuery("findReceiverByNameAddressPhoneEmail")
+                    .setParameter("receiver_name", findStr)
+                    .setParameter("legal_address", findStr)
+                    .setParameter("phone", findStr)
+                    .setParameter("email", findStr).list();
+            return receivers;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Receiver> findReceiverByName (String findStr) throws HibernateException{
+        Session session = null;
+        List<Receiver> receivers = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            receivers = session.getNamedQuery("findReceiverByName")
+                    .setParameter("receiver_name", findStr).list();
+            return receivers;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
 }

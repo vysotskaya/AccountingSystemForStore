@@ -106,4 +106,20 @@ public class StoreAreaDAO implements BaseDAO<StoreArea> {
             }
         }
     }
+
+    public List<StoreArea> findStoreAreaByName(String findStr) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<StoreArea> storeAreas = session.getNamedQuery("findStoreAreaByName")
+                    .setParameter("storearea_name", findStr).list();
+            return storeAreas;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
 }

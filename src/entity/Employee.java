@@ -17,7 +17,12 @@ import java.io.Serializable;
         @NamedQuery(name = "getEmployeeById", query = "from entity.Employee e " +
                 "where e.employee_id = :employee_id"),
         @NamedQuery(name = "findEmployeeByName", query = "from entity.Employee e " +
-                "where e.employee_name like concat('%', :employee_name, '%')")})
+                "where e.employee_name like concat('%', :employee_name, '%')"),
+        @NamedQuery(name = "getEmployeeByPosition", query = "from entity.Employee e " +
+                "where e.position = :position"),
+        @NamedQuery(name = "findEmployeeByNameEmail", query = "from entity.Employee e " +
+                "where e.employee_name like concat('%', :employee_name, '%') or " +
+                "e.email like concat('%', :email, '%')")})
 
 public class Employee implements Serializable {
     @Id

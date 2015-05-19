@@ -122,4 +122,41 @@ public class SenderDAO implements BaseDAO <Sender>{
             }
         }
     }
+
+    public List<Sender> findSenderByNameAddressPhoneEmail (String findStr) throws HibernateException{
+        Session session = null;
+        List<Sender> senders = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            senders = session.getNamedQuery("findSenderByNameAddressPhoneEmail")
+                    .setParameter("sender_name", findStr)
+                    .setParameter("legal_address", findStr)
+                    .setParameter("phone", findStr)
+                    .setParameter("email", findStr).list();
+            return senders;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Sender> findSenderByName (String findStr) throws HibernateException{
+        Session session = null;
+        List<Sender> senders = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            senders = session.getNamedQuery("findSenderByName")
+                    .setParameter("sender_name", findStr).list();
+            return senders;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
 }

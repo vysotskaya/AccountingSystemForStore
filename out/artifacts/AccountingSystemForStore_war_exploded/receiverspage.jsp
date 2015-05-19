@@ -68,11 +68,12 @@
       <div class="col-sm-4" style="margin-top:10px;">
         <br>
         <form class="form-inline text-right" role="form">
+          <input type="hidden" name="page" value="receiverspage.jsp" />
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search..." />
+            <input type="text" name="searchOption" class="form-control" placeholder="Search..." />
           </div>
           <div class="form-group">
-            <button title="Осуществить поиск" type="submit" class="btn btn-primary">
+            <button title="Осуществить поиск" name="command" value="search" type="submit" class="btn btn-primary">
               <span class="glyphicon glyphicon-search"></span></button>
           </div>
         </form>

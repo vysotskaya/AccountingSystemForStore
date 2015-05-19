@@ -68,16 +68,10 @@
       <div class="col-sm-5" style="margin-top:10px;">
         <br>
         <form class="form-inline text-right" method="get" action="/accountingsystem" role="form">
+          <input type="hidden" name="page" value="storepage.jsp" />
           <div class="form-group">
             <input type="text" class="form-control" name="searchOption" placeholder="Search..." />
           </div>
-          <%--<div class="form-group">--%>
-            <%--<select class="form-control" name="searchOption">--%>
-              <%--<option value="byMarking">по маркировке</option>--%>
-              <%--<option value="byName">по наименованию</option>--%>
-              <%--<option value="byEmployee">по ответственному</option>--%>
-            <%--</select>--%>
-          <%--</div>--%>
           <div class="form-group">
             <button title="Осуществить поиск" name="command" value="search" type="submit" class="btn btn-primary">
               <span class="glyphicon glyphicon-search"></span></button>

@@ -17,10 +17,12 @@ public class Product_DAOTest {
 
 //    @Before
 //    public void setProduct() {
-//        DAOFactory.getFactory().getProductDAO().create(new Product(8, DAOFactory.getFactory().getRegimeDAO().getById(2),
-//                "шт.", "18J99", "нет", "пиво"));
+//        DAOFactory.getFactory().getProductDAO().create(new Product(8, DAOFactory.getFactory().getRegimeDAO().getById(6),
+//                "л.", "18J99", "отсутствуют", "Пиво"));
 //        DAOFactory.getFactory().getProductDAO().create(new Product(2, DAOFactory.getFactory().getRegimeDAO().getById(4),
-//                "шт.", "18J99", "нет", "диван"));
+//                "шт.", "00TJ99", "отсутствуют", "Диван"));
+//        DAOFactory.getFactory().getProductDAO().create(new Product(18, DAOFactory.getFactory().getRegimeDAO().getById(12),
+//                "шт.", "0045AB9", "отсутствуют", "Пила"));
 //    }
 
 //    @After
@@ -62,55 +64,11 @@ public class Product_DAOTest {
 
     @Ignore
     @Test
-    public void findProductByMarkingTest() {
-        String findStr = "9";
-        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByMarking(findStr);
-        for (Product p : products) {
-            System.out.println(p.toString());
-        }
-        assertTrue(products.size() == 3);
-    }
-
-    //@Ignore
-    @Test
-    public void findProductByNameTest() {
-        String findStr = "во";
-        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByName(findStr);
-        for (Product p : products) {
-            System.out.println(p.toString());
-        }
-        assertTrue(products.size() == 2);
-    }
-
-    //@Ignore
-    @Test
-    public void findProductByAcountTest() {
-        int find = 8;
-        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByAcount(find);
-        for (Product p : products) {
-            System.out.println(p.toString());
-        }
-        assertTrue(products.size() == 2);
-    }
-
-    //@Ignore
-    @Test
-    public void findProductByUnitTest() {
-        String findStr = "шт";
-        List<Product> products = DAOFactory.getFactory().getProductDAO().findProductByUnit(findStr);
-        for (Product p : products) {
-            System.out.println(p.toString());
-        }
-        assertTrue(products.size() == 5);
-    }
-
-    @Ignore
-    @Test
     public void readProductTest() {
-        List products = DAOFactory.getFactory().getProductDAO().read();
-        for (Object o : products) {
-            System.out.println(o.toString());
+        List<Product> products = DAOFactory.getFactory().getProductDAO().read();
+        for (Product p : products) {
+            System.out.println(p.toString());
         }
-        assertTrue(products.size() == 3);
+        assertTrue(products.size() == 4);
     }
 }

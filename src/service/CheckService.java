@@ -1,11 +1,10 @@
 package service;
 
-import configuration.Constants;
+import configuration.CommandConst;
 import entity.Receiver;
 import entity.Sender;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -39,8 +38,8 @@ public class CheckService {
     public static String checkPeriodForReport(String begin, String end) {
         String[] beginStr = begin.split("\\.");
         String[] endStr = end.split("\\.");
-        String[] constBeginStr = Constants.MIN_BEGIN_PERIOD_FOR_REPORT.split("\\.");
-        String[] constEndStr = Constants.MAX_END_PERIOD_FOR_REPORT.split("\\.");
+        String[] constBeginStr = CommandConst.MIN_BEGIN_PERIOD_FOR_REPORT.split("\\.");
+        String[] constEndStr = CommandConst.MAX_END_PERIOD_FOR_REPORT.split("\\.");
         Calendar beginDate = new GregorianCalendar(Integer.parseInt(beginStr[2]), Integer.parseInt(beginStr[1]) - 1,
                 Integer.parseInt(beginStr[0]));
         Calendar endDate = new GregorianCalendar(Integer.parseInt(endStr[2]), Integer.parseInt(endStr[1]) - 1,

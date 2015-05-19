@@ -106,4 +106,20 @@ public class PositionDAO implements BaseDAO <Position> {
             }
         }
     }
+
+    public List<Position> findPositionByName(String position_name) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<Position> positions = session.getNamedQuery("findPositionByName")
+                    .setParameter("position_name", position_name).list();
+            return positions;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
 }

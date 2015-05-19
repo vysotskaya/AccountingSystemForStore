@@ -1,8 +1,6 @@
 package dao;
 
-import entity.Employee;
-import entity.Product;
-import entity.Record;
+import entity.*;
 import hibernateutil.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -233,10 +231,106 @@ public class RecordDAO implements BaseDAO<Record> {
             if (!resultList.isEmpty()) {
                 return resultList;
             } else {
-                return null;
+                return new ArrayList();
             }
         } catch (HibernateException e) {
             throw e;
+        }
+    }
+
+    public List<Record> findRecordsByStoreArea(String findStr) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<StoreArea> storeAreaList = DAOFactory.getFactory().getStoreAreaDAO().findStoreAreaByName(findStr);
+            List<Record> records = new ArrayList();
+            List<Record> resultList = new ArrayList();
+            if (!storeAreaList.isEmpty()) {
+                for (StoreArea storeArea : storeAreaList) {
+                    records = session.getNamedQuery("getRecordsByStoreArea").setParameter("storeArea", storeArea).list();
+                    if (!records.isEmpty()) {
+                        for (Record record : records) {
+                            resultList.add(record);
+                        }
+                    }
+                }
+            }
+
+            if (!resultList.isEmpty()) {
+                return resultList;
+            } else {
+                return new ArrayList();
+            }
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Record> findRecordsByReceiver(String findStr) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<Receiver> receiverList = DAOFactory.getFactory().getReceiverDAO().findReceiverByName(findStr);
+            List<Record> records = new ArrayList();
+            List<Record> resultList = new ArrayList();
+            if (!receiverList.isEmpty()) {
+                for (Receiver receiver : receiverList) {
+                    records = session.getNamedQuery("getRecordsByReceiver").setParameter("receiver", receiver).list();
+                    if (!records.isEmpty()) {
+                        for (Record record : records) {
+                            resultList.add(record);
+                        }
+                    }
+                }
+            }
+
+            if (!resultList.isEmpty()) {
+                return resultList;
+            } else {
+                return new ArrayList();
+            }
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Record> findRecordsBySender(String findStr) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<Sender> senders = DAOFactory.getFactory().getSenderDAO().findSenderByName(findStr);
+            List<Record> records = new ArrayList();
+            List<Record> resultList = new ArrayList();
+            if (!senders.isEmpty()) {
+                for (Sender sender : senders) {
+                    records = session.getNamedQuery("getRecordsBySender").setParameter("sender", sender).list();
+                    if (!records.isEmpty()) {
+                        for (Record record : records) {
+                            resultList.add(record);
+                        }
+                    }
+                }
+            }
+
+            if (!resultList.isEmpty()) {
+                return resultList;
+            } else {
+                return new ArrayList();
+            }
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 }

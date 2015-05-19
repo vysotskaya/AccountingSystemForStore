@@ -1,6 +1,7 @@
 package dao;
 
 import entity.Employee;
+import entity.Position;
 import hibernateutil.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -130,6 +131,54 @@ public class EmployeeDAO implements BaseDAO <Employee> {
             List<Employee> employees = session.getNamedQuery("findEmployeeByName")
                     .setParameter("employee_name", employee_name).list();
             return employees;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Employee> findEmployeeByNameEmail(String findStr) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<Employee> employees = session.getNamedQuery("findEmployeeByNameEmail")
+                    .setParameter("employee_name", findStr).setParameter("email", findStr).list();
+            return employees;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Employee> findEmployeeByPosition(String findStr) throws HibernateException {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<Position> positions = DAOFactory.getFactory().getPositionDAO().findPositionByName(findStr);
+            List<Employee> employees = new ArrayList();
+            List<Employee> tempEmployeeList = new ArrayList();
+            if (!positions.isEmpty()) {
+                for (Position position : positions) {
+                    tempEmployeeList = session.getNamedQuery("getEmployeeByPosition").setParameter("position", position).list();
+                    if (!tempEmployeeList.isEmpty()) {
+                        for (Employee employee : tempEmployeeList) {
+                            employees.add(employee);
+                        }
+                    }
+                }
+            }
+
+            if (!employees.isEmpty()) {
+                return employees;
+            } else {
+                return new ArrayList();
+            }
         } catch (HibernateException e) {
             throw e;
         } finally {

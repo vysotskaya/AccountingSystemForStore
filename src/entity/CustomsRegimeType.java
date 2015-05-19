@@ -15,7 +15,9 @@ import java.io.Serializable;
         @NamedQuery(name = "getRegimeByName", query = "from entity.CustomsRegimeType c " +
                 "where c.regime_name = :regime_name"),
         @NamedQuery(name = "getRegimeById", query = "from entity.CustomsRegimeType c " +
-                "where c.regime_id = :regime_id")})
+                "where c.regime_id = :regime_id"),
+        @NamedQuery(name = "findRegimeByName", query = "from entity.CustomsRegimeType c " +
+                "where c.regime_name like concat('%', :regime_name, '%')")})
 
 public class CustomsRegimeType implements Serializable {
     @Id

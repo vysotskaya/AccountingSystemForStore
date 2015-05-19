@@ -140,12 +140,16 @@ public class ProductDAO implements BaseDAO <Product> {
         }
     }
 
-    public List<Product> findProductByMarking (String marking) throws HibernateException{
+    public List<Product> findProductByNameAcountUnitMarking (String findStr) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
             session = HibernateUtil.openSession();
-            products = session.getNamedQuery("findProductByMarking").setParameter("product_marking", marking).list();
+            products = session.getNamedQuery("findProductByNameAcountUnitMarking")
+                    .setParameter("product_name", findStr)
+                    .setParameter("acount", findStr)
+                    .setParameter("measuring_unit", findStr)
+                    .setParameter("product_marking", findStr).list();
             return products;
         } catch (HibernateException e) {
             throw e;
@@ -156,12 +160,15 @@ public class ProductDAO implements BaseDAO <Product> {
         }
     }
 
-    public List<Product> findProductByName (String name) throws HibernateException{
+    public List<Product> findProductByNameMarkingFeatures (String findStr) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
             session = HibernateUtil.openSession();
-            products = session.getNamedQuery("findProductByName").setParameter("product_name", name).list();
+            products = session.getNamedQuery("findProductByNameMarkingFeatures")
+                    .setParameter("product_name", findStr)
+                    .setParameter("storing_features", findStr)
+                    .setParameter("product_marking", findStr).list();
             return products;
         } catch (HibernateException e) {
             throw e;
@@ -172,28 +179,14 @@ public class ProductDAO implements BaseDAO <Product> {
         }
     }
 
-    public List<Product> findProductByAcount (int acount) throws HibernateException{
+    public List<Product> findProductByNameMarking (String findStr) throws HibernateException{
         Session session = null;
         List<Product> products = new ArrayList();
         try {
             session = HibernateUtil.openSession();
-            products = session.getNamedQuery("findProductByAcount").setParameter("acount", acount).list();
-            return products;
-        } catch (HibernateException e) {
-            throw e;
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-    }
-
-    public List<Product> findProductByUnit (String unit) throws HibernateException{
-        Session session = null;
-        List<Product> products = new ArrayList();
-        try {
-            session = HibernateUtil.openSession();
-            products = session.getNamedQuery("findProductByUnit").setParameter("measuring_unit", unit).list();
+            products = session.getNamedQuery("findProductByNameMarking")
+                    .setParameter("product_name", findStr)
+                    .setParameter("product_marking", findStr).list();
             return products;
         } catch (HibernateException e) {
             throw e;

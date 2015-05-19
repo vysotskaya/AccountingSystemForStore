@@ -122,4 +122,20 @@ public class RegimeDAO implements BaseDAO<CustomsRegimeType> {
             }
         }
     }
+
+    public List<CustomsRegimeType> findRegimeByName(String findStr) throws HibernateException{
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            List<CustomsRegimeType> regimeTypes = session.getNamedQuery("findRegimeByName")
+                    .setParameter("regime_name", findStr).list();
+            return regimeTypes;
+        } catch (HibernateException e) {
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
 }
