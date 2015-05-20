@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Employee;
 import org.apache.log4j.Logger;
@@ -20,13 +23,13 @@ public class AdminSearchCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(AdminSearchCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role == 2) {
+            if ( role == DataConst.ADMIN_ID) {
                 try {
-                    String findStr = (String) request.getParameter("searchOption");
+                    String findStr = (String) request.getParameter(RequestParam.SEARCH_OPTION);
                     if (findStr.equals("") || findStr.replace(" ", "").equals("")) {
                         return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
                     } else {
@@ -35,11 +38,12 @@ public class AdminSearchCommand implements Command {
                             return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
                         } else {
                             int size = employeeSet.size();
-                            employeeSet.add(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin("admin"));
+                            employeeSet.add(DAOFactory.getFactory().getEmployeeDAO()
+                                    .getEmployeeByLogin(DataConst.ADMIN_LOGIN));
                             if (employeeSet.size() == size) {
                                 return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;
                             }
-                            request.setAttribute("list", employeeSet);
+                            request.setAttribute(RequestParam.RESULT_LIST, employeeSet);
                             return PageManager.ADMIN_PAGE;
                         }
                     }

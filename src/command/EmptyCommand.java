@@ -1,6 +1,7 @@
 package command;
 
 import configuration.PageManager;
+import configuration.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +14,7 @@ public class EmptyCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String login = (String)session.getAttribute("login");
+        String login = (String)session.getAttribute(SessionAttribute.LOGIN);
         if (login != null) {
             return PageManager.SHOW_ALL_RECORDS_COMMAND;
         }

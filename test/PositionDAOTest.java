@@ -49,9 +49,9 @@ public class PositionDAOTest {
 //    @Ignore
     @Test
     public void readPositionTest() {
-        List positions = DAOFactory.getFactory().getPositionDAO().read();
-        for (Object o : positions) {
-            System.out.println(o.toString());
+        List<Position> positions = DAOFactory.getFactory().getPositionDAO().read();
+        for (Position p : positions) {
+            System.out.println(p.toString());
         }
         assertTrue(positions.size() == 3);
     }

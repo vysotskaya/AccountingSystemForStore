@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Record;
 import org.apache.log4j.Logger;
@@ -18,11 +21,12 @@ public class ForbiddenProductsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
-        if (role == null || role != 2) {
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
+        if (role == null || role != DataConst.ADMIN_ID) {
             try {
-                List<Record> records = DAOFactory.getFactory().getRecordDAO().getRecordsByProductRegime("уничтожение");
-                request.setAttribute("list", records);
+                List<Record> records = DAOFactory.getFactory().getRecordDAO()
+                        .getRecordsByProductRegime(DataConst.FORBIDDEN_PRODUCTS_REGIME);
+                request.setAttribute(RequestParam.RESULT_LIST, records);
                 return PageManager.FORBIDDEN_PRODUCT_PAGE;
             } catch (HibernateException e) {
                 Logger logger = Logger.getLogger(ForbiddenProductsCommand.class);

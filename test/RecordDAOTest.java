@@ -78,7 +78,7 @@ public class RecordDAOTest {
         assertFalse(record.equals(DAOFactory.getFactory().getRecordDAO().getById(3)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void readRecordTest() {
         List<Record> records = DAOFactory.getFactory().getRecordDAO().read();

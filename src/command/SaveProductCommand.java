@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Product;
 import entity.Receiver;
@@ -24,33 +27,33 @@ public class SaveProductCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(SaveProductCommand.class);;
         HttpSession session = request.getSession();
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         Record record = null;
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role != 2) {
+            if ( role != DataConst.ADMIN_ID) {
                 try {
-                    String employee_login = (String)session.getAttribute("login");
+                    String employee_login = (String)session.getAttribute(SessionAttribute.LOGIN);
 
-                    String marking = (String) request.getParameter("markingInput");
-                    int acount = Integer.parseInt((String) request.getParameter("acountInput"));
-                    String product_name = (String) request.getParameter("nameInput");
-                    String measuring_unit = (String) request.getParameter("unitSelect");
-                    String limit = (String) request.getParameter("limitInput");
-                    String features = (String) request.getParameter("featuresInput");
-                    int regime_id = Integer.parseInt((String) request.getParameter("regimeSelect"));
-                    int area_id = Integer.parseInt((String) request.getParameter("areaSelect"));
+                    String marking = (String) request.getParameter(RequestParam.PRODUCT_MARKING_INPUT);
+                    int acount = Integer.parseInt((String) request.getParameter(RequestParam.PRODUCT_ACOUNT_INPUT));
+                    String product_name = (String) request.getParameter(RequestParam.PRODUCT_NAME_INPUT);
+                    String measuring_unit = (String) request.getParameter(RequestParam.PRODUCT_UNIT_SELECT);
+                    String limit = (String) request.getParameter(RequestParam.PRODUCT_LIMIT_INPUT);
+                    String features = (String) request.getParameter(RequestParam.PRODUCT_FEARURES_INPUT);
+                    int regime_id = Integer.parseInt((String) request.getParameter(RequestParam.PRODUCT_REGIME_SELECT));
+                    int area_id = Integer.parseInt((String) request.getParameter(RequestParam.PRODUCT_AREA_SELECT));
 
-                    String sender_name = (String) request.getParameter("senderNameInput");
-                    String sender_address = (String) request.getParameter("senderAddressInput");
-                    String sender_phone = (String) request.getParameter("senderPhoneInput");
-                    String sender_email = (String) request.getParameter("senderEmailInput");
+                    String sender_name = (String) request.getParameter(RequestParam.SENDER_NAME_INPUT);
+                    String sender_address = (String) request.getParameter(RequestParam.SENDER_ADDRESS_INPUT);
+                    String sender_phone = (String) request.getParameter(RequestParam.SENDER_PHONE_INPUT);
+                    String sender_email = (String) request.getParameter(RequestParam.SENDER_EMAIL_INPUT);
 
-                    String receiver_name = (String) request.getParameter("receiverNameInput");
-                    String receiver_address = (String) request.getParameter("receiverAddressInput");
-                    String receiver_phone = (String) request.getParameter("receiverPhoneInput");
-                    String receiver_email = (String) request.getParameter("receiverEmailInput");
+                    String receiver_name = (String) request.getParameter(RequestParam.RECEIVER_NAME_INPUT);
+                    String receiver_address = (String) request.getParameter(RequestParam.RECEIVER_ADDRESS_INPUT);
+                    String receiver_phone = (String) request.getParameter(RequestParam.RECEIVER_PHONE_INPUT);
+                    String receiver_email = (String) request.getParameter(RequestParam.RECEIVER_EMAIL_INPUT);
 
                     if (CheckService.isNullParam(marking, product_name, measuring_unit, limit, features,
                             sender_name, sender_address, sender_phone, sender_email, receiver_name,
@@ -59,7 +62,7 @@ public class SaveProductCommand implements Command {
                     }
 
                     if (features.equals("")) {
-                        features = "отсутствуют";
+                        features = DataConst.NO_FEATURES;
                     }
 
                     Product product = new Product(acount, DAOFactory.getFactory().getRegimeDAO().getById(regime_id),
@@ -73,11 +76,11 @@ public class SaveProductCommand implements Command {
                             product, receiver, limit, DAOFactory.getFactory().getStoreAreaDAO().getById(area_id), sender);
 
                     if (!CheckService.checkRetentionLimitDate(limit)){
-                        throw new IncorrectDataInputException("Неверный срок хранения!");
+                        throw new IncorrectDataInputException(DataConst.INCORRECT_LIMIT_MESSAGE);
                     }
 
                     if (DAOFactory.getFactory().getProductDAO().getProductByMarking(marking) != null) {
-                        throw new IncorrectDataInputException("Товар с такой маркировкой уже существует!");
+                        throw new IncorrectDataInputException(DataConst.DUPLICATION_PRODUCT_MARKING_MESSAGE);
                     }
 
                     Sender senderByLegalAddress = DAOFactory.getFactory().getSenderDAO()
@@ -86,8 +89,7 @@ public class SaveProductCommand implements Command {
                     if (!CheckService.checkEqualsWithoutId(sender, senderByLegalAddress)) {
                         if (senderByLegalAddress != null) {
                             record.setSender(senderByLegalAddress);
-                            throw new IncorrectDataInputException("Отправитель с таким юридическим адресом уже существует! " +
-                                    "Вы можете выбрать его, сохранив запись повторно.");
+                            throw new IncorrectDataInputException(DataConst.DUPLICATION_SENDER_MESSAGE);
                         } else {
                             DAOFactory.getFactory().getSenderDAO().create(sender);
                         }
@@ -99,8 +101,7 @@ public class SaveProductCommand implements Command {
                     if (!CheckService.checkEqualsWithoutId(receiver, receiverByLegalAddress)) {
                         if (receiverByLegalAddress != null) {
                             record.setReceiver(receiverByLegalAddress);
-                            throw new IncorrectDataInputException("Получатель с таким юридическим адресом уже существует! " +
-                                    "Вы можете выбрать его, сохранив запись повторно.");
+                            throw new IncorrectDataInputException(DataConst.DUPLICATION_RECEIVER_MESSAGE);
                         } else {
                             DAOFactory.getFactory().getReceiverDAO().create(receiver);
                         }
@@ -123,9 +124,9 @@ public class SaveProductCommand implements Command {
                     logger.error("incorrect format of area_id, regime_id or acount", ex);
                 } catch (IncorrectDataInputException e) {
                     CreationListsService.createRegimesAndAreasLists(request);
-                    request.setAttribute("errorMessage", e.getMessage());
-                    request.setAttribute("isWrong", true);
-                    request.setAttribute("record", record);
+                    request.setAttribute(RequestParam.ERROR_MESSAGE, e.getMessage());
+                    request.setAttribute(RequestParam.INCORRECT_DATA, true);
+                    request.setAttribute(RequestParam.RECORD, record);
                     return PageManager.ADD_PRODUCT_PAGE;
                 }
                 return PageManager.SHOW_ALL_RECORDS_COMMAND;

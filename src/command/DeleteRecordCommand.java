@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -18,13 +21,13 @@ public class DeleteRecordCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(DeleteRecordCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role != 2) {
+            if ( role != DataConst.ADMIN_ID) {
                 try {
-                    int record_id = Integer.parseInt((String)request.getParameter("record_id"));
+                    int record_id = Integer.parseInt((String)request.getParameter(RequestParam.RECORD_ID));
                     int product_id = DAOFactory.getFactory().getRecordDAO().getById(record_id).getProduct().getProduct_id();
                     DAOFactory.getFactory().getRecordDAO().deleteById(record_id);
                     DAOFactory.getFactory().getProductDAO().deleteById(product_id);

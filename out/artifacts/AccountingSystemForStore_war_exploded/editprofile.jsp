@@ -80,7 +80,7 @@
                           </c:if>
                         </c:forEach>
                       </select><br/>
-                      Почта* <input type="email" name="email" class="form-control" value="${employee.email}"
+                      Почта* <input type="email" name="emailInput" class="form-control" value="${employee.email}"
                                     title="Почтовый адрес должен содержать @. Максимальная длина - 100." maxlength="100"
                                     required="true"/><br/>
                       <button type="submit" name="command" value="saveprofile" class="btn btn-primary

@@ -1,6 +1,8 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +15,8 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
-        if (role == null || role != 2) {
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
+        if (role == null || role != DataConst.ADMIN_ID) {
             return PageManager.SHOW_ALL_RECORDS_COMMAND;
         } else {
             return PageManager.SHOW_ALL_EMPLOYEES_COMMAND;

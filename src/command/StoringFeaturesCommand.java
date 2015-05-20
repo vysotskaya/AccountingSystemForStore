@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -17,11 +20,11 @@ public class StoringFeaturesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
-        if (role == null || role != 2) {
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
+        if (role == null || role != DataConst.ADMIN_ID) {
             try {
                 List products = DAOFactory.getFactory().getProductDAO().read();
-                request.setAttribute("list", products);
+                request.setAttribute(RequestParam.RESULT_LIST, products);
                 return PageManager.STORING_FEATURES_PAGE;
             } catch (HibernateException e) {
                 Logger logger = Logger.getLogger(SendersCommand.class);

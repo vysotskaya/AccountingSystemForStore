@@ -54,12 +54,12 @@ public class SenderDAOTest {
         assertFalse(sender.equals(DAOFactory.getFactory().getSenderDAO().getById(1)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void readSenderTest() {
-        List senders = DAOFactory.getFactory().getSenderDAO().read();
-        for (Object o : senders) {
-            System.out.println(o.toString());
+        List<Sender> senders = DAOFactory.getFactory().getSenderDAO().read();
+        for (Sender s : senders) {
+            System.out.println(s.toString());
         }
         assertTrue(senders.size() == 1);
     }

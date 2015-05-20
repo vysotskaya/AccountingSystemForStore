@@ -64,12 +64,12 @@ public class EmployeeDAOTest {
         assertTrue(employee.equals(DAOFactory.getFactory().getEmployeeDAO().getEmployeeByLogin("Ivanov")));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void readEmployeeTest() {
-        List employees = DAOFactory.getFactory().getEmployeeDAO().read();
-        for (Object o : employees) {
-            System.out.println(o.toString());
+        List<Employee> employees = DAOFactory.getFactory().getEmployeeDAO().read();
+        for (Employee e : employees) {
+            System.out.println(e.toString());
         }
         assertTrue(true);
     }

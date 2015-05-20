@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Employee;
 import org.apache.log4j.Logger;
@@ -19,17 +22,17 @@ public class EditProfileCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(EditProfileCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if (role == 2) {
+            if (role == DataConst.ADMIN_ID) {
                 try {
-                    int id = Integer.parseInt((String)request.getParameter("emloyee_id"));
+                    int id = Integer.parseInt((String)request.getParameter(RequestParam.EMPLOYEE_ID));
                     Employee employee = DAOFactory.getFactory().getEmployeeDAO().getById(id);
                     if (employee != null) {
                         CreationListsService.createPositionList(request);
-                        request.setAttribute("employee", employee);
+                        request.setAttribute(RequestParam.EMPLOYEE, employee);
                         return PageManager.EDIT_PROFILE_PAGE;
                     }
                 } catch (HibernateException e) {

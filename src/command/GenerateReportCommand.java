@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Record;
 import org.apache.log4j.Logger;
@@ -22,14 +25,14 @@ public class GenerateReportCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(GenerateReportCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if (role != 2) {
+            if (role != DataConst.ADMIN_ID) {
                 try {
-                    String periodBegin = (String) request.getParameter("periodBeginInput");
-                    String periodEnd = (String) request.getParameter("periodEndInput");
+                    String periodBegin = (String) request.getParameter(RequestParam.BEGIN_PERIOD_FOR_REPORT);
+                    String periodEnd = (String) request.getParameter(RequestParam.END_PERIOD_FOR_REPORT);
 
                     if (CheckService.isNullParam(periodBegin, periodEnd)) {
                         return PageManager.LOGIN_PAGE;
@@ -37,10 +40,10 @@ public class GenerateReportCommand implements Command {
 
                     String checkString = CheckService.checkPeriodForReport(periodBegin, periodEnd);
                     if (checkString != null) {
-                        request.setAttribute("errorMessage", checkString);
-                        request.setAttribute("isWrong", true);
-                        request.setAttribute("begin", periodBegin);
-                        request.setAttribute("end", periodEnd);
+                        request.setAttribute(RequestParam.ERROR_MESSAGE, checkString);
+                        request.setAttribute(RequestParam.INCORRECT_DATA, true);
+                        request.setAttribute(RequestParam.BEGIN, periodBegin);
+                        request.setAttribute(RequestParam.END, periodEnd);
                         return PageManager.PERIOD_PAGE;
                     }
 
@@ -51,6 +54,12 @@ public class GenerateReportCommand implements Command {
                         } catch (Docx4JException e) {
                             logger.error("error in generating report : ", e);
                         }
+                    } else {
+                        request.setAttribute(RequestParam.ERROR_MESSAGE, DataConst.NO_PRODUCT_MESSAGE);
+                        request.setAttribute(RequestParam.INCORRECT_DATA, true);
+                        request.setAttribute(RequestParam.BEGIN, periodBegin);
+                        request.setAttribute(RequestParam.END, periodEnd);
+                        return PageManager.PERIOD_PAGE;
                     }
                 } catch (HibernateException e) {
                     logger.error("hibernate error", e);

@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Record;
 import org.apache.log4j.Logger;
@@ -18,11 +21,11 @@ public class RecordsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
-        if (role == null || role != 2) {
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
+        if (role == null || role != DataConst.ADMIN_ID) {
             try {
                 List<Record> records = DAOFactory.getFactory().getRecordDAO().read();
-                request.setAttribute("list", records);
+                request.setAttribute(RequestParam.RESULT_LIST, records);
                 return PageManager.STORAGE_PAGE;
             } catch (HibernateException e) {
                 Logger logger = Logger.getLogger(RecordsCommand.class);

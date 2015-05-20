@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Record;
 import org.apache.log4j.Logger;
@@ -19,20 +22,20 @@ public class EditProductCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(EditProductCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer) session.getAttribute("role");
+        Integer role = (Integer) session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if (role != 2) {
+            if (role != DataConst.ADMIN_ID) {
                 try {
-                    int id = Integer.parseInt((String) request.getParameter("record_id"));
+                    int id = Integer.parseInt((String) request.getParameter(RequestParam.RECORD_ID));
                     Record record = DAOFactory.getFactory().getRecordDAO().getById(id);
-                    if (record.getEmployee().getLogin().equals((String) session.getAttribute("login"))) {
+                    if (record.getEmployee().getLogin().equals((String) session.getAttribute(SessionAttribute.LOGIN))) {
                         CreationListsService.createRegimesAndAreasLists(request);
-                        request.setAttribute("record", record);
+                        request.setAttribute(RequestParam.RECORD, record);
                         return PageManager.EDIT_PRODUCT_PAGE;
                     } else {
-                        request.setAttribute("isProhibited", true);
+                        request.setAttribute(RequestParam.EDIT_PROHIBITED, true);
                         return PageManager.SHOW_ALL_RECORDS_COMMAND;
                     }
                 } catch (HibernateException e){

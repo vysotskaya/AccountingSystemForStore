@@ -136,7 +136,7 @@
                 </td>
                 <td style="width: 25%;">
                     <a title="Редактировать данные сотрудника"
-                       href="/accountingsystem?command=editprofile&emloyee_id=${employee.employee_id}"
+                       href="/accountingsystem?command=editprofile&employee_id=${employee.employee_id}"
                        id="editbutton" class="btn btn-sm btn-warning">>
                       <span class="glyphicon glyphicon-pencil"></span>
                     </a>

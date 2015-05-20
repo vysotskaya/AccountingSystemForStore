@@ -54,12 +54,12 @@ public class StoreAreaDAOTest {
         assertFalse(storeArea.equals(DAOFactory.getFactory().getStoreAreaDAO().getById(4)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void readStoreAreaTest() {
-        List areas = DAOFactory.getFactory().getStoreAreaDAO().read();
-        for (Object o : areas) {
-            System.out.println(o.toString());
+        List<StoreArea> areas = DAOFactory.getFactory().getStoreAreaDAO().read();
+        for (StoreArea area: areas) {
+            System.out.println(area.toString());
         }
         assertTrue(areas.size() == 3);
     }

@@ -11,8 +11,6 @@ import java.util.List;
 import static junit.framework.Assert.*;
 
 public class Product_DAOTest {
-
-    private CustomsRegimeType regime;
     private Product product;
 
 //    @Before

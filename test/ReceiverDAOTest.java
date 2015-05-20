@@ -30,7 +30,7 @@ public class ReceiverDAOTest {
         assertTrue(receiver.equals(DAOFactory.getFactory().getReceiverDAO().getById(1)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void getReceiverByNameAndAddressTest() {
         Receiver receiver1 = DAOFactory.getFactory().getReceiverDAO().getById(1);
@@ -58,7 +58,7 @@ public class ReceiverDAOTest {
     @Ignore
     @Test
     public void readReceiverTest() {
-        List receivers = DAOFactory.getFactory().getReceiverDAO().read();
+        List<Receiver> receivers = DAOFactory.getFactory().getReceiverDAO().read();
         System.out.println(receivers.size());
         assertTrue(receivers.size() == 1);
     }

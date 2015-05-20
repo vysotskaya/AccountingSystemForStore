@@ -1,9 +1,10 @@
 package service;
 
-import configuration.CommandConst;
+import configuration.DataConst;
 import entity.Receiver;
 import entity.Sender;
 
+import javax.xml.crypto.Data;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -38,8 +39,8 @@ public class CheckService {
     public static String checkPeriodForReport(String begin, String end) {
         String[] beginStr = begin.split("\\.");
         String[] endStr = end.split("\\.");
-        String[] constBeginStr = CommandConst.MIN_BEGIN_PERIOD_FOR_REPORT.split("\\.");
-        String[] constEndStr = CommandConst.MAX_END_PERIOD_FOR_REPORT.split("\\.");
+        String[] constBeginStr = DataConst.MIN_BEGIN_PERIOD_FOR_REPORT.split("\\.");
+        String[] constEndStr = DataConst.MAX_END_PERIOD_FOR_REPORT.split("\\.");
         Calendar beginDate = new GregorianCalendar(Integer.parseInt(beginStr[2]), Integer.parseInt(beginStr[1]) - 1,
                 Integer.parseInt(beginStr[0]));
         Calendar endDate = new GregorianCalendar(Integer.parseInt(endStr[2]), Integer.parseInt(endStr[1]) - 1,
@@ -49,13 +50,13 @@ public class CheckService {
         Calendar constEndDate = new GregorianCalendar(Integer.parseInt(constEndStr[2]),
                 Integer.parseInt(constEndStr[1]) - 1, Integer.parseInt(constEndStr[0]));
         if (beginDate.getTime().getTime() >= endDate.getTime().getTime()) {
-            return "Некорректный период!";
+            return DataConst.INCORRECT_PERIOD_MESSAGE;
         }
         if (constBeginDate.getTime().getTime() > beginDate.getTime().getTime()) {
-            return "Минимальное начало периода - 01.01.2014!";
+            return DataConst.INCORRECT_BEGIN_PERIOD_MESSAGE;
         }
         if (endDate.getTime().getTime() > constEndDate.getTime().getTime()) {
-            return "Максимальное окончание периода - 01.01.2099!";
+            return DataConst.INCORRECT_END_PERIOD_MESSAGE;
         }
         return null;
     }

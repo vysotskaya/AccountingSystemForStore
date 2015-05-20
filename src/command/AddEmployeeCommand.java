@@ -1,6 +1,8 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.SessionAttribute;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import service.CreationListsService;
@@ -16,11 +18,11 @@ public class AddEmployeeCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role == 2) {
+            if ( role == DataConst.ADMIN_ID) {
                 try {
                     CreationListsService.createPositionList(request);
                     return PageManager.ADD_EMPLOYEE_PAGE;

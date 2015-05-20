@@ -72,12 +72,12 @@ public class RegimeDAOTest {
         assertFalse(regime.equals(DAOFactory.getFactory().getRegimeDAO().getById(1)));
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void readRegimeTest() {
-        List regimes = DAOFactory.getFactory().getRegimeDAO().read();
-        for (Object o : regimes) {
-            System.out.println(o.toString());
+        List<CustomsRegimeType> regimes = DAOFactory.getFactory().getRegimeDAO().read();
+        for (CustomsRegimeType customsRegimeType : regimes) {
+            System.out.println(customsRegimeType.toString());
         }
         assertTrue(regimes.size() == 14);
     }

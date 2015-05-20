@@ -1,5 +1,6 @@
 package service;
 
+import configuration.DataConst;
 import entity.Record;
 import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -53,12 +54,12 @@ public class GenerateReportService {
         Tbl table = factory.createTbl();
         Tr tableRow = factory.createTr();
 
-        addTableCell(tableRow, "Маркировка");
-        addTableCell(tableRow, "Наименование");
-        addTableCell(tableRow, "Количество");
-        addTableCell(tableRow, "Срок хранения");
-        addTableCell(tableRow, "Ответственный");
-        addTableCell(tableRow, "Таможенный режим");
+        addTableCell(tableRow, DataConst.MARKING_TABLE_HEAD);
+        addTableCell(tableRow, DataConst.NAME_TABLE_HEAD);
+        addTableCell(tableRow, DataConst.ACOUNT_TABLE_HEAD);
+        addTableCell(tableRow, DataConst.LIMIT_TABLE_HEAD);
+        addTableCell(tableRow, DataConst.EMPLOYEE_TABLE_HEAD);
+        addTableCell(tableRow, DataConst.REGIME_TABLE_HEAD);
         table.getContent().add(tableRow);
 
         Record record = null;

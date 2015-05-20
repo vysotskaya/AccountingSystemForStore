@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Employee;
 import entity.Record;
@@ -20,14 +23,15 @@ public class SelectEmployeeCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(SelectEmployeeCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role == 2) {
+            if ( role == DataConst.ADMIN_ID) {
                 try {
-                    int id = Integer.parseInt((String) request.getParameter("deleteEmployee_id"));
-                    int newEmployee_id = Integer.parseInt((String) request.getParameter("employeeSelect"));
+                    int id = Integer.parseInt((String) request.getParameter(RequestParam.EMPLOYEE_TO_DELETE_ID));
+                    int newEmployee_id = Integer.parseInt((String) request
+                            .getParameter(RequestParam.NEW_RESPONSIBLE_EMPLOYEE));
                     List<Record> recordList = DAOFactory.getFactory().getRecordDAO()
                             .findRecordsByEmployee(DAOFactory.getFactory().getEmployeeDAO().getById(id).getEmployee_name());
                     if (!recordList.isEmpty()) {

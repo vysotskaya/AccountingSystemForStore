@@ -1,5 +1,6 @@
 package service;
 
+import configuration.RequestParam;
 import dao.DAOFactory;
 import entity.CustomsRegimeType;
 import entity.Position;
@@ -15,13 +16,13 @@ import java.util.List;
 public class CreationListsService {
     public static void createPositionList(HttpServletRequest request) throws HibernateException{
         List<Position> positions = DAOFactory.getFactory().getPositionDAO().read();
-        request.setAttribute("list", positions);
+        request.setAttribute(RequestParam.RESULT_LIST, positions);
     }
 
     public static void createRegimesAndAreasLists(HttpServletRequest request) throws HibernateException{
         List<CustomsRegimeType> regimes = DAOFactory.getFactory().getRegimeDAO().read();
-        request.setAttribute("regimeList", regimes);
+        request.setAttribute(RequestParam.REGIME_LIST, regimes);
         List<StoreArea> areas = DAOFactory.getFactory().getStoreAreaDAO().read();
-        request.setAttribute("areaList", areas);
+        request.setAttribute(RequestParam.STORE_AREA_LIST, areas);
     }
 }

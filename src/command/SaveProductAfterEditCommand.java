@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Product;
 import entity.Receiver;
@@ -15,6 +18,7 @@ import service.CreationListsService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.Data;
 
 /**
  * Created by User on 13.05.2015.
@@ -25,35 +29,35 @@ public class SaveProductAfterEditCommand implements Command {
         Logger logger = Logger.getLogger(SaveProductAfterEditCommand.class);
         HttpSession session = request.getSession();
         Record record = null;
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role != 2) {
+            if ( role != DataConst.ADMIN_ID) {
                 try {
-                    String employee_login = (String)session.getAttribute("login");
+                    String employee_login = (String)session.getAttribute(SessionAttribute.LOGIN);
 
-                    String marking = (String) request.getParameter("markingInput");
-                    int acount = Integer.parseInt((String) request.getParameter("acountInput"));
-                    String product_name = (String) request.getParameter("nameInput");
-                    String measuring_unit = (String) request.getParameter("unitSelect");
-                    String limit = (String) request.getParameter("limitInput");
-                    String features = (String) request.getParameter("featuresInput");
-                    int regime_id = Integer.parseInt((String) request.getParameter("regimeSelect"));
-                    int area_id = Integer.parseInt((String) request.getParameter("areaSelect"));
+                    String marking = (String) request.getParameter(RequestParam.PRODUCT_MARKING_INPUT);
+                    int acount = Integer.parseInt((String) request.getParameter(RequestParam.PRODUCT_ACOUNT_INPUT));
+                    String product_name = (String) request.getParameter(RequestParam.PRODUCT_NAME_INPUT);
+                    String measuring_unit = (String) request.getParameter(RequestParam.PRODUCT_UNIT_SELECT);
+                    String limit = (String) request.getParameter(RequestParam.PRODUCT_LIMIT_INPUT);
+                    String features = (String) request.getParameter(RequestParam.PRODUCT_FEARURES_INPUT);
+                    int regime_id = Integer.parseInt((String) request.getParameter(RequestParam.PRODUCT_REGIME_SELECT));
+                    int area_id = Integer.parseInt((String) request.getParameter(RequestParam.PRODUCT_AREA_SELECT));
 
-                    int receiver_id = Integer.parseInt((String) request.getParameter("receiver_id"));
-                    int sender_id = Integer.parseInt((String) request.getParameter("sender_id"));
+                    int receiver_id = Integer.parseInt((String) request.getParameter(RequestParam.RECEIVER_ID));
+                    int sender_id = Integer.parseInt((String) request.getParameter(RequestParam.SENDER_ID));
 
-                    String sender_name = (String) request.getParameter("senderNameInput");
-                    String sender_address = (String) request.getParameter("senderAddressInput");
-                    String sender_phone = (String) request.getParameter("senderPhoneInput");
-                    String sender_email = (String) request.getParameter("senderEmailInput");
+                    String sender_name = (String) request.getParameter(RequestParam.SENDER_NAME_INPUT);
+                    String sender_address = (String) request.getParameter(RequestParam.SENDER_ADDRESS_INPUT);
+                    String sender_phone = (String) request.getParameter(RequestParam.SENDER_PHONE_INPUT);
+                    String sender_email = (String) request.getParameter(RequestParam.SENDER_EMAIL_INPUT);
 
-                    String receiver_name = (String) request.getParameter("receiverNameInput");
-                    String receiver_address = (String) request.getParameter("receiverAddressInput");
-                    String receiver_phone = (String) request.getParameter("receiverPhoneInput");
-                    String receiver_email = (String) request.getParameter("receiverEmailInput");
+                    String receiver_name = (String) request.getParameter(RequestParam.RECEIVER_NAME_INPUT);
+                    String receiver_address = (String) request.getParameter(RequestParam.RECEIVER_ADDRESS_INPUT);
+                    String receiver_phone = (String) request.getParameter(RequestParam.RECEIVER_PHONE_INPUT);
+                    String receiver_email = (String) request.getParameter(RequestParam.RECEIVER_EMAIL_INPUT);
 
                     if (CheckService.isNullParam(marking, product_name, measuring_unit, limit, features,
                             sender_name, sender_address, sender_phone, sender_email, receiver_name,
@@ -62,7 +66,7 @@ public class SaveProductAfterEditCommand implements Command {
                     }
 
                     if (features.equals("")) {
-                        features = "отсутствуют";
+                        features = DataConst.NO_FEATURES;
                     }
 
                     Product product = DAOFactory.getFactory().getProductDAO().getProductByMarking(marking);
@@ -76,7 +80,7 @@ public class SaveProductAfterEditCommand implements Command {
                     product.setStoring_features(features);
 
                     if (!CheckService.checkRetentionLimitDate(limit)){
-                        throw new IncorrectDataInputException("Неверный срок хранения!");
+                        throw new IncorrectDataInputException(DataConst.INCORRECT_LIMIT_MESSAGE);
                     }
 
                     Sender sender = DAOFactory.getFactory().getSenderDAO().getById(sender_id);
@@ -86,8 +90,7 @@ public class SaveProductAfterEditCommand implements Command {
                     if (!sender.equals(senderByLegalAddress)) {
                         if (senderByLegalAddress != null) {
                             record.setSender(senderByLegalAddress);
-                            throw new IncorrectDataInputException("Отправитель с таким юридическим адресом уже существует! " +
-                                    "Вы можете выбрать его, сохранив запись повторно.");
+                            throw new IncorrectDataInputException(DataConst.DUPLICATION_SENDER_MESSAGE);
                         } else {
                             sender.setLegal_address(sender_address);
                             sender.setEmail(sender_email);
@@ -110,8 +113,7 @@ public class SaveProductAfterEditCommand implements Command {
                     if (!receiver.equals(receiverByLegalAddress)) {
                         if (receiverByLegalAddress != null) {
                             record.setReceiver(receiverByLegalAddress);
-                            throw new IncorrectDataInputException("Получатель с таким юридическим адресом уже существует! " +
-                                    "Вы можете выбрать его, сохранив запись повторно.");
+                            throw new IncorrectDataInputException(DataConst.DUPLICATION_RECEIVER_MESSAGE);
                         } else {
                             receiver.setLegal_address(receiver_address);
                             receiver.setEmail(receiver_email);
@@ -145,9 +147,9 @@ public class SaveProductAfterEditCommand implements Command {
                     logger.error("incorrect format of receiver_id, sender_id, regime_id, area_id or acount", ex);
                 } catch (IncorrectDataInputException e) {
                     CreationListsService.createRegimesAndAreasLists(request);
-                    request.setAttribute("errorMessage", e.getMessage());
-                    request.setAttribute("isWrong", true);
-                    request.setAttribute("record", record);
+                    request.setAttribute(RequestParam.ERROR_MESSAGE, e.getMessage());
+                    request.setAttribute(RequestParam.INCORRECT_DATA, true);
+                    request.setAttribute(RequestParam.RECORD, record);
                     return PageManager.EDIT_PRODUCT_PAGE;
                 }
                 return PageManager.SHOW_ALL_RECORDS_COMMAND;

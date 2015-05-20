@@ -1,6 +1,9 @@
 package command;
 
+import configuration.DataConst;
 import configuration.PageManager;
+import configuration.RequestParam;
+import configuration.SessionAttribute;
 import dao.DAOFactory;
 import entity.Employee;
 import org.apache.log4j.Logger;
@@ -19,16 +22,17 @@ public class SaveProfileCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Logger logger = Logger.getLogger(SaveProfileCommand.class);
         HttpSession session = request.getSession();
-        Integer role = (Integer)session.getAttribute("role");
+        Integer role = (Integer)session.getAttribute(SessionAttribute.ROLE);
         if (role == null) {
             return PageManager.LOGIN_PAGE;
         } else {
-            if ( role == 2) {
+            if ( role == DataConst.ADMIN_ID) {
                 try {
-                    int employee_id = Integer.parseInt((String)request.getParameter("employee_id"));
-                    String name = (String) request.getParameter("surnameInput");
-                    String email = (String) request.getParameter("email");
-                    int position_id = Integer.parseInt((String) request.getParameter("positionSelect"));
+                    int employee_id = Integer.parseInt((String)request.getParameter(RequestParam.EMPLOYEE_ID));
+                    String name = (String) request.getParameter(RequestParam.EMPLOYEE_SURNAME_INPUT);
+                    String email = (String) request.getParameter(RequestParam.EMPLOYEE_EMAIL_INPUT);
+                    int position_id = Integer.parseInt((String) request
+                            .getParameter(RequestParam.EMPLOYEE_POSITION_SELECT));
 
                     if (CheckService.isNullParam(name, email)) {
                         throw new NullPointerException();
